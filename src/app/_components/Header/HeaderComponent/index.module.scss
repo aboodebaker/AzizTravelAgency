@@ -1,0 +1,27 @@
+.header {
+    padding: 36px 0;
+    background-color: #08092E;
+}
+
+.wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: calc(var(--base) /2 ) var(--base);
+}
+
+.logo {
+ /* Change this value to whatever size you prefer */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+.hide {
+   display: none; 
+}
+
+.title {
+    color: white;
+}
+
