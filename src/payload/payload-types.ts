@@ -319,6 +319,7 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  diamond?: boolean | null;
   travelDetails?: {
     travelDates: {
       departureDate: string;

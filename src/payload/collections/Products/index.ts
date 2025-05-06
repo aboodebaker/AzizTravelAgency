@@ -81,10 +81,11 @@ const Products: CollectionConfig = {
               name: 'isPackage',
               label: 'Is a Package?',
               type: 'checkbox',
+              defaultValue: true,
             },
             {
               name: 'benefits',
-              label: 'Benefits',
+              label: 'Benefits (for hilton Promo)',
               type: 'array',
               admin: {
                 condition: (_, siblingData) => siblingData?.isPackage === false, // Only shows if it's NOT a package
@@ -96,6 +97,14 @@ const Products: CollectionConfig = {
                   required: true, // Ensures that each benefit is a string
                 },
               ],
+            },
+            {
+              name: 'diamond',
+              label: 'Diamond (for hilton Promo)',
+              type: 'checkbox',
+              admin: {
+                condition: (_, siblingData) => siblingData?.isPackage === false, // Only shows if it's NOT a package
+              },
             },
             {
               name: 'travelDetails',

@@ -8,7 +8,11 @@ export const PRODUCTS = `
       docs {
         slug
         isPackage
-        benefits # Will return only if not a package
+        benefits {
+          benefit
+          id
+        }
+        diamond
         travelDetails { # Will return only if it's a package
           travelDates {
             departureDate
@@ -64,7 +68,11 @@ export const PRODUCT = `
         title
         stripeProductID
         isPackage
-        benefits
+        benefits {
+          benefit
+          id
+        }
+        diamond
         travelDetails {
           travelDates {
             departureDate

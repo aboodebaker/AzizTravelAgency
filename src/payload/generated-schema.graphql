@@ -1644,6 +1644,7 @@ type Product {
   layout: [Product_Layout!]!
   isPackage: Boolean
   benefits: [Product_Benefits!]
+  diamond: Boolean
   travelDetails: Product_TravelDetails
   stripeProductID: String
   priceJSON: String
@@ -4125,6 +4126,7 @@ input Product_where {
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
+  diamond: Product_diamond_operator
   travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
   travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
@@ -4216,6 +4218,12 @@ input Product_benefits__id_operator {
   in: [String]
   not_in: [String]
   all: [String]
+  exists: Boolean
+}
+
+input Product_diamond_operator {
+  equals: Boolean
+  not_equals: Boolean
   exists: Boolean
 }
 
@@ -4628,6 +4636,7 @@ input Product_where_and {
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
+  diamond: Product_diamond_operator
   travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
   travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
@@ -4680,6 +4689,7 @@ input Product_where_or {
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
+  diamond: Product_diamond_operator
   travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
   travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
@@ -4745,6 +4755,7 @@ type ProductsDocAccessFields {
   layout: ProductsDocAccessFields_layout
   isPackage: ProductsDocAccessFields_isPackage
   benefits: ProductsDocAccessFields_benefits
+  diamond: ProductsDocAccessFields_diamond
   travelDetails: ProductsDocAccessFields_travelDetails
   stripeProductID: ProductsDocAccessFields_stripeProductID
   priceJSON: ProductsDocAccessFields_priceJSON
@@ -4924,6 +4935,29 @@ type ProductsDocAccessFields_benefits_id_Update {
 }
 
 type ProductsDocAccessFields_benefits_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_diamond {
+  create: ProductsDocAccessFields_diamond_Create
+  read: ProductsDocAccessFields_diamond_Read
+  update: ProductsDocAccessFields_diamond_Update
+  delete: ProductsDocAccessFields_diamond_Delete
+}
+
+type ProductsDocAccessFields_diamond_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_diamond_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_diamond_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_diamond_Delete {
   permission: Boolean!
 }
 
@@ -6214,6 +6248,7 @@ type ProductVersion_Version {
   layout: [ProductVersion_Version_Layout!]!
   isPackage: Boolean
   benefits: [ProductVersion_Version_Benefits!]
+  diamond: Boolean
   travelDetails: ProductVersion_Version_TravelDetails
   stripeProductID: String
   priceJSON: String
@@ -6517,6 +6552,7 @@ input versionsProduct_where {
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__diamond: versionsProduct_version__diamond_operator
   version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
   version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
@@ -6620,6 +6656,12 @@ input versionsProduct_version__benefits__id_operator {
   in: [String]
   not_in: [String]
   all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__diamond_operator {
+  equals: Boolean
+  not_equals: Boolean
   exists: Boolean
 }
 
@@ -7061,6 +7103,7 @@ input versionsProduct_where_and {
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__diamond: versionsProduct_version__diamond_operator
   version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
   version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
@@ -7117,6 +7160,7 @@ input versionsProduct_where_or {
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__diamond: versionsProduct_version__diamond_operator
   version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
   version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
@@ -12106,6 +12150,7 @@ type ProductsFields {
   layout: ProductsFields_layout
   isPackage: ProductsFields_isPackage
   benefits: ProductsFields_benefits
+  diamond: ProductsFields_diamond
   travelDetails: ProductsFields_travelDetails
   stripeProductID: ProductsFields_stripeProductID
   priceJSON: ProductsFields_priceJSON
@@ -12285,6 +12330,29 @@ type ProductsFields_benefits_id_Update {
 }
 
 type ProductsFields_benefits_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_diamond {
+  create: ProductsFields_diamond_Create
+  read: ProductsFields_diamond_Read
+  update: ProductsFields_diamond_Update
+  delete: ProductsFields_diamond_Delete
+}
+
+type ProductsFields_diamond_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_diamond_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_diamond_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_diamond_Delete {
   permission: Boolean!
 }
 
@@ -16238,6 +16306,7 @@ input mutationProductInput {
   layout: JSON
   isPackage: Boolean
   benefits: [mutationProduct_BenefitsInput]
+  diamond: Boolean
   travelDetails: mutationProduct_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String
@@ -16334,6 +16403,7 @@ input mutationProductUpdateInput {
   layout: JSON
   isPackage: Boolean
   benefits: [mutationProductUpdate_BenefitsInput]
+  diamond: Boolean
   travelDetails: mutationProductUpdate_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String

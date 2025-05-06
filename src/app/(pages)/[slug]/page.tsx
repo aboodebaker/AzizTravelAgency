@@ -53,12 +53,20 @@ export default async function Page({ params: { slug = 'home' } }) {
      productsInCategory = allProducts.filter(
       product => product.isPackage === false)
 
+      const produc = await fetchDoc<Product>({
+      collection: 'products',
+      slug: 'hilton-gold-status',
+      draft: isDraftMode,
+    })
+
+    console.log(produc)
+
       
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
     // so swallow the error here and simply render the page with fallback data where necessary
     // in production you may want to redirect to a 404  page or at least log the error somewhere
-    // console.error(error)
+    console.error(error)
   }
 
   // if no `home` page exists, render a static one using dummy content
@@ -71,7 +79,7 @@ export default async function Page({ params: { slug = 'home' } }) {
   if (!page) {
     return notFound()
   }
-  console.log(productsInCategory)
+
 
   const benefits = [
     '100% Points earning Bonus on stays',
@@ -97,14 +105,14 @@ export default async function Page({ params: { slug = 'home' } }) {
               source={'/media/Leonardo_Phoenix_10_A_sleek_highquality_image_of_a_Hilton_Diam_1.jpg'}
               title={'Diamond Tier Benefits'}
               href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
-              product={productsInCategory[0]}
+              product={productsInCategory.filter(product => product.diamond == true)[0] }
             />
             <HiltonPromo
               benefits={benefits}
               source={'/media/Leonardo_Phoenix_10_A_sleek_highquality_image_of_a_Hilton_Gold_2.jpg'}
               title={'Gold Tier Benefits'}
               href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
-              product={productsInCategory[1]}
+              product={productsInCategory.filter(product => product.diamond !== true)[0] }
             />
           </Gutter>
         </section>
