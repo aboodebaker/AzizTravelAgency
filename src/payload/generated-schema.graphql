@@ -1,33 +1,41 @@
 type Query {
   Page(id: String!, draft: Boolean): Page
   Pages(draft: Boolean, where: Page_where, limit: Int, page: Int, sort: String): Pages
+  countPages(draft: Boolean, where: Page_where): countPages
   docAccessPage(id: String!): pagesDocAccess
   versionPage(id: String): PageVersion
   versionsPages(where: versionsPage_where, limit: Int, page: Int, sort: String): versionsPages
   Product(id: String!, draft: Boolean): Product
   Products(draft: Boolean, where: Product_where, limit: Int, page: Int, sort: String): Products
+  countProducts(draft: Boolean, where: Product_where): countProducts
   docAccessProduct(id: String!): productsDocAccess
   versionProduct(id: String): ProductVersion
   versionsProducts(where: versionsProduct_where, limit: Int, page: Int, sort: String): versionsProducts
-  Order(id: String!, draft: Boolean): Order
-  Orders(draft: Boolean, where: Order_where, limit: Int, page: Int, sort: String): Orders
+  Order(id: String!): Order
+  Orders(where: Order_where, limit: Int, page: Int, sort: String): Orders
+  countOrders(where: Order_where): countOrders
   docAccessOrder(id: String!): ordersDocAccess
-  Media(id: String!, draft: Boolean): Media
-  allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
+  Media(id: String!): Media
+  allMedia(where: Media_where, limit: Int, page: Int, sort: String): allMedia
+  countallMedia(where: Media_where): countallMedia
   docAccessMedia(id: String!): mediaDocAccess
-  Category(id: String!, draft: Boolean): Category
-  Categories(draft: Boolean, where: Category_where, limit: Int, page: Int, sort: String): Categories
+  Category(id: String!): Category
+  Categories(where: Category_where, limit: Int, page: Int, sort: String): Categories
+  countCategories(where: Category_where): countCategories
   docAccessCategory(id: String!): categoriesDocAccess
-  User(id: String!, draft: Boolean): User
-  Users(draft: Boolean, where: User_where, limit: Int, page: Int, sort: String): Users
+  User(id: String!): User
+  Users(where: User_where, limit: Int, page: Int, sort: String): Users
+  countUsers(where: User_where): countUsers
   docAccessUser(id: String!): usersDocAccess
   meUser: usersMe
   initializedUser: Boolean
-  Redirect(id: String!, draft: Boolean): Redirect
-  Redirects(draft: Boolean, where: Redirect_where, limit: Int, page: Int, sort: String): Redirects
+  Redirect(id: String!): Redirect
+  Redirects(where: Redirect_where, limit: Int, page: Int, sort: String): Redirects
+  countRedirects(where: Redirect_where): countRedirects
   docAccessRedirect(id: String!): redirectsDocAccess
-  PayloadPreference(id: String!, draft: Boolean): PayloadPreference
-  PayloadPreferences(draft: Boolean, where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
+  PayloadPreference(id: String!): PayloadPreference
+  PayloadPreferences(where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
+  countPayloadPreferences(where: PayloadPreference_where): countPayloadPreferences
   docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
   Settings(draft: Boolean): Settings
   docAccessSettings: settingsDocAccess
@@ -84,7 +92,7 @@ type Page_Hero_Links {
 type Page_Hero_Links_Link {
   type: Page_Hero_Links_Link_type
   newTab: Boolean
-  reference: Page_Hero_Links_Link_Reference_Relationship
+  reference(draft: Boolean): Page_Hero_Links_Link_Reference_Relationship
   url: String
   label: String
   icon(where: Page_Hero_Links_Link_Icon_where): Media
@@ -119,6 +127,8 @@ type Media {
   filesize: Float
   width: Float
   height: Float
+  focalX: Float
+  focalY: Float
 }
 
 input Page_Hero_Links_Link_Icon_where {
@@ -132,6 +142,8 @@ input Page_Hero_Links_Link_Icon_where {
   filesize: Page_Hero_Links_Link_Icon_filesize_operator
   width: Page_Hero_Links_Link_Icon_width_operator
   height: Page_Hero_Links_Link_Icon_height_operator
+  focalX: Page_Hero_Links_Link_Icon_focalX_operator
+  focalY: Page_Hero_Links_Link_Icon_focalY_operator
   id: Page_Hero_Links_Link_Icon_id_operator
   AND: [Page_Hero_Links_Link_Icon_where_and]
   OR: [Page_Hero_Links_Link_Icon_where_or]
@@ -240,6 +252,26 @@ input Page_Hero_Links_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input Page_Hero_Links_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Page_Hero_Links_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Page_Hero_Links_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -262,6 +294,8 @@ input Page_Hero_Links_Link_Icon_where_and {
   filesize: Page_Hero_Links_Link_Icon_filesize_operator
   width: Page_Hero_Links_Link_Icon_width_operator
   height: Page_Hero_Links_Link_Icon_height_operator
+  focalX: Page_Hero_Links_Link_Icon_focalX_operator
+  focalY: Page_Hero_Links_Link_Icon_focalY_operator
   id: Page_Hero_Links_Link_Icon_id_operator
   AND: [Page_Hero_Links_Link_Icon_where_and]
   OR: [Page_Hero_Links_Link_Icon_where_or]
@@ -278,6 +312,8 @@ input Page_Hero_Links_Link_Icon_where_or {
   filesize: Page_Hero_Links_Link_Icon_filesize_operator
   width: Page_Hero_Links_Link_Icon_width_operator
   height: Page_Hero_Links_Link_Icon_height_operator
+  focalX: Page_Hero_Links_Link_Icon_focalX_operator
+  focalY: Page_Hero_Links_Link_Icon_focalY_operator
   id: Page_Hero_Links_Link_Icon_id_operator
   AND: [Page_Hero_Links_Link_Icon_where_and]
   OR: [Page_Hero_Links_Link_Icon_where_or]
@@ -300,6 +336,8 @@ input Page_Hero_Media_where {
   filesize: Page_Hero_Media_filesize_operator
   width: Page_Hero_Media_width_operator
   height: Page_Hero_Media_height_operator
+  focalX: Page_Hero_Media_focalX_operator
+  focalY: Page_Hero_Media_focalY_operator
   id: Page_Hero_Media_id_operator
   AND: [Page_Hero_Media_where_and]
   OR: [Page_Hero_Media_where_or]
@@ -408,6 +446,26 @@ input Page_Hero_Media_height_operator {
   exists: Boolean
 }
 
+input Page_Hero_Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Page_Hero_Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Page_Hero_Media_id_operator {
   equals: String
   not_equals: String
@@ -430,6 +488,8 @@ input Page_Hero_Media_where_and {
   filesize: Page_Hero_Media_filesize_operator
   width: Page_Hero_Media_width_operator
   height: Page_Hero_Media_height_operator
+  focalX: Page_Hero_Media_focalX_operator
+  focalY: Page_Hero_Media_focalY_operator
   id: Page_Hero_Media_id_operator
   AND: [Page_Hero_Media_where_and]
   OR: [Page_Hero_Media_where_or]
@@ -446,6 +506,8 @@ input Page_Hero_Media_where_or {
   filesize: Page_Hero_Media_filesize_operator
   width: Page_Hero_Media_width_operator
   height: Page_Hero_Media_height_operator
+  focalX: Page_Hero_Media_focalX_operator
+  focalY: Page_Hero_Media_focalY_operator
   id: Page_Hero_Media_id_operator
   AND: [Page_Hero_Media_where_and]
   OR: [Page_Hero_Media_where_or]
@@ -470,7 +532,7 @@ type Cta_Links {
 type Cta_Links_Link {
   type: Cta_Links_Link_type
   newTab: Boolean
-  reference: Cta_Links_Link_Reference_Relationship
+  reference(draft: Boolean): Cta_Links_Link_Reference_Relationship
   url: String
   label: String
   icon(where: Cta_Links_Link_Icon_where): Media
@@ -504,6 +566,8 @@ input Cta_Links_Link_Icon_where {
   filesize: Cta_Links_Link_Icon_filesize_operator
   width: Cta_Links_Link_Icon_width_operator
   height: Cta_Links_Link_Icon_height_operator
+  focalX: Cta_Links_Link_Icon_focalX_operator
+  focalY: Cta_Links_Link_Icon_focalY_operator
   id: Cta_Links_Link_Icon_id_operator
   AND: [Cta_Links_Link_Icon_where_and]
   OR: [Cta_Links_Link_Icon_where_or]
@@ -612,6 +676,26 @@ input Cta_Links_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input Cta_Links_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Cta_Links_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Cta_Links_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -634,6 +718,8 @@ input Cta_Links_Link_Icon_where_and {
   filesize: Cta_Links_Link_Icon_filesize_operator
   width: Cta_Links_Link_Icon_width_operator
   height: Cta_Links_Link_Icon_height_operator
+  focalX: Cta_Links_Link_Icon_focalX_operator
+  focalY: Cta_Links_Link_Icon_focalY_operator
   id: Cta_Links_Link_Icon_id_operator
   AND: [Cta_Links_Link_Icon_where_and]
   OR: [Cta_Links_Link_Icon_where_or]
@@ -650,6 +736,8 @@ input Cta_Links_Link_Icon_where_or {
   filesize: Cta_Links_Link_Icon_filesize_operator
   width: Cta_Links_Link_Icon_width_operator
   height: Cta_Links_Link_Icon_height_operator
+  focalX: Cta_Links_Link_Icon_focalX_operator
+  focalY: Cta_Links_Link_Icon_focalY_operator
   id: Cta_Links_Link_Icon_id_operator
   AND: [Cta_Links_Link_Icon_where_and]
   OR: [Cta_Links_Link_Icon_where_or]
@@ -688,7 +776,7 @@ enum Content_Columns_size {
 type Content_Columns_Link {
   type: Content_Columns_Link_type
   newTab: Boolean
-  reference: Content_Columns_Link_Reference_Relationship
+  reference(draft: Boolean): Content_Columns_Link_Reference_Relationship
   url: String
   label: String
   icon(where: Content_Columns_Link_Icon_where): Media
@@ -722,6 +810,8 @@ input Content_Columns_Link_Icon_where {
   filesize: Content_Columns_Link_Icon_filesize_operator
   width: Content_Columns_Link_Icon_width_operator
   height: Content_Columns_Link_Icon_height_operator
+  focalX: Content_Columns_Link_Icon_focalX_operator
+  focalY: Content_Columns_Link_Icon_focalY_operator
   id: Content_Columns_Link_Icon_id_operator
   AND: [Content_Columns_Link_Icon_where_and]
   OR: [Content_Columns_Link_Icon_where_or]
@@ -830,6 +920,26 @@ input Content_Columns_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input Content_Columns_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Content_Columns_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Content_Columns_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -852,6 +962,8 @@ input Content_Columns_Link_Icon_where_and {
   filesize: Content_Columns_Link_Icon_filesize_operator
   width: Content_Columns_Link_Icon_width_operator
   height: Content_Columns_Link_Icon_height_operator
+  focalX: Content_Columns_Link_Icon_focalX_operator
+  focalY: Content_Columns_Link_Icon_focalY_operator
   id: Content_Columns_Link_Icon_id_operator
   AND: [Content_Columns_Link_Icon_where_and]
   OR: [Content_Columns_Link_Icon_where_or]
@@ -868,6 +980,8 @@ input Content_Columns_Link_Icon_where_or {
   filesize: Content_Columns_Link_Icon_filesize_operator
   width: Content_Columns_Link_Icon_width_operator
   height: Content_Columns_Link_Icon_height_operator
+  focalX: Content_Columns_Link_Icon_focalX_operator
+  focalY: Content_Columns_Link_Icon_focalY_operator
   id: Content_Columns_Link_Icon_id_operator
   AND: [Content_Columns_Link_Icon_where_and]
   OR: [Content_Columns_Link_Icon_where_or]
@@ -890,6 +1004,8 @@ input Content_Columns_Media_where {
   filesize: Content_Columns_Media_filesize_operator
   width: Content_Columns_Media_width_operator
   height: Content_Columns_Media_height_operator
+  focalX: Content_Columns_Media_focalX_operator
+  focalY: Content_Columns_Media_focalY_operator
   id: Content_Columns_Media_id_operator
   AND: [Content_Columns_Media_where_and]
   OR: [Content_Columns_Media_where_or]
@@ -998,6 +1114,26 @@ input Content_Columns_Media_height_operator {
   exists: Boolean
 }
 
+input Content_Columns_Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Content_Columns_Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Content_Columns_Media_id_operator {
   equals: String
   not_equals: String
@@ -1020,6 +1156,8 @@ input Content_Columns_Media_where_and {
   filesize: Content_Columns_Media_filesize_operator
   width: Content_Columns_Media_width_operator
   height: Content_Columns_Media_height_operator
+  focalX: Content_Columns_Media_focalX_operator
+  focalY: Content_Columns_Media_focalY_operator
   id: Content_Columns_Media_id_operator
   AND: [Content_Columns_Media_where_and]
   OR: [Content_Columns_Media_where_or]
@@ -1036,6 +1174,8 @@ input Content_Columns_Media_where_or {
   filesize: Content_Columns_Media_filesize_operator
   width: Content_Columns_Media_width_operator
   height: Content_Columns_Media_height_operator
+  focalX: Content_Columns_Media_focalX_operator
+  focalY: Content_Columns_Media_focalY_operator
   id: Content_Columns_Media_id_operator
   AND: [Content_Columns_Media_where_and]
   OR: [Content_Columns_Media_where_or]
@@ -1071,6 +1211,8 @@ input MediaBlock_Media_where {
   filesize: MediaBlock_Media_filesize_operator
   width: MediaBlock_Media_width_operator
   height: MediaBlock_Media_height_operator
+  focalX: MediaBlock_Media_focalX_operator
+  focalY: MediaBlock_Media_focalY_operator
   id: MediaBlock_Media_id_operator
   AND: [MediaBlock_Media_where_and]
   OR: [MediaBlock_Media_where_or]
@@ -1179,6 +1321,26 @@ input MediaBlock_Media_height_operator {
   exists: Boolean
 }
 
+input MediaBlock_Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input MediaBlock_Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input MediaBlock_Media_id_operator {
   equals: String
   not_equals: String
@@ -1201,6 +1363,8 @@ input MediaBlock_Media_where_and {
   filesize: MediaBlock_Media_filesize_operator
   width: MediaBlock_Media_width_operator
   height: MediaBlock_Media_height_operator
+  focalX: MediaBlock_Media_focalX_operator
+  focalY: MediaBlock_Media_focalY_operator
   id: MediaBlock_Media_id_operator
   AND: [MediaBlock_Media_where_and]
   OR: [MediaBlock_Media_where_or]
@@ -1217,6 +1381,8 @@ input MediaBlock_Media_where_or {
   filesize: MediaBlock_Media_filesize_operator
   width: MediaBlock_Media_width_operator
   height: MediaBlock_Media_height_operator
+  focalX: MediaBlock_Media_focalX_operator
+  focalY: MediaBlock_Media_focalY_operator
   id: MediaBlock_Media_id_operator
   AND: [MediaBlock_Media_where_and]
   OR: [MediaBlock_Media_where_or]
@@ -1228,8 +1394,8 @@ type Archive {
   relationTo: Archive_relationTo
   categories: [Category!]
   limit: Float
-  selectedDocs: [Archive_SelectedDocs_Relationship!]
-  populatedDocs: [Archive_PopulatedDocs_Relationship!]
+  selectedDocs(draft: Boolean): [Archive_SelectedDocs_Relationship!]
+  populatedDocs(draft: Boolean): [Archive_PopulatedDocs_Relationship!]
   populatedDocsTotal: Float
   id: String
   blockName: String
@@ -1267,6 +1433,8 @@ input Category_Media_where {
   filesize: Category_Media_filesize_operator
   width: Category_Media_width_operator
   height: Category_Media_height_operator
+  focalX: Category_Media_focalX_operator
+  focalY: Category_Media_focalY_operator
   id: Category_Media_id_operator
   AND: [Category_Media_where_and]
   OR: [Category_Media_where_or]
@@ -1375,6 +1543,26 @@ input Category_Media_height_operator {
   exists: Boolean
 }
 
+input Category_Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Category_Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Category_Media_id_operator {
   equals: String
   not_equals: String
@@ -1397,6 +1585,8 @@ input Category_Media_where_and {
   filesize: Category_Media_filesize_operator
   width: Category_Media_width_operator
   height: Category_Media_height_operator
+  focalX: Category_Media_focalX_operator
+  focalY: Category_Media_focalY_operator
   id: Category_Media_id_operator
   AND: [Category_Media_where_and]
   OR: [Category_Media_where_or]
@@ -1413,6 +1603,8 @@ input Category_Media_where_or {
   filesize: Category_Media_filesize_operator
   width: Category_Media_width_operator
   height: Category_Media_height_operator
+  focalX: Category_Media_focalX_operator
+  focalY: Category_Media_focalY_operator
   id: Category_Media_id_operator
   AND: [Category_Media_where_and]
   OR: [Category_Media_where_or]
@@ -1450,12 +1642,15 @@ type Product {
   title: String
   publishedOn: DateTime
   layout: [Product_Layout!]!
+  isPackage: Boolean
+  benefits: [Product_Benefits!]
+  travelDetails: Product_TravelDetails
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
   paywall: [Product_Paywall!]
   categories: [Category!]
-  relatedProducts: [Product!]
+  relatedProducts(draft: Boolean): [Product!]
   slug: String
   skipSync: Boolean
   meta: Product_Meta
@@ -1465,6 +1660,70 @@ type Product {
 }
 
 union Product_Layout = Cta | Content | MediaBlock | Archive
+
+type Product_Benefits {
+  benefit: String
+  id: String
+}
+
+type Product_TravelDetails {
+  travelDates: Product_TravelDetails_TravelDates
+  originalPrice: Float
+  amountSaved: Product_TravelDetails_AmountSaved
+  multiCountry: Boolean
+  visaRequired: Boolean
+  visaIncluded: Boolean
+  travelInsuranceIncluded: Boolean
+  flights: [Product_TravelDetails_Flights!]
+  destinations: [Product_TravelDetails_Destinations!]
+}
+
+type Product_TravelDetails_TravelDates {
+  departureDate: DateTime
+  returnDate: DateTime
+  flexibility: Product_TravelDetails_TravelDates_Flexibility
+}
+
+type Product_TravelDetails_TravelDates_Flexibility {
+  beforeDays: Float
+  afterDays: Float
+}
+
+type Product_TravelDetails_AmountSaved {
+  value: Float
+}
+
+type Product_TravelDetails_Flights {
+  flightNumber: String
+  departureAirport: String
+  arrivalAirport: String
+  departureTime: DateTime
+  arrivalTime: DateTime
+  airline: String
+  travelTimeMinutes: Float
+  transitTimeMinutes: Float
+  baggageAllowance: Product_TravelDetails_Flights_BaggageAllowance
+  id: String
+}
+
+type Product_TravelDetails_Flights_BaggageAllowance {
+  checkedInKg: Float
+  cabinKg: Float
+  bagNumber: Float
+}
+
+type Product_TravelDetails_Destinations {
+  city: String
+  country: String
+  hotels: [Product_TravelDetails_Destinations_Hotels!]
+  id: String
+}
+
+type Product_TravelDetails_Destinations_Hotels {
+  name: String
+  stars: Float
+  id: String
+}
 
 union Product_Paywall = Cta | Content | MediaBlock | Archive
 
@@ -1485,6 +1744,8 @@ input Product_Meta_Image_where {
   filesize: Product_Meta_Image_filesize_operator
   width: Product_Meta_Image_width_operator
   height: Product_Meta_Image_height_operator
+  focalX: Product_Meta_Image_focalX_operator
+  focalY: Product_Meta_Image_focalY_operator
   id: Product_Meta_Image_id_operator
   AND: [Product_Meta_Image_where_and]
   OR: [Product_Meta_Image_where_or]
@@ -1593,6 +1854,26 @@ input Product_Meta_Image_height_operator {
   exists: Boolean
 }
 
+input Product_Meta_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Meta_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Product_Meta_Image_id_operator {
   equals: String
   not_equals: String
@@ -1615,6 +1896,8 @@ input Product_Meta_Image_where_and {
   filesize: Product_Meta_Image_filesize_operator
   width: Product_Meta_Image_width_operator
   height: Product_Meta_Image_height_operator
+  focalX: Product_Meta_Image_focalX_operator
+  focalY: Product_Meta_Image_focalY_operator
   id: Product_Meta_Image_id_operator
   AND: [Product_Meta_Image_where_and]
   OR: [Product_Meta_Image_where_or]
@@ -1631,6 +1914,8 @@ input Product_Meta_Image_where_or {
   filesize: Product_Meta_Image_filesize_operator
   width: Product_Meta_Image_width_operator
   height: Product_Meta_Image_height_operator
+  focalX: Product_Meta_Image_focalX_operator
+  focalY: Product_Meta_Image_focalY_operator
   id: Product_Meta_Image_id_operator
   AND: [Product_Meta_Image_where_and]
   OR: [Product_Meta_Image_where_or]
@@ -1669,6 +1954,8 @@ input Page_Meta_Image_where {
   filesize: Page_Meta_Image_filesize_operator
   width: Page_Meta_Image_width_operator
   height: Page_Meta_Image_height_operator
+  focalX: Page_Meta_Image_focalX_operator
+  focalY: Page_Meta_Image_focalY_operator
   id: Page_Meta_Image_id_operator
   AND: [Page_Meta_Image_where_and]
   OR: [Page_Meta_Image_where_or]
@@ -1777,6 +2064,26 @@ input Page_Meta_Image_height_operator {
   exists: Boolean
 }
 
+input Page_Meta_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Page_Meta_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Page_Meta_Image_id_operator {
   equals: String
   not_equals: String
@@ -1799,6 +2106,8 @@ input Page_Meta_Image_where_and {
   filesize: Page_Meta_Image_filesize_operator
   width: Page_Meta_Image_width_operator
   height: Page_Meta_Image_height_operator
+  focalX: Page_Meta_Image_focalX_operator
+  focalY: Page_Meta_Image_focalY_operator
   id: Page_Meta_Image_id_operator
   AND: [Page_Meta_Image_where_and]
   OR: [Page_Meta_Image_where_or]
@@ -1815,6 +2124,8 @@ input Page_Meta_Image_where_or {
   filesize: Page_Meta_Image_filesize_operator
   width: Page_Meta_Image_width_operator
   height: Page_Meta_Image_height_operator
+  focalX: Page_Meta_Image_focalX_operator
+  focalY: Page_Meta_Image_focalY_operator
   id: Page_Meta_Image_id_operator
   AND: [Page_Meta_Image_where_and]
   OR: [Page_Meta_Image_where_or]
@@ -2127,6 +2438,10 @@ input Page_where_or {
   id: Page_id_operator
   AND: [Page_where_and]
   OR: [Page_where_or]
+}
+
+type countPages {
+  totalDocs: Int
 }
 
 type pagesDocAccess {
@@ -2614,34 +2929,9 @@ type PagesDocAccessFields_meta_Delete {
 }
 
 type PagesDocAccessFields_meta_Fields {
-  overview: PagesDocAccessFields_meta_overview
   title: PagesDocAccessFields_meta_title
   description: PagesDocAccessFields_meta_description
   image: PagesDocAccessFields_meta_image
-  preview: PagesDocAccessFields_meta_preview
-}
-
-type PagesDocAccessFields_meta_overview {
-  create: PagesDocAccessFields_meta_overview_Create
-  read: PagesDocAccessFields_meta_overview_Read
-  update: PagesDocAccessFields_meta_overview_Update
-  delete: PagesDocAccessFields_meta_overview_Delete
-}
-
-type PagesDocAccessFields_meta_overview_Create {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_overview_Read {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_overview_Update {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_overview_Delete {
-  permission: Boolean!
 }
 
 type PagesDocAccessFields_meta_title {
@@ -2710,29 +3000,6 @@ type PagesDocAccessFields_meta_image_Update {
 }
 
 type PagesDocAccessFields_meta_image_Delete {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_preview {
-  create: PagesDocAccessFields_meta_preview_Create
-  read: PagesDocAccessFields_meta_preview_Read
-  update: PagesDocAccessFields_meta_preview_Update
-  delete: PagesDocAccessFields_meta_preview_Delete
-}
-
-type PagesDocAccessFields_meta_preview_Create {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_preview_Read {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_preview_Update {
-  permission: Boolean!
-}
-
-type PagesDocAccessFields_meta_preview_Delete {
   permission: Boolean!
 }
 
@@ -2836,7 +3103,7 @@ type PagesReadVersionsDocAccess {
 }
 
 type PageVersion {
-  parent: Page
+  parent(draft: Boolean): Page
   version: PageVersion_Version
   createdAt: DateTime
   updatedAt: DateTime
@@ -2879,7 +3146,7 @@ type PageVersion_Version_Hero_Links {
 type PageVersion_Version_Hero_Links_Link {
   type: PageVersion_Version_Hero_Links_Link_type
   newTab: Boolean
-  reference: PageVersion_Version_Hero_Links_Link_Reference_Relationship
+  reference(draft: Boolean): PageVersion_Version_Hero_Links_Link_Reference_Relationship
   url: String
   label: String
   icon(where: PageVersion_Version_Hero_Links_Link_Icon_where): Media
@@ -2913,6 +3180,8 @@ input PageVersion_Version_Hero_Links_Link_Icon_where {
   filesize: PageVersion_Version_Hero_Links_Link_Icon_filesize_operator
   width: PageVersion_Version_Hero_Links_Link_Icon_width_operator
   height: PageVersion_Version_Hero_Links_Link_Icon_height_operator
+  focalX: PageVersion_Version_Hero_Links_Link_Icon_focalX_operator
+  focalY: PageVersion_Version_Hero_Links_Link_Icon_focalY_operator
   id: PageVersion_Version_Hero_Links_Link_Icon_id_operator
   AND: [PageVersion_Version_Hero_Links_Link_Icon_where_and]
   OR: [PageVersion_Version_Hero_Links_Link_Icon_where_or]
@@ -3021,6 +3290,26 @@ input PageVersion_Version_Hero_Links_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input PageVersion_Version_Hero_Links_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input PageVersion_Version_Hero_Links_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input PageVersion_Version_Hero_Links_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -3043,6 +3332,8 @@ input PageVersion_Version_Hero_Links_Link_Icon_where_and {
   filesize: PageVersion_Version_Hero_Links_Link_Icon_filesize_operator
   width: PageVersion_Version_Hero_Links_Link_Icon_width_operator
   height: PageVersion_Version_Hero_Links_Link_Icon_height_operator
+  focalX: PageVersion_Version_Hero_Links_Link_Icon_focalX_operator
+  focalY: PageVersion_Version_Hero_Links_Link_Icon_focalY_operator
   id: PageVersion_Version_Hero_Links_Link_Icon_id_operator
   AND: [PageVersion_Version_Hero_Links_Link_Icon_where_and]
   OR: [PageVersion_Version_Hero_Links_Link_Icon_where_or]
@@ -3059,6 +3350,8 @@ input PageVersion_Version_Hero_Links_Link_Icon_where_or {
   filesize: PageVersion_Version_Hero_Links_Link_Icon_filesize_operator
   width: PageVersion_Version_Hero_Links_Link_Icon_width_operator
   height: PageVersion_Version_Hero_Links_Link_Icon_height_operator
+  focalX: PageVersion_Version_Hero_Links_Link_Icon_focalX_operator
+  focalY: PageVersion_Version_Hero_Links_Link_Icon_focalY_operator
   id: PageVersion_Version_Hero_Links_Link_Icon_id_operator
   AND: [PageVersion_Version_Hero_Links_Link_Icon_where_and]
   OR: [PageVersion_Version_Hero_Links_Link_Icon_where_or]
@@ -3081,6 +3374,8 @@ input PageVersion_Version_Hero_Media_where {
   filesize: PageVersion_Version_Hero_Media_filesize_operator
   width: PageVersion_Version_Hero_Media_width_operator
   height: PageVersion_Version_Hero_Media_height_operator
+  focalX: PageVersion_Version_Hero_Media_focalX_operator
+  focalY: PageVersion_Version_Hero_Media_focalY_operator
   id: PageVersion_Version_Hero_Media_id_operator
   AND: [PageVersion_Version_Hero_Media_where_and]
   OR: [PageVersion_Version_Hero_Media_where_or]
@@ -3189,6 +3484,26 @@ input PageVersion_Version_Hero_Media_height_operator {
   exists: Boolean
 }
 
+input PageVersion_Version_Hero_Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input PageVersion_Version_Hero_Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input PageVersion_Version_Hero_Media_id_operator {
   equals: String
   not_equals: String
@@ -3211,6 +3526,8 @@ input PageVersion_Version_Hero_Media_where_and {
   filesize: PageVersion_Version_Hero_Media_filesize_operator
   width: PageVersion_Version_Hero_Media_width_operator
   height: PageVersion_Version_Hero_Media_height_operator
+  focalX: PageVersion_Version_Hero_Media_focalX_operator
+  focalY: PageVersion_Version_Hero_Media_focalY_operator
   id: PageVersion_Version_Hero_Media_id_operator
   AND: [PageVersion_Version_Hero_Media_where_and]
   OR: [PageVersion_Version_Hero_Media_where_or]
@@ -3227,6 +3544,8 @@ input PageVersion_Version_Hero_Media_where_or {
   filesize: PageVersion_Version_Hero_Media_filesize_operator
   width: PageVersion_Version_Hero_Media_width_operator
   height: PageVersion_Version_Hero_Media_height_operator
+  focalX: PageVersion_Version_Hero_Media_focalX_operator
+  focalY: PageVersion_Version_Hero_Media_focalY_operator
   id: PageVersion_Version_Hero_Media_id_operator
   AND: [PageVersion_Version_Hero_Media_where_and]
   OR: [PageVersion_Version_Hero_Media_where_or]
@@ -3251,6 +3570,8 @@ input PageVersion_Version_Meta_Image_where {
   filesize: PageVersion_Version_Meta_Image_filesize_operator
   width: PageVersion_Version_Meta_Image_width_operator
   height: PageVersion_Version_Meta_Image_height_operator
+  focalX: PageVersion_Version_Meta_Image_focalX_operator
+  focalY: PageVersion_Version_Meta_Image_focalY_operator
   id: PageVersion_Version_Meta_Image_id_operator
   AND: [PageVersion_Version_Meta_Image_where_and]
   OR: [PageVersion_Version_Meta_Image_where_or]
@@ -3359,6 +3680,26 @@ input PageVersion_Version_Meta_Image_height_operator {
   exists: Boolean
 }
 
+input PageVersion_Version_Meta_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input PageVersion_Version_Meta_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input PageVersion_Version_Meta_Image_id_operator {
   equals: String
   not_equals: String
@@ -3381,6 +3722,8 @@ input PageVersion_Version_Meta_Image_where_and {
   filesize: PageVersion_Version_Meta_Image_filesize_operator
   width: PageVersion_Version_Meta_Image_width_operator
   height: PageVersion_Version_Meta_Image_height_operator
+  focalX: PageVersion_Version_Meta_Image_focalX_operator
+  focalY: PageVersion_Version_Meta_Image_focalY_operator
   id: PageVersion_Version_Meta_Image_id_operator
   AND: [PageVersion_Version_Meta_Image_where_and]
   OR: [PageVersion_Version_Meta_Image_where_or]
@@ -3397,6 +3740,8 @@ input PageVersion_Version_Meta_Image_where_or {
   filesize: PageVersion_Version_Meta_Image_filesize_operator
   width: PageVersion_Version_Meta_Image_width_operator
   height: PageVersion_Version_Meta_Image_height_operator
+  focalX: PageVersion_Version_Meta_Image_focalX_operator
+  focalY: PageVersion_Version_Meta_Image_focalY_operator
   id: PageVersion_Version_Meta_Image_id_operator
   AND: [PageVersion_Version_Meta_Image_where_and]
   OR: [PageVersion_Version_Meta_Image_where_or]
@@ -3777,6 +4122,37 @@ type Products {
 input Product_where {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  isPackage: Product_isPackage_operator
+  benefits__benefit: Product_benefits__benefit_operator
+  benefits__id: Product_benefits__id_operator
+  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
+  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
+  travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
+  travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
+  travelDetails__amountSaved__value: Product_travelDetails__amountSaved__value_operator
+  travelDetails__multiCountry: Product_travelDetails__multiCountry_operator
+  travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
+  travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
+  travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
+  travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
+  travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
+  travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
+  travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
+  travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
+  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
+  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
+  travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
+  travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
+  travelDetails__flights__id: Product_travelDetails__flights__id_operator
+  travelDetails__destinations__city: Product_travelDetails__destinations__city_operator
+  travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
+  travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
+  travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
+  travelDetails__destinations__hotels__id: Product_travelDetails__destinations__hotels__id_operator
+  travelDetails__destinations__id: Product_travelDetails__destinations__id_operator
   stripeProductID: Product_stripeProductID_operator
   priceJSON: Product_priceJSON_operator
   enablePaywall: Product_enablePaywall_operator
@@ -3813,6 +4189,304 @@ input Product_publishedOn_operator {
   less_than_equal: DateTime
   less_than: DateTime
   like: DateTime
+  exists: Boolean
+}
+
+input Product_isPackage_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Product_benefits__benefit_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Product_benefits__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__travelDates__departureDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__travelDates__returnDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__travelDates__flexibility__beforeDays_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__travelDates__flexibility__afterDays_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__originalPrice_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__amountSaved__value_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__multiCountry_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Product_travelDetails__visaRequired_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Product_travelDetails__visaIncluded_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Product_travelDetails__travelInsuranceIncluded_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__flightNumber_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__departureAirport_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Product_travelDetails__flights__arrivalAirport_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Product_travelDetails__flights__departureTime_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__flights__arrivalTime_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__flights__airline_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__travelTimeMinutes_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input Product_travelDetails__flights__transitTimeMinutes_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__baggageAllowance__checkedInKg_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__baggageAllowance__cabinKg_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__baggageAllowance__bagNumber_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__flights__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__city_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__country_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__hotels__name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__hotels__stars_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__hotels__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_travelDetails__destinations__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -3951,6 +4625,37 @@ input Product_id_operator {
 input Product_where_and {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  isPackage: Product_isPackage_operator
+  benefits__benefit: Product_benefits__benefit_operator
+  benefits__id: Product_benefits__id_operator
+  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
+  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
+  travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
+  travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
+  travelDetails__amountSaved__value: Product_travelDetails__amountSaved__value_operator
+  travelDetails__multiCountry: Product_travelDetails__multiCountry_operator
+  travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
+  travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
+  travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
+  travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
+  travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
+  travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
+  travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
+  travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
+  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
+  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
+  travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
+  travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
+  travelDetails__flights__id: Product_travelDetails__flights__id_operator
+  travelDetails__destinations__city: Product_travelDetails__destinations__city_operator
+  travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
+  travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
+  travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
+  travelDetails__destinations__hotels__id: Product_travelDetails__destinations__hotels__id_operator
+  travelDetails__destinations__id: Product_travelDetails__destinations__id_operator
   stripeProductID: Product_stripeProductID_operator
   priceJSON: Product_priceJSON_operator
   enablePaywall: Product_enablePaywall_operator
@@ -3972,6 +4677,37 @@ input Product_where_and {
 input Product_where_or {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  isPackage: Product_isPackage_operator
+  benefits__benefit: Product_benefits__benefit_operator
+  benefits__id: Product_benefits__id_operator
+  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
+  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
+  travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
+  travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
+  travelDetails__amountSaved__value: Product_travelDetails__amountSaved__value_operator
+  travelDetails__multiCountry: Product_travelDetails__multiCountry_operator
+  travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
+  travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
+  travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
+  travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
+  travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
+  travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
+  travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
+  travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
+  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
+  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
+  travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
+  travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
+  travelDetails__flights__id: Product_travelDetails__flights__id_operator
+  travelDetails__destinations__city: Product_travelDetails__destinations__city_operator
+  travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
+  travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
+  travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
+  travelDetails__destinations__hotels__id: Product_travelDetails__destinations__hotels__id_operator
+  travelDetails__destinations__id: Product_travelDetails__destinations__id_operator
   stripeProductID: Product_stripeProductID_operator
   priceJSON: Product_priceJSON_operator
   enablePaywall: Product_enablePaywall_operator
@@ -3990,6 +4726,10 @@ input Product_where_or {
   OR: [Product_where_or]
 }
 
+type countProducts {
+  totalDocs: Int
+}
+
 type productsDocAccess {
   fields: ProductsDocAccessFields
   create: ProductsCreateDocAccess
@@ -4003,6 +4743,9 @@ type ProductsDocAccessFields {
   title: ProductsDocAccessFields_title
   publishedOn: ProductsDocAccessFields_publishedOn
   layout: ProductsDocAccessFields_layout
+  isPackage: ProductsDocAccessFields_isPackage
+  benefits: ProductsDocAccessFields_benefits
+  travelDetails: ProductsDocAccessFields_travelDetails
   stripeProductID: ProductsDocAccessFields_stripeProductID
   priceJSON: ProductsDocAccessFields_priceJSON
   enablePaywall: ProductsDocAccessFields_enablePaywall
@@ -4083,6 +4826,999 @@ type ProductsDocAccessFields_layout_Update {
 }
 
 type ProductsDocAccessFields_layout_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_isPackage {
+  create: ProductsDocAccessFields_isPackage_Create
+  read: ProductsDocAccessFields_isPackage_Read
+  update: ProductsDocAccessFields_isPackage_Update
+  delete: ProductsDocAccessFields_isPackage_Delete
+}
+
+type ProductsDocAccessFields_isPackage_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_isPackage_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_isPackage_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_isPackage_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits {
+  create: ProductsDocAccessFields_benefits_Create
+  read: ProductsDocAccessFields_benefits_Read
+  update: ProductsDocAccessFields_benefits_Update
+  delete: ProductsDocAccessFields_benefits_Delete
+  fields: ProductsDocAccessFields_benefits_Fields
+}
+
+type ProductsDocAccessFields_benefits_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_Fields {
+  benefit: ProductsDocAccessFields_benefits_benefit
+  id: ProductsDocAccessFields_benefits_id
+}
+
+type ProductsDocAccessFields_benefits_benefit {
+  create: ProductsDocAccessFields_benefits_benefit_Create
+  read: ProductsDocAccessFields_benefits_benefit_Read
+  update: ProductsDocAccessFields_benefits_benefit_Update
+  delete: ProductsDocAccessFields_benefits_benefit_Delete
+}
+
+type ProductsDocAccessFields_benefits_benefit_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_benefit_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_benefit_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_benefit_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_id {
+  create: ProductsDocAccessFields_benefits_id_Create
+  read: ProductsDocAccessFields_benefits_id_Read
+  update: ProductsDocAccessFields_benefits_id_Update
+  delete: ProductsDocAccessFields_benefits_id_Delete
+}
+
+type ProductsDocAccessFields_benefits_id_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_id_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_id_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_benefits_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails {
+  create: ProductsDocAccessFields_travelDetails_Create
+  read: ProductsDocAccessFields_travelDetails_Read
+  update: ProductsDocAccessFields_travelDetails_Update
+  delete: ProductsDocAccessFields_travelDetails_Delete
+  fields: ProductsDocAccessFields_travelDetails_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_Fields {
+  travelDates: ProductsDocAccessFields_travelDetails_travelDates
+  originalPrice: ProductsDocAccessFields_travelDetails_originalPrice
+  amountSaved: ProductsDocAccessFields_travelDetails_amountSaved
+  multiCountry: ProductsDocAccessFields_travelDetails_multiCountry
+  visaRequired: ProductsDocAccessFields_travelDetails_visaRequired
+  visaIncluded: ProductsDocAccessFields_travelDetails_visaIncluded
+  travelInsuranceIncluded: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded
+  flights: ProductsDocAccessFields_travelDetails_flights
+  destinations: ProductsDocAccessFields_travelDetails_destinations
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates {
+  create: ProductsDocAccessFields_travelDetails_travelDates_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_Delete
+  fields: ProductsDocAccessFields_travelDetails_travelDates_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_Fields {
+  departureDate: ProductsDocAccessFields_travelDetails_travelDates_departureDate
+  returnDate: ProductsDocAccessFields_travelDetails_travelDates_returnDate
+  flexibility: ProductsDocAccessFields_travelDetails_travelDates_flexibility
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_departureDate {
+  create: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_returnDate {
+  create: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility {
+  create: ProductsDocAccessFields_travelDetails_travelDates_flexibility_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_flexibility_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_flexibility_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_flexibility_Delete
+  fields: ProductsDocAccessFields_travelDetails_travelDates_flexibility_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_Fields {
+  beforeDays: ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays
+  afterDays: ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays {
+  create: ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_beforeDays_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays {
+  create: ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_flexibility_afterDays_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_originalPrice {
+  create: ProductsDocAccessFields_travelDetails_originalPrice_Create
+  read: ProductsDocAccessFields_travelDetails_originalPrice_Read
+  update: ProductsDocAccessFields_travelDetails_originalPrice_Update
+  delete: ProductsDocAccessFields_travelDetails_originalPrice_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_originalPrice_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_originalPrice_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_originalPrice_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_originalPrice_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved {
+  create: ProductsDocAccessFields_travelDetails_amountSaved_Create
+  read: ProductsDocAccessFields_travelDetails_amountSaved_Read
+  update: ProductsDocAccessFields_travelDetails_amountSaved_Update
+  delete: ProductsDocAccessFields_travelDetails_amountSaved_Delete
+  fields: ProductsDocAccessFields_travelDetails_amountSaved_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_Fields {
+  value: ProductsDocAccessFields_travelDetails_amountSaved_value
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_value {
+  create: ProductsDocAccessFields_travelDetails_amountSaved_value_Create
+  read: ProductsDocAccessFields_travelDetails_amountSaved_value_Read
+  update: ProductsDocAccessFields_travelDetails_amountSaved_value_Update
+  delete: ProductsDocAccessFields_travelDetails_amountSaved_value_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_value_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_value_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_value_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_amountSaved_value_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_multiCountry {
+  create: ProductsDocAccessFields_travelDetails_multiCountry_Create
+  read: ProductsDocAccessFields_travelDetails_multiCountry_Read
+  update: ProductsDocAccessFields_travelDetails_multiCountry_Update
+  delete: ProductsDocAccessFields_travelDetails_multiCountry_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_multiCountry_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_multiCountry_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_multiCountry_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_multiCountry_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaRequired {
+  create: ProductsDocAccessFields_travelDetails_visaRequired_Create
+  read: ProductsDocAccessFields_travelDetails_visaRequired_Read
+  update: ProductsDocAccessFields_travelDetails_visaRequired_Update
+  delete: ProductsDocAccessFields_travelDetails_visaRequired_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_visaRequired_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaRequired_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaRequired_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaRequired_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaIncluded {
+  create: ProductsDocAccessFields_travelDetails_visaIncluded_Create
+  read: ProductsDocAccessFields_travelDetails_visaIncluded_Read
+  update: ProductsDocAccessFields_travelDetails_visaIncluded_Update
+  delete: ProductsDocAccessFields_travelDetails_visaIncluded_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_visaIncluded_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaIncluded_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaIncluded_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_visaIncluded_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded {
+  create: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Create
+  read: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Read
+  update: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Update
+  delete: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights {
+  create: ProductsDocAccessFields_travelDetails_flights_Create
+  read: ProductsDocAccessFields_travelDetails_flights_Read
+  update: ProductsDocAccessFields_travelDetails_flights_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_Delete
+  fields: ProductsDocAccessFields_travelDetails_flights_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_flights_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_Fields {
+  flightNumber: ProductsDocAccessFields_travelDetails_flights_flightNumber
+  departureAirport: ProductsDocAccessFields_travelDetails_flights_departureAirport
+  arrivalAirport: ProductsDocAccessFields_travelDetails_flights_arrivalAirport
+  departureTime: ProductsDocAccessFields_travelDetails_flights_departureTime
+  arrivalTime: ProductsDocAccessFields_travelDetails_flights_arrivalTime
+  airline: ProductsDocAccessFields_travelDetails_flights_airline
+  travelTimeMinutes: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes
+  transitTimeMinutes: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes
+  baggageAllowance: ProductsDocAccessFields_travelDetails_flights_baggageAllowance
+  id: ProductsDocAccessFields_travelDetails_flights_id
+}
+
+type ProductsDocAccessFields_travelDetails_flights_flightNumber {
+  create: ProductsDocAccessFields_travelDetails_flights_flightNumber_Create
+  read: ProductsDocAccessFields_travelDetails_flights_flightNumber_Read
+  update: ProductsDocAccessFields_travelDetails_flights_flightNumber_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_flightNumber_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_flightNumber_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_flightNumber_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_flightNumber_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_flightNumber_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureAirport {
+  create: ProductsDocAccessFields_travelDetails_flights_departureAirport_Create
+  read: ProductsDocAccessFields_travelDetails_flights_departureAirport_Read
+  update: ProductsDocAccessFields_travelDetails_flights_departureAirport_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_departureAirport_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureAirport_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureAirport_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureAirport_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureAirport_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalAirport {
+  create: ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Create
+  read: ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Read
+  update: ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalAirport_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureTime {
+  create: ProductsDocAccessFields_travelDetails_flights_departureTime_Create
+  read: ProductsDocAccessFields_travelDetails_flights_departureTime_Read
+  update: ProductsDocAccessFields_travelDetails_flights_departureTime_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_departureTime_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureTime_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureTime_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureTime_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_departureTime_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalTime {
+  create: ProductsDocAccessFields_travelDetails_flights_arrivalTime_Create
+  read: ProductsDocAccessFields_travelDetails_flights_arrivalTime_Read
+  update: ProductsDocAccessFields_travelDetails_flights_arrivalTime_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_arrivalTime_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalTime_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalTime_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalTime_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_arrivalTime_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_airline {
+  create: ProductsDocAccessFields_travelDetails_flights_airline_Create
+  read: ProductsDocAccessFields_travelDetails_flights_airline_Read
+  update: ProductsDocAccessFields_travelDetails_flights_airline_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_airline_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_airline_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_airline_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_airline_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_airline_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes {
+  create: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Create
+  read: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Read
+  update: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes {
+  create: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Create
+  read: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Read
+  update: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance {
+  create: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Create
+  read: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Read
+  update: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Delete
+  fields: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_Fields {
+  checkedInKg: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg
+  cabinKg: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg
+  bagNumber: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg {
+  create: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Create
+  read: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Read
+  update: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_checkedInKg_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg {
+  create: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Create
+  read: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Read
+  update: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_cabinKg_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber {
+  create: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Create
+  read: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Read
+  update: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_baggageAllowance_bagNumber_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_id {
+  create: ProductsDocAccessFields_travelDetails_flights_id_Create
+  read: ProductsDocAccessFields_travelDetails_flights_id_Read
+  update: ProductsDocAccessFields_travelDetails_flights_id_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_id_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_flights_id_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_id_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_id_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_flights_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations {
+  create: ProductsDocAccessFields_travelDetails_destinations_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_Delete
+  fields: ProductsDocAccessFields_travelDetails_destinations_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_Fields {
+  city: ProductsDocAccessFields_travelDetails_destinations_city
+  country: ProductsDocAccessFields_travelDetails_destinations_country
+  hotels: ProductsDocAccessFields_travelDetails_destinations_hotels
+  id: ProductsDocAccessFields_travelDetails_destinations_id
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_city {
+  create: ProductsDocAccessFields_travelDetails_destinations_city_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_city_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_city_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_city_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_city_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_city_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_city_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_city_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_country {
+  create: ProductsDocAccessFields_travelDetails_destinations_country_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_country_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_country_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_country_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_country_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_country_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_country_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_country_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_Delete
+  fields: ProductsDocAccessFields_travelDetails_destinations_hotels_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_Fields {
+  name: ProductsDocAccessFields_travelDetails_destinations_hotels_name
+  stars: ProductsDocAccessFields_travelDetails_destinations_hotels_stars
+  id: ProductsDocAccessFields_travelDetails_destinations_hotels_id
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_name {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_name_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_name_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_name_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_name_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_name_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_name_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_name_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_name_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_stars {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_id {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_id_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_id_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_id_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_id_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_id_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_id_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_id_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_hotels_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_id {
+  create: ProductsDocAccessFields_travelDetails_destinations_id_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_id_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_id_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_id_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_id_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_id_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_id_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_destinations_id_Delete {
   permission: Boolean!
 }
 
@@ -4295,34 +6031,9 @@ type ProductsDocAccessFields_meta_Delete {
 }
 
 type ProductsDocAccessFields_meta_Fields {
-  overview: ProductsDocAccessFields_meta_overview
   title: ProductsDocAccessFields_meta_title
   description: ProductsDocAccessFields_meta_description
   image: ProductsDocAccessFields_meta_image
-  preview: ProductsDocAccessFields_meta_preview
-}
-
-type ProductsDocAccessFields_meta_overview {
-  create: ProductsDocAccessFields_meta_overview_Create
-  read: ProductsDocAccessFields_meta_overview_Read
-  update: ProductsDocAccessFields_meta_overview_Update
-  delete: ProductsDocAccessFields_meta_overview_Delete
-}
-
-type ProductsDocAccessFields_meta_overview_Create {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_overview_Read {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_overview_Update {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_overview_Delete {
-  permission: Boolean!
 }
 
 type ProductsDocAccessFields_meta_title {
@@ -4391,29 +6102,6 @@ type ProductsDocAccessFields_meta_image_Update {
 }
 
 type ProductsDocAccessFields_meta_image_Delete {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_preview {
-  create: ProductsDocAccessFields_meta_preview_Create
-  read: ProductsDocAccessFields_meta_preview_Read
-  update: ProductsDocAccessFields_meta_preview_Update
-  delete: ProductsDocAccessFields_meta_preview_Delete
-}
-
-type ProductsDocAccessFields_meta_preview_Create {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_preview_Read {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_preview_Update {
-  permission: Boolean!
-}
-
-type ProductsDocAccessFields_meta_preview_Delete {
   permission: Boolean!
 }
 
@@ -4512,7 +6200,7 @@ type ProductsReadVersionsDocAccess {
 }
 
 type ProductVersion {
-  parent: Product
+  parent(draft: Boolean): Product
   version: ProductVersion_Version
   createdAt: DateTime
   updatedAt: DateTime
@@ -4524,12 +6212,15 @@ type ProductVersion_Version {
   title: String
   publishedOn: DateTime
   layout: [ProductVersion_Version_Layout!]!
+  isPackage: Boolean
+  benefits: [ProductVersion_Version_Benefits!]
+  travelDetails: ProductVersion_Version_TravelDetails
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
   paywall: [ProductVersion_Version_Paywall!]
   categories: [Category!]
-  relatedProducts: [Product!]
+  relatedProducts(draft: Boolean): [Product!]
   slug: String
   skipSync: Boolean
   meta: ProductVersion_Version_Meta
@@ -4539,6 +6230,70 @@ type ProductVersion_Version {
 }
 
 union ProductVersion_Version_Layout = Cta | Content | MediaBlock | Archive
+
+type ProductVersion_Version_Benefits {
+  benefit: String
+  id: String
+}
+
+type ProductVersion_Version_TravelDetails {
+  travelDates: ProductVersion_Version_TravelDetails_TravelDates
+  originalPrice: Float
+  amountSaved: ProductVersion_Version_TravelDetails_AmountSaved
+  multiCountry: Boolean
+  visaRequired: Boolean
+  visaIncluded: Boolean
+  travelInsuranceIncluded: Boolean
+  flights: [ProductVersion_Version_TravelDetails_Flights!]
+  destinations: [ProductVersion_Version_TravelDetails_Destinations!]
+}
+
+type ProductVersion_Version_TravelDetails_TravelDates {
+  departureDate: DateTime
+  returnDate: DateTime
+  flexibility: ProductVersion_Version_TravelDetails_TravelDates_Flexibility
+}
+
+type ProductVersion_Version_TravelDetails_TravelDates_Flexibility {
+  beforeDays: Float
+  afterDays: Float
+}
+
+type ProductVersion_Version_TravelDetails_AmountSaved {
+  value: Float
+}
+
+type ProductVersion_Version_TravelDetails_Flights {
+  flightNumber: String
+  departureAirport: String
+  arrivalAirport: String
+  departureTime: DateTime
+  arrivalTime: DateTime
+  airline: String
+  travelTimeMinutes: Float
+  transitTimeMinutes: Float
+  baggageAllowance: ProductVersion_Version_TravelDetails_Flights_BaggageAllowance
+  id: String
+}
+
+type ProductVersion_Version_TravelDetails_Flights_BaggageAllowance {
+  checkedInKg: Float
+  cabinKg: Float
+  bagNumber: Float
+}
+
+type ProductVersion_Version_TravelDetails_Destinations {
+  city: String
+  country: String
+  hotels: [ProductVersion_Version_TravelDetails_Destinations_Hotels!]
+  id: String
+}
+
+type ProductVersion_Version_TravelDetails_Destinations_Hotels {
+  name: String
+  stars: Float
+  id: String
+}
 
 union ProductVersion_Version_Paywall = Cta | Content | MediaBlock | Archive
 
@@ -4559,6 +6314,8 @@ input ProductVersion_Version_Meta_Image_where {
   filesize: ProductVersion_Version_Meta_Image_filesize_operator
   width: ProductVersion_Version_Meta_Image_width_operator
   height: ProductVersion_Version_Meta_Image_height_operator
+  focalX: ProductVersion_Version_Meta_Image_focalX_operator
+  focalY: ProductVersion_Version_Meta_Image_focalY_operator
   id: ProductVersion_Version_Meta_Image_id_operator
   AND: [ProductVersion_Version_Meta_Image_where_and]
   OR: [ProductVersion_Version_Meta_Image_where_or]
@@ -4667,6 +6424,26 @@ input ProductVersion_Version_Meta_Image_height_operator {
   exists: Boolean
 }
 
+input ProductVersion_Version_Meta_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Meta_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input ProductVersion_Version_Meta_Image_id_operator {
   equals: String
   not_equals: String
@@ -4689,6 +6466,8 @@ input ProductVersion_Version_Meta_Image_where_and {
   filesize: ProductVersion_Version_Meta_Image_filesize_operator
   width: ProductVersion_Version_Meta_Image_width_operator
   height: ProductVersion_Version_Meta_Image_height_operator
+  focalX: ProductVersion_Version_Meta_Image_focalX_operator
+  focalY: ProductVersion_Version_Meta_Image_focalY_operator
   id: ProductVersion_Version_Meta_Image_id_operator
   AND: [ProductVersion_Version_Meta_Image_where_and]
   OR: [ProductVersion_Version_Meta_Image_where_or]
@@ -4705,6 +6484,8 @@ input ProductVersion_Version_Meta_Image_where_or {
   filesize: ProductVersion_Version_Meta_Image_filesize_operator
   width: ProductVersion_Version_Meta_Image_width_operator
   height: ProductVersion_Version_Meta_Image_height_operator
+  focalX: ProductVersion_Version_Meta_Image_focalX_operator
+  focalY: ProductVersion_Version_Meta_Image_focalY_operator
   id: ProductVersion_Version_Meta_Image_id_operator
   AND: [ProductVersion_Version_Meta_Image_where_and]
   OR: [ProductVersion_Version_Meta_Image_where_or]
@@ -4733,6 +6514,37 @@ input versionsProduct_where {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__isPackage: versionsProduct_version__isPackage_operator
+  version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
+  version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
+  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
+  version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
+  version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
+  version__travelDetails__amountSaved__value: versionsProduct_version__travelDetails__amountSaved__value_operator
+  version__travelDetails__multiCountry: versionsProduct_version__travelDetails__multiCountry_operator
+  version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
+  version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
+  version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
+  version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
+  version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
+  version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
+  version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
+  version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
+  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
+  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
+  version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
+  version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
+  version__travelDetails__flights__id: versionsProduct_version__travelDetails__flights__id_operator
+  version__travelDetails__destinations__city: versionsProduct_version__travelDetails__destinations__city_operator
+  version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
+  version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
+  version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
+  version__travelDetails__destinations__hotels__id: versionsProduct_version__travelDetails__destinations__hotels__id_operator
+  version__travelDetails__destinations__id: versionsProduct_version__travelDetails__destinations__id_operator
   version__stripeProductID: versionsProduct_version__stripeProductID_operator
   version__priceJSON: versionsProduct_version__priceJSON_operator
   version__enablePaywall: versionsProduct_version__enablePaywall_operator
@@ -4781,6 +6593,304 @@ input versionsProduct_version__publishedOn_operator {
   less_than_equal: DateTime
   less_than: DateTime
   like: DateTime
+  exists: Boolean
+}
+
+input versionsProduct_version__isPackage_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsProduct_version__benefits__benefit_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input versionsProduct_version__benefits__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__travelDates__departureDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__travelDates__returnDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__originalPrice_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__amountSaved__value_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__multiCountry_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__visaRequired_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__visaIncluded_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__travelInsuranceIncluded_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__flightNumber_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__departureAirport_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input versionsProduct_version__travelDetails__flights__arrivalAirport_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input versionsProduct_version__travelDetails__flights__departureTime_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__flights__arrivalTime_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__flights__airline_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__flights__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__city_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__country_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__hotels__name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__hotels__stars_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__hotels__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsProduct_version__travelDetails__destinations__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -4948,6 +7058,37 @@ input versionsProduct_where_and {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__isPackage: versionsProduct_version__isPackage_operator
+  version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
+  version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
+  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
+  version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
+  version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
+  version__travelDetails__amountSaved__value: versionsProduct_version__travelDetails__amountSaved__value_operator
+  version__travelDetails__multiCountry: versionsProduct_version__travelDetails__multiCountry_operator
+  version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
+  version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
+  version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
+  version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
+  version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
+  version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
+  version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
+  version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
+  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
+  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
+  version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
+  version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
+  version__travelDetails__flights__id: versionsProduct_version__travelDetails__flights__id_operator
+  version__travelDetails__destinations__city: versionsProduct_version__travelDetails__destinations__city_operator
+  version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
+  version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
+  version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
+  version__travelDetails__destinations__hotels__id: versionsProduct_version__travelDetails__destinations__hotels__id_operator
+  version__travelDetails__destinations__id: versionsProduct_version__travelDetails__destinations__id_operator
   version__stripeProductID: versionsProduct_version__stripeProductID_operator
   version__priceJSON: versionsProduct_version__priceJSON_operator
   version__enablePaywall: versionsProduct_version__enablePaywall_operator
@@ -4973,6 +7114,37 @@ input versionsProduct_where_or {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__isPackage: versionsProduct_version__isPackage_operator
+  version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
+  version__benefits__id: versionsProduct_version__benefits__id_operator
+  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
+  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
+  version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
+  version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
+  version__travelDetails__amountSaved__value: versionsProduct_version__travelDetails__amountSaved__value_operator
+  version__travelDetails__multiCountry: versionsProduct_version__travelDetails__multiCountry_operator
+  version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
+  version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
+  version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
+  version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
+  version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
+  version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
+  version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
+  version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
+  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
+  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
+  version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
+  version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
+  version__travelDetails__flights__id: versionsProduct_version__travelDetails__flights__id_operator
+  version__travelDetails__destinations__city: versionsProduct_version__travelDetails__destinations__city_operator
+  version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
+  version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
+  version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
+  version__travelDetails__destinations__hotels__id: versionsProduct_version__travelDetails__destinations__hotels__id_operator
+  version__travelDetails__destinations__id: versionsProduct_version__travelDetails__destinations__id_operator
   version__stripeProductID: versionsProduct_version__stripeProductID_operator
   version__priceJSON: versionsProduct_version__priceJSON_operator
   version__enablePaywall: versionsProduct_version__enablePaywall_operator
@@ -5008,7 +7180,7 @@ type User {
   id: String
   name: String
   roles: [User_roles!]
-  purchases: [Product!]
+  purchases(draft: Boolean): [Product!]
   stripeCustomerID: String
   cart: User_Cart
   skipSync: Boolean
@@ -5034,7 +7206,7 @@ type User_Cart {
 }
 
 type CartItems {
-  product: Product
+  product(draft: Boolean): Product
   quantity: Float
   id: String
 }
@@ -5045,7 +7217,7 @@ A field whose value conforms to the standard internet email address format as sp
 scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
 type Order_Items {
-  product: Product
+  product(draft: Boolean): Product
   price: Float
   quantity: Float
   id: String
@@ -5209,6 +7381,10 @@ input Order_where_or {
   id: Order_id_operator
   AND: [Order_where_and]
   OR: [Order_where_or]
+}
+
+type countOrders {
+  totalDocs: Int
 }
 
 type ordersDocAccess {
@@ -5511,6 +7687,8 @@ input Media_where {
   filesize: Media_filesize_operator
   width: Media_width_operator
   height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
   id: Media_id_operator
   AND: [Media_where_and]
   OR: [Media_where_or]
@@ -5619,6 +7797,26 @@ input Media_height_operator {
   exists: Boolean
 }
 
+input Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Media_id_operator {
   equals: String
   not_equals: String
@@ -5641,6 +7839,8 @@ input Media_where_and {
   filesize: Media_filesize_operator
   width: Media_width_operator
   height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
   id: Media_id_operator
   AND: [Media_where_and]
   OR: [Media_where_or]
@@ -5657,9 +7857,15 @@ input Media_where_or {
   filesize: Media_filesize_operator
   width: Media_width_operator
   height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
   id: Media_id_operator
   AND: [Media_where_and]
   OR: [Media_where_or]
+}
+
+type countallMedia {
+  totalDocs: Int
 }
 
 type mediaDocAccess {
@@ -5681,6 +7887,8 @@ type MediaDocAccessFields {
   filesize: MediaDocAccessFields_filesize
   width: MediaDocAccessFields_width
   height: MediaDocAccessFields_height
+  focalX: MediaDocAccessFields_focalX
+  focalY: MediaDocAccessFields_focalY
 }
 
 type MediaDocAccessFields_alt {
@@ -5913,6 +8121,52 @@ type MediaDocAccessFields_height_Delete {
   permission: Boolean!
 }
 
+type MediaDocAccessFields_focalX {
+  create: MediaDocAccessFields_focalX_Create
+  read: MediaDocAccessFields_focalX_Read
+  update: MediaDocAccessFields_focalX_Update
+  delete: MediaDocAccessFields_focalX_Delete
+}
+
+type MediaDocAccessFields_focalX_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY {
+  create: MediaDocAccessFields_focalY_Create
+  read: MediaDocAccessFields_focalY_Read
+  update: MediaDocAccessFields_focalY_Update
+  delete: MediaDocAccessFields_focalY_Delete
+}
+
+type MediaDocAccessFields_focalY_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Delete {
+  permission: Boolean!
+}
+
 type MediaCreateDocAccess {
   permission: Boolean!
   where: JSONObject
@@ -6111,6 +8365,10 @@ input Category_where_or {
   id: Category_id_operator
   AND: [Category_where_and]
   OR: [Category_where_or]
+}
+
+type countCategories {
+  totalDocs: Int
 }
 
 type categoriesDocAccess {
@@ -6601,6 +8859,10 @@ input User_where_or {
   OR: [User_where_or]
 }
 
+type countUsers {
+  totalDocs: Int
+}
+
 type usersDocAccess {
   fields: UsersDocAccessFields
   create: UsersCreateDocAccess
@@ -6985,6 +9247,7 @@ type UsersUnlockDocAccess {
 type usersMe {
   collection: String
   exp: Int
+  strategy: String
   token: String
   user: User
 }
@@ -6999,7 +9262,7 @@ type Redirect {
 
 type Redirect_To {
   type: Redirect_To_type
-  reference: Redirect_To_Reference_Relationship
+  reference(draft: Boolean): Redirect_To_Reference_Relationship
   url: String
 }
 
@@ -7144,6 +9407,10 @@ input Redirect_where_or {
   id: Redirect_id_operator
   AND: [Redirect_where_and]
   OR: [Redirect_where_or]
+}
+
+type countRedirects {
+  totalDocs: Int
 }
 
 type redirectsDocAccess {
@@ -7479,6 +9746,10 @@ input PayloadPreference_where_or {
   OR: [PayloadPreference_where_or]
 }
 
+type countPayloadPreferences {
+  totalDocs: Int
+}
+
 type payload_preferencesDocAccess {
   fields: PayloadPreferencesDocAccessFields
   create: PayloadPreferencesCreateDocAccess
@@ -7631,7 +9902,7 @@ type PayloadPreferencesDeleteDocAccess {
 }
 
 type Settings {
-  productsPage: Page
+  productsPage(draft: Boolean): Page
   updatedAt: DateTime
   createdAt: DateTime
 }
@@ -7741,7 +10012,7 @@ type Header_NavItems {
 type Header_NavItems_Link {
   type: Header_NavItems_Link_type
   newTab: Boolean
-  reference: Header_NavItems_Link_Reference_Relationship
+  reference(draft: Boolean): Header_NavItems_Link_Reference_Relationship
   url: String
   label: String
   icon(where: Header_NavItems_Link_Icon_where): Media
@@ -7774,6 +10045,8 @@ input Header_NavItems_Link_Icon_where {
   filesize: Header_NavItems_Link_Icon_filesize_operator
   width: Header_NavItems_Link_Icon_width_operator
   height: Header_NavItems_Link_Icon_height_operator
+  focalX: Header_NavItems_Link_Icon_focalX_operator
+  focalY: Header_NavItems_Link_Icon_focalY_operator
   id: Header_NavItems_Link_Icon_id_operator
   AND: [Header_NavItems_Link_Icon_where_and]
   OR: [Header_NavItems_Link_Icon_where_or]
@@ -7882,6 +10155,26 @@ input Header_NavItems_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input Header_NavItems_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Header_NavItems_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Header_NavItems_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -7904,6 +10197,8 @@ input Header_NavItems_Link_Icon_where_and {
   filesize: Header_NavItems_Link_Icon_filesize_operator
   width: Header_NavItems_Link_Icon_width_operator
   height: Header_NavItems_Link_Icon_height_operator
+  focalX: Header_NavItems_Link_Icon_focalX_operator
+  focalY: Header_NavItems_Link_Icon_focalY_operator
   id: Header_NavItems_Link_Icon_id_operator
   AND: [Header_NavItems_Link_Icon_where_and]
   OR: [Header_NavItems_Link_Icon_where_or]
@@ -7920,6 +10215,8 @@ input Header_NavItems_Link_Icon_where_or {
   filesize: Header_NavItems_Link_Icon_filesize_operator
   width: Header_NavItems_Link_Icon_width_operator
   height: Header_NavItems_Link_Icon_height_operator
+  focalX: Header_NavItems_Link_Icon_focalX_operator
+  focalY: Header_NavItems_Link_Icon_focalY_operator
   id: Header_NavItems_Link_Icon_id_operator
   AND: [Header_NavItems_Link_Icon_where_and]
   OR: [Header_NavItems_Link_Icon_where_or]
@@ -8234,7 +10531,7 @@ type Footer_NavItems {
 type Footer_NavItems_Link {
   type: Footer_NavItems_Link_type
   newTab: Boolean
-  reference: Footer_NavItems_Link_Reference_Relationship
+  reference(draft: Boolean): Footer_NavItems_Link_Reference_Relationship
   url: String
   label: String
   icon(where: Footer_NavItems_Link_Icon_where): Media
@@ -8267,6 +10564,8 @@ input Footer_NavItems_Link_Icon_where {
   filesize: Footer_NavItems_Link_Icon_filesize_operator
   width: Footer_NavItems_Link_Icon_width_operator
   height: Footer_NavItems_Link_Icon_height_operator
+  focalX: Footer_NavItems_Link_Icon_focalX_operator
+  focalY: Footer_NavItems_Link_Icon_focalY_operator
   id: Footer_NavItems_Link_Icon_id_operator
   AND: [Footer_NavItems_Link_Icon_where_and]
   OR: [Footer_NavItems_Link_Icon_where_or]
@@ -8375,6 +10674,26 @@ input Footer_NavItems_Link_Icon_height_operator {
   exists: Boolean
 }
 
+input Footer_NavItems_Link_Icon_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Footer_NavItems_Link_Icon_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Footer_NavItems_Link_Icon_id_operator {
   equals: String
   not_equals: String
@@ -8397,6 +10716,8 @@ input Footer_NavItems_Link_Icon_where_and {
   filesize: Footer_NavItems_Link_Icon_filesize_operator
   width: Footer_NavItems_Link_Icon_width_operator
   height: Footer_NavItems_Link_Icon_height_operator
+  focalX: Footer_NavItems_Link_Icon_focalX_operator
+  focalY: Footer_NavItems_Link_Icon_focalY_operator
   id: Footer_NavItems_Link_Icon_id_operator
   AND: [Footer_NavItems_Link_Icon_where_and]
   OR: [Footer_NavItems_Link_Icon_where_or]
@@ -8413,6 +10734,8 @@ input Footer_NavItems_Link_Icon_where_or {
   filesize: Footer_NavItems_Link_Icon_filesize_operator
   width: Footer_NavItems_Link_Icon_width_operator
   height: Footer_NavItems_Link_Icon_height_operator
+  focalX: Footer_NavItems_Link_Icon_focalX_operator
+  focalY: Footer_NavItems_Link_Icon_focalY_operator
   id: Footer_NavItems_Link_Icon_id_operator
   AND: [Footer_NavItems_Link_Icon_where_and]
   OR: [Footer_NavItems_Link_Icon_where_or]
@@ -8436,6 +10759,8 @@ input Footer_WindowSeatArticles_Image_where {
   filesize: Footer_WindowSeatArticles_Image_filesize_operator
   width: Footer_WindowSeatArticles_Image_width_operator
   height: Footer_WindowSeatArticles_Image_height_operator
+  focalX: Footer_WindowSeatArticles_Image_focalX_operator
+  focalY: Footer_WindowSeatArticles_Image_focalY_operator
   id: Footer_WindowSeatArticles_Image_id_operator
   AND: [Footer_WindowSeatArticles_Image_where_and]
   OR: [Footer_WindowSeatArticles_Image_where_or]
@@ -8544,6 +10869,26 @@ input Footer_WindowSeatArticles_Image_height_operator {
   exists: Boolean
 }
 
+input Footer_WindowSeatArticles_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Footer_WindowSeatArticles_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Footer_WindowSeatArticles_Image_id_operator {
   equals: String
   not_equals: String
@@ -8566,6 +10911,8 @@ input Footer_WindowSeatArticles_Image_where_and {
   filesize: Footer_WindowSeatArticles_Image_filesize_operator
   width: Footer_WindowSeatArticles_Image_width_operator
   height: Footer_WindowSeatArticles_Image_height_operator
+  focalX: Footer_WindowSeatArticles_Image_focalX_operator
+  focalY: Footer_WindowSeatArticles_Image_focalY_operator
   id: Footer_WindowSeatArticles_Image_id_operator
   AND: [Footer_WindowSeatArticles_Image_where_and]
   OR: [Footer_WindowSeatArticles_Image_where_or]
@@ -8582,6 +10929,8 @@ input Footer_WindowSeatArticles_Image_where_or {
   filesize: Footer_WindowSeatArticles_Image_filesize_operator
   width: Footer_WindowSeatArticles_Image_width_operator
   height: Footer_WindowSeatArticles_Image_height_operator
+  focalX: Footer_WindowSeatArticles_Image_focalX_operator
+  focalY: Footer_WindowSeatArticles_Image_focalY_operator
   id: Footer_WindowSeatArticles_Image_id_operator
   AND: [Footer_WindowSeatArticles_Image_where_and]
   OR: [Footer_WindowSeatArticles_Image_where_or]
@@ -9574,34 +11923,9 @@ type PagesFields_meta_Delete {
 }
 
 type PagesFields_meta_Fields {
-  overview: PagesFields_meta_overview
   title: PagesFields_meta_title
   description: PagesFields_meta_description
   image: PagesFields_meta_image
-  preview: PagesFields_meta_preview
-}
-
-type PagesFields_meta_overview {
-  create: PagesFields_meta_overview_Create
-  read: PagesFields_meta_overview_Read
-  update: PagesFields_meta_overview_Update
-  delete: PagesFields_meta_overview_Delete
-}
-
-type PagesFields_meta_overview_Create {
-  permission: Boolean!
-}
-
-type PagesFields_meta_overview_Read {
-  permission: Boolean!
-}
-
-type PagesFields_meta_overview_Update {
-  permission: Boolean!
-}
-
-type PagesFields_meta_overview_Delete {
-  permission: Boolean!
 }
 
 type PagesFields_meta_title {
@@ -9670,29 +11994,6 @@ type PagesFields_meta_image_Update {
 }
 
 type PagesFields_meta_image_Delete {
-  permission: Boolean!
-}
-
-type PagesFields_meta_preview {
-  create: PagesFields_meta_preview_Create
-  read: PagesFields_meta_preview_Read
-  update: PagesFields_meta_preview_Update
-  delete: PagesFields_meta_preview_Delete
-}
-
-type PagesFields_meta_preview_Create {
-  permission: Boolean!
-}
-
-type PagesFields_meta_preview_Read {
-  permission: Boolean!
-}
-
-type PagesFields_meta_preview_Update {
-  permission: Boolean!
-}
-
-type PagesFields_meta_preview_Delete {
   permission: Boolean!
 }
 
@@ -9803,6 +12104,9 @@ type ProductsFields {
   title: ProductsFields_title
   publishedOn: ProductsFields_publishedOn
   layout: ProductsFields_layout
+  isPackage: ProductsFields_isPackage
+  benefits: ProductsFields_benefits
+  travelDetails: ProductsFields_travelDetails
   stripeProductID: ProductsFields_stripeProductID
   priceJSON: ProductsFields_priceJSON
   enablePaywall: ProductsFields_enablePaywall
@@ -9883,6 +12187,999 @@ type ProductsFields_layout_Update {
 }
 
 type ProductsFields_layout_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_isPackage {
+  create: ProductsFields_isPackage_Create
+  read: ProductsFields_isPackage_Read
+  update: ProductsFields_isPackage_Update
+  delete: ProductsFields_isPackage_Delete
+}
+
+type ProductsFields_isPackage_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_isPackage_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_isPackage_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_isPackage_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits {
+  create: ProductsFields_benefits_Create
+  read: ProductsFields_benefits_Read
+  update: ProductsFields_benefits_Update
+  delete: ProductsFields_benefits_Delete
+  fields: ProductsFields_benefits_Fields
+}
+
+type ProductsFields_benefits_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_Fields {
+  benefit: ProductsFields_benefits_benefit
+  id: ProductsFields_benefits_id
+}
+
+type ProductsFields_benefits_benefit {
+  create: ProductsFields_benefits_benefit_Create
+  read: ProductsFields_benefits_benefit_Read
+  update: ProductsFields_benefits_benefit_Update
+  delete: ProductsFields_benefits_benefit_Delete
+}
+
+type ProductsFields_benefits_benefit_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_benefit_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_benefit_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_benefit_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_id {
+  create: ProductsFields_benefits_id_Create
+  read: ProductsFields_benefits_id_Read
+  update: ProductsFields_benefits_id_Update
+  delete: ProductsFields_benefits_id_Delete
+}
+
+type ProductsFields_benefits_id_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_id_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_id_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_benefits_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails {
+  create: ProductsFields_travelDetails_Create
+  read: ProductsFields_travelDetails_Read
+  update: ProductsFields_travelDetails_Update
+  delete: ProductsFields_travelDetails_Delete
+  fields: ProductsFields_travelDetails_Fields
+}
+
+type ProductsFields_travelDetails_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_Fields {
+  travelDates: ProductsFields_travelDetails_travelDates
+  originalPrice: ProductsFields_travelDetails_originalPrice
+  amountSaved: ProductsFields_travelDetails_amountSaved
+  multiCountry: ProductsFields_travelDetails_multiCountry
+  visaRequired: ProductsFields_travelDetails_visaRequired
+  visaIncluded: ProductsFields_travelDetails_visaIncluded
+  travelInsuranceIncluded: ProductsFields_travelDetails_travelInsuranceIncluded
+  flights: ProductsFields_travelDetails_flights
+  destinations: ProductsFields_travelDetails_destinations
+}
+
+type ProductsFields_travelDetails_travelDates {
+  create: ProductsFields_travelDetails_travelDates_Create
+  read: ProductsFields_travelDetails_travelDates_Read
+  update: ProductsFields_travelDetails_travelDates_Update
+  delete: ProductsFields_travelDetails_travelDates_Delete
+  fields: ProductsFields_travelDetails_travelDates_Fields
+}
+
+type ProductsFields_travelDetails_travelDates_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_Fields {
+  departureDate: ProductsFields_travelDetails_travelDates_departureDate
+  returnDate: ProductsFields_travelDetails_travelDates_returnDate
+  flexibility: ProductsFields_travelDetails_travelDates_flexibility
+}
+
+type ProductsFields_travelDetails_travelDates_departureDate {
+  create: ProductsFields_travelDetails_travelDates_departureDate_Create
+  read: ProductsFields_travelDetails_travelDates_departureDate_Read
+  update: ProductsFields_travelDetails_travelDates_departureDate_Update
+  delete: ProductsFields_travelDetails_travelDates_departureDate_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_departureDate_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_departureDate_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_departureDate_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_departureDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_returnDate {
+  create: ProductsFields_travelDetails_travelDates_returnDate_Create
+  read: ProductsFields_travelDetails_travelDates_returnDate_Read
+  update: ProductsFields_travelDetails_travelDates_returnDate_Update
+  delete: ProductsFields_travelDetails_travelDates_returnDate_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_returnDate_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_returnDate_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_returnDate_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_returnDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility {
+  create: ProductsFields_travelDetails_travelDates_flexibility_Create
+  read: ProductsFields_travelDetails_travelDates_flexibility_Read
+  update: ProductsFields_travelDetails_travelDates_flexibility_Update
+  delete: ProductsFields_travelDetails_travelDates_flexibility_Delete
+  fields: ProductsFields_travelDetails_travelDates_flexibility_Fields
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_Fields {
+  beforeDays: ProductsFields_travelDetails_travelDates_flexibility_beforeDays
+  afterDays: ProductsFields_travelDetails_travelDates_flexibility_afterDays
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_beforeDays {
+  create: ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Create
+  read: ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Read
+  update: ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Update
+  delete: ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_beforeDays_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_afterDays {
+  create: ProductsFields_travelDetails_travelDates_flexibility_afterDays_Create
+  read: ProductsFields_travelDetails_travelDates_flexibility_afterDays_Read
+  update: ProductsFields_travelDetails_travelDates_flexibility_afterDays_Update
+  delete: ProductsFields_travelDetails_travelDates_flexibility_afterDays_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_afterDays_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_afterDays_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_afterDays_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_flexibility_afterDays_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_originalPrice {
+  create: ProductsFields_travelDetails_originalPrice_Create
+  read: ProductsFields_travelDetails_originalPrice_Read
+  update: ProductsFields_travelDetails_originalPrice_Update
+  delete: ProductsFields_travelDetails_originalPrice_Delete
+}
+
+type ProductsFields_travelDetails_originalPrice_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_originalPrice_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_originalPrice_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_originalPrice_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved {
+  create: ProductsFields_travelDetails_amountSaved_Create
+  read: ProductsFields_travelDetails_amountSaved_Read
+  update: ProductsFields_travelDetails_amountSaved_Update
+  delete: ProductsFields_travelDetails_amountSaved_Delete
+  fields: ProductsFields_travelDetails_amountSaved_Fields
+}
+
+type ProductsFields_travelDetails_amountSaved_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_Fields {
+  value: ProductsFields_travelDetails_amountSaved_value
+}
+
+type ProductsFields_travelDetails_amountSaved_value {
+  create: ProductsFields_travelDetails_amountSaved_value_Create
+  read: ProductsFields_travelDetails_amountSaved_value_Read
+  update: ProductsFields_travelDetails_amountSaved_value_Update
+  delete: ProductsFields_travelDetails_amountSaved_value_Delete
+}
+
+type ProductsFields_travelDetails_amountSaved_value_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_value_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_value_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_amountSaved_value_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_multiCountry {
+  create: ProductsFields_travelDetails_multiCountry_Create
+  read: ProductsFields_travelDetails_multiCountry_Read
+  update: ProductsFields_travelDetails_multiCountry_Update
+  delete: ProductsFields_travelDetails_multiCountry_Delete
+}
+
+type ProductsFields_travelDetails_multiCountry_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_multiCountry_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_multiCountry_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_multiCountry_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaRequired {
+  create: ProductsFields_travelDetails_visaRequired_Create
+  read: ProductsFields_travelDetails_visaRequired_Read
+  update: ProductsFields_travelDetails_visaRequired_Update
+  delete: ProductsFields_travelDetails_visaRequired_Delete
+}
+
+type ProductsFields_travelDetails_visaRequired_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaRequired_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaRequired_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaRequired_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaIncluded {
+  create: ProductsFields_travelDetails_visaIncluded_Create
+  read: ProductsFields_travelDetails_visaIncluded_Read
+  update: ProductsFields_travelDetails_visaIncluded_Update
+  delete: ProductsFields_travelDetails_visaIncluded_Delete
+}
+
+type ProductsFields_travelDetails_visaIncluded_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaIncluded_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaIncluded_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_visaIncluded_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelInsuranceIncluded {
+  create: ProductsFields_travelDetails_travelInsuranceIncluded_Create
+  read: ProductsFields_travelDetails_travelInsuranceIncluded_Read
+  update: ProductsFields_travelDetails_travelInsuranceIncluded_Update
+  delete: ProductsFields_travelDetails_travelInsuranceIncluded_Delete
+}
+
+type ProductsFields_travelDetails_travelInsuranceIncluded_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelInsuranceIncluded_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelInsuranceIncluded_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelInsuranceIncluded_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights {
+  create: ProductsFields_travelDetails_flights_Create
+  read: ProductsFields_travelDetails_flights_Read
+  update: ProductsFields_travelDetails_flights_Update
+  delete: ProductsFields_travelDetails_flights_Delete
+  fields: ProductsFields_travelDetails_flights_Fields
+}
+
+type ProductsFields_travelDetails_flights_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_Fields {
+  flightNumber: ProductsFields_travelDetails_flights_flightNumber
+  departureAirport: ProductsFields_travelDetails_flights_departureAirport
+  arrivalAirport: ProductsFields_travelDetails_flights_arrivalAirport
+  departureTime: ProductsFields_travelDetails_flights_departureTime
+  arrivalTime: ProductsFields_travelDetails_flights_arrivalTime
+  airline: ProductsFields_travelDetails_flights_airline
+  travelTimeMinutes: ProductsFields_travelDetails_flights_travelTimeMinutes
+  transitTimeMinutes: ProductsFields_travelDetails_flights_transitTimeMinutes
+  baggageAllowance: ProductsFields_travelDetails_flights_baggageAllowance
+  id: ProductsFields_travelDetails_flights_id
+}
+
+type ProductsFields_travelDetails_flights_flightNumber {
+  create: ProductsFields_travelDetails_flights_flightNumber_Create
+  read: ProductsFields_travelDetails_flights_flightNumber_Read
+  update: ProductsFields_travelDetails_flights_flightNumber_Update
+  delete: ProductsFields_travelDetails_flights_flightNumber_Delete
+}
+
+type ProductsFields_travelDetails_flights_flightNumber_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_flightNumber_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_flightNumber_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_flightNumber_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureAirport {
+  create: ProductsFields_travelDetails_flights_departureAirport_Create
+  read: ProductsFields_travelDetails_flights_departureAirport_Read
+  update: ProductsFields_travelDetails_flights_departureAirport_Update
+  delete: ProductsFields_travelDetails_flights_departureAirport_Delete
+}
+
+type ProductsFields_travelDetails_flights_departureAirport_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureAirport_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureAirport_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureAirport_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalAirport {
+  create: ProductsFields_travelDetails_flights_arrivalAirport_Create
+  read: ProductsFields_travelDetails_flights_arrivalAirport_Read
+  update: ProductsFields_travelDetails_flights_arrivalAirport_Update
+  delete: ProductsFields_travelDetails_flights_arrivalAirport_Delete
+}
+
+type ProductsFields_travelDetails_flights_arrivalAirport_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalAirport_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalAirport_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalAirport_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureTime {
+  create: ProductsFields_travelDetails_flights_departureTime_Create
+  read: ProductsFields_travelDetails_flights_departureTime_Read
+  update: ProductsFields_travelDetails_flights_departureTime_Update
+  delete: ProductsFields_travelDetails_flights_departureTime_Delete
+}
+
+type ProductsFields_travelDetails_flights_departureTime_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureTime_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureTime_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_departureTime_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalTime {
+  create: ProductsFields_travelDetails_flights_arrivalTime_Create
+  read: ProductsFields_travelDetails_flights_arrivalTime_Read
+  update: ProductsFields_travelDetails_flights_arrivalTime_Update
+  delete: ProductsFields_travelDetails_flights_arrivalTime_Delete
+}
+
+type ProductsFields_travelDetails_flights_arrivalTime_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalTime_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalTime_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_arrivalTime_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_airline {
+  create: ProductsFields_travelDetails_flights_airline_Create
+  read: ProductsFields_travelDetails_flights_airline_Read
+  update: ProductsFields_travelDetails_flights_airline_Update
+  delete: ProductsFields_travelDetails_flights_airline_Delete
+}
+
+type ProductsFields_travelDetails_flights_airline_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_airline_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_airline_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_airline_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_travelTimeMinutes {
+  create: ProductsFields_travelDetails_flights_travelTimeMinutes_Create
+  read: ProductsFields_travelDetails_flights_travelTimeMinutes_Read
+  update: ProductsFields_travelDetails_flights_travelTimeMinutes_Update
+  delete: ProductsFields_travelDetails_flights_travelTimeMinutes_Delete
+}
+
+type ProductsFields_travelDetails_flights_travelTimeMinutes_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_travelTimeMinutes_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_travelTimeMinutes_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_travelTimeMinutes_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_transitTimeMinutes {
+  create: ProductsFields_travelDetails_flights_transitTimeMinutes_Create
+  read: ProductsFields_travelDetails_flights_transitTimeMinutes_Read
+  update: ProductsFields_travelDetails_flights_transitTimeMinutes_Update
+  delete: ProductsFields_travelDetails_flights_transitTimeMinutes_Delete
+}
+
+type ProductsFields_travelDetails_flights_transitTimeMinutes_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_transitTimeMinutes_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_transitTimeMinutes_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_transitTimeMinutes_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance {
+  create: ProductsFields_travelDetails_flights_baggageAllowance_Create
+  read: ProductsFields_travelDetails_flights_baggageAllowance_Read
+  update: ProductsFields_travelDetails_flights_baggageAllowance_Update
+  delete: ProductsFields_travelDetails_flights_baggageAllowance_Delete
+  fields: ProductsFields_travelDetails_flights_baggageAllowance_Fields
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_Fields {
+  checkedInKg: ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg
+  cabinKg: ProductsFields_travelDetails_flights_baggageAllowance_cabinKg
+  bagNumber: ProductsFields_travelDetails_flights_baggageAllowance_bagNumber
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg {
+  create: ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Create
+  read: ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Read
+  update: ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Update
+  delete: ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Delete
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_checkedInKg_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_cabinKg {
+  create: ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Create
+  read: ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Read
+  update: ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Update
+  delete: ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Delete
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_cabinKg_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_bagNumber {
+  create: ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Create
+  read: ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Read
+  update: ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Update
+  delete: ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Delete
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_baggageAllowance_bagNumber_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_id {
+  create: ProductsFields_travelDetails_flights_id_Create
+  read: ProductsFields_travelDetails_flights_id_Read
+  update: ProductsFields_travelDetails_flights_id_Update
+  delete: ProductsFields_travelDetails_flights_id_Delete
+}
+
+type ProductsFields_travelDetails_flights_id_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_id_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_id_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_flights_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations {
+  create: ProductsFields_travelDetails_destinations_Create
+  read: ProductsFields_travelDetails_destinations_Read
+  update: ProductsFields_travelDetails_destinations_Update
+  delete: ProductsFields_travelDetails_destinations_Delete
+  fields: ProductsFields_travelDetails_destinations_Fields
+}
+
+type ProductsFields_travelDetails_destinations_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_Fields {
+  city: ProductsFields_travelDetails_destinations_city
+  country: ProductsFields_travelDetails_destinations_country
+  hotels: ProductsFields_travelDetails_destinations_hotels
+  id: ProductsFields_travelDetails_destinations_id
+}
+
+type ProductsFields_travelDetails_destinations_city {
+  create: ProductsFields_travelDetails_destinations_city_Create
+  read: ProductsFields_travelDetails_destinations_city_Read
+  update: ProductsFields_travelDetails_destinations_city_Update
+  delete: ProductsFields_travelDetails_destinations_city_Delete
+}
+
+type ProductsFields_travelDetails_destinations_city_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_city_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_city_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_city_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_country {
+  create: ProductsFields_travelDetails_destinations_country_Create
+  read: ProductsFields_travelDetails_destinations_country_Read
+  update: ProductsFields_travelDetails_destinations_country_Update
+  delete: ProductsFields_travelDetails_destinations_country_Delete
+}
+
+type ProductsFields_travelDetails_destinations_country_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_country_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_country_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_country_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels {
+  create: ProductsFields_travelDetails_destinations_hotels_Create
+  read: ProductsFields_travelDetails_destinations_hotels_Read
+  update: ProductsFields_travelDetails_destinations_hotels_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_Delete
+  fields: ProductsFields_travelDetails_destinations_hotels_Fields
+}
+
+type ProductsFields_travelDetails_destinations_hotels_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_Fields {
+  name: ProductsFields_travelDetails_destinations_hotels_name
+  stars: ProductsFields_travelDetails_destinations_hotels_stars
+  id: ProductsFields_travelDetails_destinations_hotels_id
+}
+
+type ProductsFields_travelDetails_destinations_hotels_name {
+  create: ProductsFields_travelDetails_destinations_hotels_name_Create
+  read: ProductsFields_travelDetails_destinations_hotels_name_Read
+  update: ProductsFields_travelDetails_destinations_hotels_name_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_name_Delete
+}
+
+type ProductsFields_travelDetails_destinations_hotels_name_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_name_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_name_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_name_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_stars {
+  create: ProductsFields_travelDetails_destinations_hotels_stars_Create
+  read: ProductsFields_travelDetails_destinations_hotels_stars_Read
+  update: ProductsFields_travelDetails_destinations_hotels_stars_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_stars_Delete
+}
+
+type ProductsFields_travelDetails_destinations_hotels_stars_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_stars_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_stars_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_stars_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_id {
+  create: ProductsFields_travelDetails_destinations_hotels_id_Create
+  read: ProductsFields_travelDetails_destinations_hotels_id_Read
+  update: ProductsFields_travelDetails_destinations_hotels_id_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_id_Delete
+}
+
+type ProductsFields_travelDetails_destinations_hotels_id_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_id_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_id_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_hotels_id_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_id {
+  create: ProductsFields_travelDetails_destinations_id_Create
+  read: ProductsFields_travelDetails_destinations_id_Read
+  update: ProductsFields_travelDetails_destinations_id_Update
+  delete: ProductsFields_travelDetails_destinations_id_Delete
+}
+
+type ProductsFields_travelDetails_destinations_id_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_id_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_id_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_destinations_id_Delete {
   permission: Boolean!
 }
 
@@ -10095,34 +13392,9 @@ type ProductsFields_meta_Delete {
 }
 
 type ProductsFields_meta_Fields {
-  overview: ProductsFields_meta_overview
   title: ProductsFields_meta_title
   description: ProductsFields_meta_description
   image: ProductsFields_meta_image
-  preview: ProductsFields_meta_preview
-}
-
-type ProductsFields_meta_overview {
-  create: ProductsFields_meta_overview_Create
-  read: ProductsFields_meta_overview_Read
-  update: ProductsFields_meta_overview_Update
-  delete: ProductsFields_meta_overview_Delete
-}
-
-type ProductsFields_meta_overview_Create {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_overview_Read {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_overview_Update {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_overview_Delete {
-  permission: Boolean!
 }
 
 type ProductsFields_meta_title {
@@ -10191,29 +13463,6 @@ type ProductsFields_meta_image_Update {
 }
 
 type ProductsFields_meta_image_Delete {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_preview {
-  create: ProductsFields_meta_preview_Create
-  read: ProductsFields_meta_preview_Read
-  update: ProductsFields_meta_preview_Update
-  delete: ProductsFields_meta_preview_Delete
-}
-
-type ProductsFields_meta_preview_Create {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_preview_Read {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_preview_Update {
-  permission: Boolean!
-}
-
-type ProductsFields_meta_preview_Delete {
   permission: Boolean!
 }
 
@@ -10605,6 +13854,8 @@ type MediaFields {
   filesize: MediaFields_filesize
   width: MediaFields_width
   height: MediaFields_height
+  focalX: MediaFields_focalX
+  focalY: MediaFields_focalY
 }
 
 type MediaFields_alt {
@@ -10834,6 +14085,52 @@ type MediaFields_height_Update {
 }
 
 type MediaFields_height_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_focalX {
+  create: MediaFields_focalX_Create
+  read: MediaFields_focalX_Read
+  update: MediaFields_focalX_Update
+  delete: MediaFields_focalX_Delete
+}
+
+type MediaFields_focalX_Create {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Read {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Update {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_focalY {
+  create: MediaFields_focalY_Create
+  read: MediaFields_focalY_Read
+  update: MediaFields_focalY_Update
+  delete: MediaFields_focalY_Delete
+}
+
+type MediaFields_focalY_Create {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Read {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Update {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Delete {
   permission: Boolean!
 }
 
@@ -12769,30 +16066,30 @@ type Mutation {
   updateProduct(id: String!, autosave: Boolean, data: mutationProductUpdateInput!, draft: Boolean): Product
   deleteProduct(id: String!): Product
   restoreVersionProduct(id: String): Product
-  createOrder(data: mutationOrderInput!, draft: Boolean): Order
-  updateOrder(id: String!, autosave: Boolean, data: mutationOrderUpdateInput!, draft: Boolean): Order
+  createOrder(data: mutationOrderInput!): Order
+  updateOrder(id: String!, autosave: Boolean, data: mutationOrderUpdateInput!): Order
   deleteOrder(id: String!): Order
-  createMedia(data: mutationMediaInput!, draft: Boolean): Media
-  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
+  createMedia(data: mutationMediaInput!): Media
+  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!): Media
   deleteMedia(id: String!): Media
-  createCategory(data: mutationCategoryInput!, draft: Boolean): Category
-  updateCategory(id: String!, autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean): Category
+  createCategory(data: mutationCategoryInput!): Category
+  updateCategory(id: String!, autosave: Boolean, data: mutationCategoryUpdateInput!): Category
   deleteCategory(id: String!): Category
-  createUser(data: mutationUserInput!, draft: Boolean): User
-  updateUser(id: String!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
+  createUser(data: mutationUserInput!): User
+  updateUser(id: String!, autosave: Boolean, data: mutationUserUpdateInput!): User
   deleteUser(id: String!): User
-  refreshTokenUser(token: String): usersRefreshedUser
+  refreshTokenUser: usersRefreshedUser
   logoutUser: String
   unlockUser(email: String!): Boolean!
   loginUser(email: String, password: String): usersLoginResult
   forgotPasswordUser(disableEmail: Boolean, email: String!, expiration: Int): Boolean!
   resetPasswordUser(password: String, token: String): usersResetPassword
   verifyEmailUser(token: String): Boolean
-  createRedirect(data: mutationRedirectInput!, draft: Boolean): Redirect
-  updateRedirect(id: String!, autosave: Boolean, data: mutationRedirectUpdateInput!, draft: Boolean): Redirect
+  createRedirect(data: mutationRedirectInput!): Redirect
+  updateRedirect(id: String!, autosave: Boolean, data: mutationRedirectUpdateInput!): Redirect
   deleteRedirect(id: String!): Redirect
-  createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
-  updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
+  createPayloadPreference(data: mutationPayloadPreferenceInput!): PayloadPreference
+  updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!): PayloadPreference
   deletePayloadPreference(id: String!): PayloadPreference
   updateSettings(data: mutationSettingsInput!, draft: Boolean): Settings
   updateHeader(data: mutationHeaderInput!, draft: Boolean): Header
@@ -12939,6 +16236,9 @@ input mutationProductInput {
   title: String!
   publishedOn: String
   layout: JSON
+  isPackage: Boolean
+  benefits: [mutationProduct_BenefitsInput]
+  travelDetails: mutationProduct_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
@@ -12951,6 +16251,70 @@ input mutationProductInput {
   updatedAt: String
   createdAt: String
   _status: Product__status_MutationInput
+}
+
+input mutationProduct_BenefitsInput {
+  benefit: String!
+  id: String
+}
+
+input mutationProduct_TravelDetailsInput {
+  travelDates: mutationProduct_TravelDetails_TravelDatesInput!
+  originalPrice: Float
+  amountSaved: mutationProduct_TravelDetails_AmountSavedInput
+  multiCountry: Boolean
+  visaRequired: Boolean
+  visaIncluded: Boolean
+  travelInsuranceIncluded: Boolean
+  flights: [mutationProduct_TravelDetails_FlightsInput]
+  destinations: [mutationProduct_TravelDetails_DestinationsInput]
+}
+
+input mutationProduct_TravelDetails_TravelDatesInput {
+  departureDate: String!
+  returnDate: String!
+  flexibility: mutationProduct_TravelDetails_TravelDates_FlexibilityInput
+}
+
+input mutationProduct_TravelDetails_TravelDates_FlexibilityInput {
+  beforeDays: Float
+  afterDays: Float
+}
+
+input mutationProduct_TravelDetails_AmountSavedInput {
+  value: Float
+}
+
+input mutationProduct_TravelDetails_FlightsInput {
+  flightNumber: String
+  departureAirport: String!
+  arrivalAirport: String!
+  departureTime: String!
+  arrivalTime: String!
+  airline: String
+  travelTimeMinutes: Float!
+  transitTimeMinutes: Float
+  baggageAllowance: mutationProduct_TravelDetails_Flights_BaggageAllowanceInput
+  id: String
+}
+
+input mutationProduct_TravelDetails_Flights_BaggageAllowanceInput {
+  checkedInKg: Float
+  cabinKg: Float
+  bagNumber: Float
+}
+
+input mutationProduct_TravelDetails_DestinationsInput {
+  city: String
+  country: String
+  hotels: [mutationProduct_TravelDetails_Destinations_HotelsInput]
+  id: String
+}
+
+input mutationProduct_TravelDetails_Destinations_HotelsInput {
+  name: String
+  stars: Float
+  id: String
 }
 
 input mutationProduct_MetaInput {
@@ -12968,6 +16332,9 @@ input mutationProductUpdateInput {
   title: String
   publishedOn: String
   layout: JSON
+  isPackage: Boolean
+  benefits: [mutationProductUpdate_BenefitsInput]
+  travelDetails: mutationProductUpdate_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
@@ -12980,6 +16347,70 @@ input mutationProductUpdateInput {
   updatedAt: String
   createdAt: String
   _status: ProductUpdate__status_MutationInput
+}
+
+input mutationProductUpdate_BenefitsInput {
+  benefit: String!
+  id: String
+}
+
+input mutationProductUpdate_TravelDetailsInput {
+  travelDates: mutationProductUpdate_TravelDetails_TravelDatesInput!
+  originalPrice: Float
+  amountSaved: mutationProductUpdate_TravelDetails_AmountSavedInput
+  multiCountry: Boolean
+  visaRequired: Boolean
+  visaIncluded: Boolean
+  travelInsuranceIncluded: Boolean
+  flights: [mutationProductUpdate_TravelDetails_FlightsInput]
+  destinations: [mutationProductUpdate_TravelDetails_DestinationsInput]
+}
+
+input mutationProductUpdate_TravelDetails_TravelDatesInput {
+  departureDate: String!
+  returnDate: String!
+  flexibility: mutationProductUpdate_TravelDetails_TravelDates_FlexibilityInput
+}
+
+input mutationProductUpdate_TravelDetails_TravelDates_FlexibilityInput {
+  beforeDays: Float
+  afterDays: Float
+}
+
+input mutationProductUpdate_TravelDetails_AmountSavedInput {
+  value: Float
+}
+
+input mutationProductUpdate_TravelDetails_FlightsInput {
+  flightNumber: String
+  departureAirport: String!
+  arrivalAirport: String!
+  departureTime: String!
+  arrivalTime: String!
+  airline: String
+  travelTimeMinutes: Float!
+  transitTimeMinutes: Float
+  baggageAllowance: mutationProductUpdate_TravelDetails_Flights_BaggageAllowanceInput
+  id: String
+}
+
+input mutationProductUpdate_TravelDetails_Flights_BaggageAllowanceInput {
+  checkedInKg: Float
+  cabinKg: Float
+  bagNumber: Float
+}
+
+input mutationProductUpdate_TravelDetails_DestinationsInput {
+  city: String
+  country: String
+  hotels: [mutationProductUpdate_TravelDetails_Destinations_HotelsInput]
+  id: String
+}
+
+input mutationProductUpdate_TravelDetails_Destinations_HotelsInput {
+  name: String
+  stars: Float
+  id: String
 }
 
 input mutationProductUpdate_MetaInput {
@@ -13036,6 +16467,8 @@ input mutationMediaInput {
   filesize: Float
   width: Float
   height: Float
+  focalX: Float
+  focalY: Float
 }
 
 input mutationMediaUpdateInput {
@@ -13049,6 +16482,8 @@ input mutationMediaUpdateInput {
   filesize: Float
   width: Float
   height: Float
+  focalX: Float
+  focalY: Float
 }
 
 input mutationCategoryInput {
@@ -13174,6 +16609,7 @@ input mutationUserUpdate_Cart_ItemsInput {
 type usersRefreshedUser {
   exp: Int
   refreshedToken: String
+  strategy: String
   user: usersJWT
 }
 

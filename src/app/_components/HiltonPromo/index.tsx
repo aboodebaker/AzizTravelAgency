@@ -20,6 +20,7 @@ const HiltonPromo = ({
   href: string
   product: Product
 }) => {
+  console.log(product)
   return (
     <div className={classes.hiltonPromo}>
       <div className={classes.card}>

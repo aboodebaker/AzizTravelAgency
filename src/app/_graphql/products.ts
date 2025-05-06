@@ -7,6 +7,49 @@ export const PRODUCTS = `
     Products(limit: 300) {
       docs {
         slug
+        isPackage
+        benefits # Will return only if not a package
+        travelDetails { # Will return only if it's a package
+          travelDates {
+            departureDate
+            returnDate
+            flexibility {
+              beforeDays
+              afterDays
+            }
+          }
+          originalPrice
+          amountSaved {
+            value
+          }
+          multiCountry
+          visaRequired
+          visaIncluded
+          travelInsuranceIncluded
+          flights {
+            flightNumber
+            departureAirport
+            arrivalAirport
+            departureTime
+            arrivalTime
+            airline
+            travelTimeMinutes
+            transitTimeMinutes
+            baggageAllowance {
+              checkedInKg
+              cabinKg
+              bagNumber
+            }
+          }
+          destinations {
+            city
+            country
+            hotels {
+              name
+              stars
+            }
+          }
+        }
       }
     }
   }
@@ -17,8 +60,52 @@ export const PRODUCT = `
     Products(where: { slug: { equals: $slug}}, limit: 1, draft: $draft) {
       docs {
         id
+        slug
         title
         stripeProductID
+        isPackage
+        benefits
+        travelDetails {
+          travelDates {
+            departureDate
+            returnDate
+            flexibility {
+              beforeDays
+              afterDays
+            }
+          }
+          originalPrice
+          amountSaved {
+            value
+          }
+          multiCountry
+          visaRequired
+          visaIncluded
+          travelInsuranceIncluded
+          flights {
+            flightNumber
+            departureAirport
+            arrivalAirport
+            departureTime
+            arrivalTime
+            airline
+            travelTimeMinutes
+            transitTimeMinutes
+            baggageAllowance {
+              checkedInKg
+              cabinKg
+              bagNumber
+            }
+          }
+          destinations {
+            city
+            country
+            hotels {
+              name
+              stars
+            }
+          }
+        }
         ${PRODUCT_CATEGORIES}
         layout {
           ${CALL_TO_ACTION}

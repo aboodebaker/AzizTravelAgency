@@ -12,7 +12,7 @@ export const CustomHero: React.FC<Page['hero']> = ({ richText, media, links }) =
   const mediaUrl =
     media &&
     typeof media !== 'string' &&
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${media.filename}`
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${encodeURIComponent(media.filename)}`
 
   return (
     <section className={classes.hero}>

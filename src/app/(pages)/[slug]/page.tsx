@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 /* eslint-disable prettier/prettier */
 import React from 'react'
 import { Metadata } from 'next'
@@ -48,8 +49,11 @@ export default async function Page({ params: { slug = 'home' } }) {
 
     if (!targetCategory) throw new Error('Category not found')
 
-    const allProducts = await fetchDocs<Product>('products')
-     productsInCategory = allProducts
+    const allProducts = (await fetchDocs<Product>('products'))
+     productsInCategory = allProducts.filter(
+      product => product.isPackage === false)
+
+      
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
     // so swallow the error here and simply render the page with fallback data where necessary
@@ -67,6 +71,7 @@ export default async function Page({ params: { slug = 'home' } }) {
   if (!page) {
     return notFound()
   }
+  console.log(productsInCategory)
 
   const benefits = [
     '100% Points earning Bonus on stays',

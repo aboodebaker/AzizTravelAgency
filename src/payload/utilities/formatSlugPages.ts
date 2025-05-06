@@ -6,8 +6,7 @@ const format = (val: string): string => {
     .replace(/[^\w-]+/g, '')
     .toLowerCase()
 
-  const randomSuffix = Math.random().toString(36).substring(2, 8) // 6-character random string
-  return `${base}-${randomSuffix}`
+  return `${base}`
 }
 
 const formatSlug =

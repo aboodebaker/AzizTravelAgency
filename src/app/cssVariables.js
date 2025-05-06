@@ -1,5 +1,5 @@
 // Keep these in sync with the CSS variables in the `_css` directory
-
+// Removed invalid @import statement. TailwindCSS should be imported in CSS files or configured in the Tailwind config file.
 module.exports = {
   breakpoints: {
     s: 768,

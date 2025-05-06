@@ -77,6 +77,185 @@ const Products: CollectionConfig = {
               required: true,
               blocks: [CallToAction, Content, MediaBlock, Archive],
             },
+            {
+              name: 'isPackage',
+              label: 'Is a Package?',
+              type: 'checkbox',
+            },
+            {
+              name: 'benefits',
+              label: 'Benefits',
+              type: 'array',
+              admin: {
+                condition: (_, siblingData) => siblingData?.isPackage === false, // Only shows if it's NOT a package
+              },
+              fields: [
+                {
+                  name: 'benefit',
+                  type: 'text',
+                  required: true, // Ensures that each benefit is a string
+                },
+              ],
+            },
+            {
+              name: 'travelDetails',
+              label: 'Travel Details',
+              type: 'group',
+              admin: {
+                condition: (_, siblingData) => siblingData?.isPackage === true,
+              },
+              fields: [
+                {
+                  name: 'travelDates',
+                  type: 'group',
+                  fields: [
+                    {
+                      name: 'departureDate',
+                      type: 'date',
+                      required: true,
+                    },
+                    {
+                      name: 'returnDate',
+                      type: 'date',
+                      required: true,
+                    },
+                    {
+                      name: 'flexibility',
+                      type: 'group',
+                      fields: [
+                        {
+                          name: 'beforeDays',
+                          type: 'number',
+                        },
+                        {
+                          name: 'afterDays',
+                          type: 'number',
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: 'originalPrice',
+                  type: 'number',
+                },
+                {
+                  name: 'amountSaved',
+                  type: 'group',
+                  fields: [
+                    {
+                      name: 'value',
+                      type: 'number',
+                    },
+                  ],
+                },
+                {
+                  name: 'multiCountry',
+                  type: 'checkbox',
+                },
+                {
+                  name: 'visaRequired',
+                  type: 'checkbox',
+                },
+                {
+                  name: 'visaIncluded',
+                  type: 'checkbox',
+                },
+                {
+                  name: 'travelInsuranceIncluded',
+                  type: 'checkbox',
+                },
+                {
+                  name: 'flights',
+                  type: 'array',
+                  fields: [
+                    {
+                      name: 'flightNumber',
+                      type: 'text',
+                    },
+                    {
+                      name: 'departureAirport',
+                      type: 'text',
+                      required: true,
+                    },
+                    {
+                      name: 'arrivalAirport',
+                      type: 'text',
+                      required: true,
+                    },
+                    {
+                      name: 'departureTime',
+                      type: 'date',
+                      required: true,
+                    },
+                    {
+                      name: 'arrivalTime',
+                      type: 'date',
+                      required: true,
+                    },
+                    {
+                      name: 'airline',
+                      type: 'text',
+                    },
+                    {
+                      name: 'travelTimeMinutes',
+                      type: 'number',
+                      required: true,
+                    },
+                    {
+                      name: 'transitTimeMinutes',
+                      type: 'number',
+                    },
+                    {
+                      name: 'baggageAllowance',
+                      type: 'group',
+                      fields: [
+                        {
+                          name: 'checkedInKg',
+                          type: 'number',
+                        },
+                        {
+                          name: 'cabinKg',
+                          type: 'number',
+                        },
+                        {
+                          name: 'bagNumber',
+                          type: 'number',
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: 'destinations',
+                  type: 'array',
+                  fields: [
+                    {
+                      name: 'city',
+                      type: 'text',
+                    },
+                    {
+                      name: 'country',
+                      type: 'text',
+                    },
+                    {
+                      name: 'hotels',
+                      type: 'array',
+                      fields: [
+                        {
+                          name: 'name',
+                          type: 'text',
+                        },
+                        {
+                          name: 'stars',
+                          type: 'number',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
           ],
         },
         {
