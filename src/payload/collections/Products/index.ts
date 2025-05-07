@@ -78,6 +78,11 @@ const Products: CollectionConfig = {
               blocks: [CallToAction, Content, MediaBlock, Archive],
             },
             {
+              name: 'price',
+              type: 'number',
+              required: true,
+            },
+            {
               name: 'isPackage',
               label: 'Is a Package?',
               type: 'checkbox',
@@ -85,11 +90,8 @@ const Products: CollectionConfig = {
             },
             {
               name: 'benefits',
-              label: 'Benefits (for hilton Promo)',
+              label: 'Benefits (for hilton Promo or the package)',
               type: 'array',
-              admin: {
-                condition: (_, siblingData) => siblingData?.isPackage === false, // Only shows if it's NOT a package
-              },
               fields: [
                 {
                   name: 'benefit',
@@ -175,6 +177,28 @@ const Products: CollectionConfig = {
                   type: 'checkbox',
                 },
                 {
+                  name: 'tags',
+                  type: 'array',
+                  fields: [
+                    {
+                      name: 'tag',
+                      type: 'select',
+                      required: true,
+                      options: [
+                        { label: 'Adults Only', value: 'adults_only' },
+                        { label: 'Family & Kids', value: 'family' },
+                        { label: 'On Sale', value: 'sale' },
+                        { label: 'Beach', value: 'beach' },
+                        { label: 'Romantic & Honeymoon', value: 'romantic' },
+                        { label: 'All Inclusive', value: 'all_inclusive' },
+                        { label: 'Relax & Recharge', value: 'relax' },
+                        { label: 'Adventure', value: 'adventure' },
+                        { label: 'City Break', value: 'city' },
+                      ],
+                    },
+                  ],
+                },
+                {
                   name: 'flights',
                   type: 'array',
                   fields: [
@@ -207,12 +231,12 @@ const Products: CollectionConfig = {
                       type: 'text',
                     },
                     {
-                      name: 'travelTimeMinutes',
+                      name: 'travelTimeHours',
                       type: 'number',
                       required: true,
                     },
                     {
-                      name: 'transitTimeMinutes',
+                      name: 'transitTimeHours',
                       type: 'number',
                     },
                     {

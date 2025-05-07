@@ -312,6 +312,7 @@ export interface Product {
         blockType: 'archive';
       }
   )[];
+  price: number;
   isPackage?: boolean | null;
   benefits?:
     | {
@@ -337,6 +338,21 @@ export interface Product {
     visaRequired?: boolean | null;
     visaIncluded?: boolean | null;
     travelInsuranceIncluded?: boolean | null;
+    tags?:
+      | {
+          tag:
+            | 'adults_only'
+            | 'family'
+            | 'sale'
+            | 'beach'
+            | 'romantic'
+            | 'all_inclusive'
+            | 'relax'
+            | 'adventure'
+            | 'city';
+          id?: string | null;
+        }[]
+      | null;
     flights?:
       | {
           flightNumber?: string | null;
@@ -345,8 +361,8 @@ export interface Product {
           departureTime: string;
           arrivalTime: string;
           airline?: string | null;
-          travelTimeMinutes: number;
-          transitTimeMinutes?: number | null;
+          travelTimeHours: number;
+          transitTimeHours?: number | null;
           baggageAllowance?: {
             checkedInKg?: number | null;
             cabinKg?: number | null;

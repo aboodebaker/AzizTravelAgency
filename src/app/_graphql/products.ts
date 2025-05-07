@@ -2,6 +2,54 @@ import { ARCHIVE_BLOCK, CALL_TO_ACTION, CONTENT, MEDIA_BLOCK } from './blocks'
 import { PRODUCT_CATEGORIES } from './categories'
 import { META } from './meta'
 
+export const PRODUCT_DETAILS = `
+  travelDetails {
+    travelDates {
+      departureDate
+      returnDate
+      flexibility {
+        beforeDays
+        afterDays
+        }
+      }
+    originalPrice
+    amountSaved {
+      value
+    }
+    multiCountry
+    visaRequired
+    visaIncluded
+    travelInsuranceIncluded
+    flights {
+      flightNumber
+      departureAirport
+      arrivalAirport
+      departureTime
+      arrivalTime
+      airline
+      travelTimeHours
+      transitTimeHours
+      baggageAllowance {
+        checkedInKg
+        cabinKg
+        bagNumber
+      }
+    }
+    destinations {
+      city
+      country
+      hotels {
+        name
+        stars
+      }
+    }
+    tags {
+      tag
+      id
+    }
+  }
+`
+
 export const PRODUCTS = `
   query Products {
     Products(limit: 300) {
@@ -12,48 +60,9 @@ export const PRODUCTS = `
           benefit
           id
         }
+        ${META}
         diamond
-        travelDetails { # Will return only if it's a package
-          travelDates {
-            departureDate
-            returnDate
-            flexibility {
-              beforeDays
-              afterDays
-            }
-          }
-          originalPrice
-          amountSaved {
-            value
-          }
-          multiCountry
-          visaRequired
-          visaIncluded
-          travelInsuranceIncluded
-          flights {
-            flightNumber
-            departureAirport
-            arrivalAirport
-            departureTime
-            arrivalTime
-            airline
-            travelTimeMinutes
-            transitTimeMinutes
-            baggageAllowance {
-              checkedInKg
-              cabinKg
-              bagNumber
-            }
-          }
-          destinations {
-            city
-            country
-            hotels {
-              name
-              stars
-            }
-          }
-        }
+        ${PRODUCT_DETAILS}
       }
     }
   }
@@ -73,47 +82,7 @@ export const PRODUCT = `
           id
         }
         diamond
-        travelDetails {
-          travelDates {
-            departureDate
-            returnDate
-            flexibility {
-              beforeDays
-              afterDays
-            }
-          }
-          originalPrice
-          amountSaved {
-            value
-          }
-          multiCountry
-          visaRequired
-          visaIncluded
-          travelInsuranceIncluded
-          flights {
-            flightNumber
-            departureAirport
-            arrivalAirport
-            departureTime
-            arrivalTime
-            airline
-            travelTimeMinutes
-            transitTimeMinutes
-            baggageAllowance {
-              checkedInKg
-              cabinKg
-              bagNumber
-            }
-          }
-          destinations {
-            city
-            country
-            hotels {
-              name
-              stars
-            }
-          }
-        }
+        ${PRODUCT_DETAILS}
         ${PRODUCT_CATEGORIES}
         layout {
           ${CALL_TO_ACTION}

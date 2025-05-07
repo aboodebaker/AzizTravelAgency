@@ -2,11 +2,13 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+import { useFilter } from '../../../_providers/Filter'
 import DateDropdown from '../DateDropdown'
 import FilterButton from '../FilterButton'
 import SortDropdown from '../SortDropdown'
 
 const HolidayFilters = () => {
+  const { date, setDate, sort, setSort, tags, setTags } = useFilter()
   // Filter data
   const sortOptions = [
     { label: 'Price: Low to High', value: 'price_asc' },
@@ -42,14 +44,25 @@ const HolidayFilters = () => {
 
   // State
   const [activeFilters, setActiveFilters] = useState([])
-  const [sortValue, setSortValue] = useState('popular')
-  const [dateValue, setDateValue] = useState('2025-06')
 
   // Handlers
-  const handleFilterClick = filterValue => {
-    setActiveFilters(prev =>
-      prev.includes(filterValue) ? prev.filter(v => v !== filterValue) : [...prev, filterValue],
-    )
+  const handleFilterClick = (value: string) => {
+    setActiveFilters(prevFilters => {
+      if (prevFilters.includes(value)) {
+        return prevFilters.filter(filter => filter !== value) // Remove tag if it's already active
+      } else {
+        return [...prevFilters, value] // Add tag to active filters
+      }
+    })
+
+    // Update the tags in context
+    setTags(prevTags => {
+      if (prevTags.includes(value)) {
+        return prevTags.filter(tag => tag !== value)
+      } else {
+        return [...prevTags, value]
+      }
+    })
   }
 
   // Styles
@@ -109,8 +122,8 @@ const HolidayFilters = () => {
     <div style={styles.container}>
       <div style={styles.filtersContainer}>
         <div style={styles.dropdownsContainer}>
-          <SortDropdown options={sortOptions} value={sortValue} onChange={setSortValue} />
-          <DateDropdown options={dateOptions} value={dateValue} onChange={setDateValue} />
+          <SortDropdown options={sortOptions} value={sort} onChange={setSort} />
+          <DateDropdown options={dateOptions} value={date} onChange={setDate} />
         </div>
 
         {/* Naturally scrollable filter buttons container */}

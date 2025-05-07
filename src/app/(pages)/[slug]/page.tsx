@@ -1,5 +1,6 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable prettier/prettier */
+//@ts-nocheck
 import React from 'react'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
@@ -53,20 +54,12 @@ export default async function Page({ params: { slug = 'home' } }) {
      productsInCategory = allProducts.filter(
       product => product.isPackage === false)
 
-      const produc = await fetchDoc<Product>({
-      collection: 'products',
-      slug: 'hilton-gold-status',
-      draft: isDraftMode,
-    })
-
-    console.log(produc)
-
       
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
     // so swallow the error here and simply render the page with fallback data where necessary
     // in production you may want to redirect to a 404  page or at least log the error somewhere
-    console.error(error)
+    
   }
 
   // if no `home` page exists, render a static one using dummy content
@@ -101,16 +94,16 @@ export default async function Page({ params: { slug = 'home' } }) {
           <Gutter className={classes.home}>
             <Categories categories={catergories} />
             <HiltonPromo
-              benefits={benefits}
-              source={'/media/Leonardo_Phoenix_10_A_sleek_highquality_image_of_a_Hilton_Diam_1.jpg'}
+              benefits={productsInCategory.filter(product => product.diamond == true)[0].benefits.map(item => item.benefit)}
+              source={`/media/${productsInCategory.filter(product => product.diamond == true)[0].meta.image.filename}`}
               title={'Diamond Tier Benefits'}
               href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
               product={productsInCategory.filter(product => product.diamond == true)[0] }
             />
             <HiltonPromo
-              benefits={benefits}
-              source={'/media/Leonardo_Phoenix_10_A_sleek_highquality_image_of_a_Hilton_Gold_2.jpg'}
-              title={'Gold Tier Benefits'}
+              benefits={productsInCategory.filter(product => product.diamond !== true)[0].benefits.map(item => item.benefit)}
+              source={`/media/${productsInCategory.filter(product => product.diamond !== true)[0].meta.image.filename}`}
+              title={`Gold Tier Benefits`}
               href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
               product={productsInCategory.filter(product => product.diamond !== true)[0] }
             />

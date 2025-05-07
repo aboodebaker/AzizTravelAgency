@@ -1,0 +1,119 @@
+.travel-card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(8, 9, 46, 0.08);
+  overflow: hidden;
+  max-width: 400px;
+  height: 650px;
+  transition: transform 0.2s ease;
+}
+
+.travel-card:hover {
+  transform: translateY(-4px);
+}
+
+.travel-card-image {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
+.travel-card-img {
+  object-fit: cover;
+}
+
+.travel-card-tags {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.travel-card-tag {
+  background-color: #08092e;
+  color: white;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+.travel-card-content {
+  padding: 20px;
+}
+
+.travel-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #08092e;
+  font-weight: bold;
+}
+
+.travel-card-destination {
+  font-size: 1rem;
+  color: #555;
+  margin: 4px 0 8px;
+}
+
+.travel-card-hotel {
+  font-size: 0.95rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.travel-card-stars {
+  color: #cca063;
+  font-size: 1rem;
+}
+
+.travel-card-dates {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 8px 0;
+}
+
+.travel-card-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #08092e;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.travel-card-original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-weight: normal;
+  font-size: 0.95rem;
+}
+
+.travel-card-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  color: #08092e;
+}
+
+.travel-card-benefit {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.checkmark {
+  color: #cca063;
+}
+
+.travel-card-button {
+  margin-top: 16px;
+  color: white;
+}

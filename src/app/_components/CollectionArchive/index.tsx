@@ -8,6 +8,7 @@ import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
 import { useFilter } from '../../_providers/Filter'
 import { Card } from '../Card'
 import { Gutter } from '../Gutter'
+import { TravelCard } from '../LuxuryTravelCard'
 import { PageRange } from '../PageRange'
 import { Pagination } from '../Pagination'
 
@@ -28,7 +29,7 @@ export type Props = {
   categories?: ArchiveBlockProps['categories']
   className?: string
   limit?: number
-  onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
+  onResultChange?: (result: Result) => void
   populateBy?: 'collection' | 'selection'
   populatedDocs?: ArchiveBlockProps['populatedDocs']
   populatedDocsTotal?: ArchiveBlockProps['populatedDocsTotal']
@@ -79,9 +80,7 @@ export const CollectionArchive: React.FC<Props> = props => {
   const scrollToRef = useCallback(() => {
     const { current } = scrollRef
     if (current) {
-      // current.scrollIntoView({
-      //   behavior: 'smooth',
-      // })
+      // current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [])
 
@@ -96,10 +95,6 @@ export const CollectionArchive: React.FC<Props> = props => {
 
     if (populateBy === 'collection' && !isRequesting.current) {
       isRequesting.current = true
-
-      // hydrate the block with fresh content after first render
-      // don't show loader unless the request takes longer than x ms
-      // and don't show it during initial hydration
       timer = setTimeout(() => {
         if (hasHydrated.current) {
           setIsLoading(true)
@@ -147,7 +142,7 @@ export const CollectionArchive: React.FC<Props> = props => {
             }
           }
         } catch (err) {
-          console.warn(err) // eslint-disable-line no-console
+          // console.warn(err)
           setIsLoading(false)
           setError(`Unable to load "${relationTo} archive" data at this time.`)
         }
@@ -184,9 +179,53 @@ export const CollectionArchive: React.FC<Props> = props => {
           <div className={classes.grid}>
             {results.docs?.map((result, index) => {
               if (typeof result === 'object' && result !== null) {
-                return <Card doc={result} relationTo={relationTo} showCategories />
-              }
+                const { slug, title, meta, price, travelDetails, benefits, isPackage } =
+                  result as Product
 
+                const imageUrl =
+                  typeof meta.image !== 'string' && meta.image?.url
+                    ? meta.image.url
+                    : '/placeholder.jpg'
+
+                const formatDate = (dateStr: string) => {
+                  const date = new Date(dateStr)
+                  return date.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })
+                }
+
+                // If travelDates are available
+                const departureDateFormatted = travelDetails?.travelDates.departureDate
+                  ? formatDate(travelDetails?.travelDates.departureDate)
+                  : ''
+                const arrivalDateFormatted = travelDetails?.travelDates.returnDate
+                  ? formatDate(travelDetails?.travelDates.returnDate)
+                  : ''
+
+                return isPackage ? (
+                  <TravelCard
+                    key={slug}
+                    slug={slug}
+                    title={title}
+                    imageUrl={imageUrl}
+                    price={price}
+                    originalPrice={travelDetails.originalPrice}
+                    travelDates={`${departureDateFormatted} - ${arrivalDateFormatted}`}
+                    destination={travelDetails.destinations.map(dest => dest.city).join(', ')}
+                    hotel={travelDetails.destinations
+                      .map(dest => dest.hotels.map(des => des.name))
+                      .join(', ')}
+                    hotelStars={travelDetails.destinations[0].hotels[0].stars}
+                    tags={travelDetails.tags.slice(0, 2).map(item => item.tag)}
+                    benefits={benefits.slice(0, 3).map(item => item.benefit)}
+                  />
+                ) : (
+                  <Card doc={result} relationTo={relationTo} showCategories />
+                )
+              }
               return null
             })}
           </div>

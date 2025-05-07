@@ -1642,6 +1642,7 @@ type Product {
   title: String
   publishedOn: DateTime
   layout: [Product_Layout!]!
+  price: Float
   isPackage: Boolean
   benefits: [Product_Benefits!]
   diamond: Boolean
@@ -1675,6 +1676,7 @@ type Product_TravelDetails {
   visaRequired: Boolean
   visaIncluded: Boolean
   travelInsuranceIncluded: Boolean
+  tags: [Product_TravelDetails_Tags!]
   flights: [Product_TravelDetails_Flights!]
   destinations: [Product_TravelDetails_Destinations!]
 }
@@ -1694,6 +1696,23 @@ type Product_TravelDetails_AmountSaved {
   value: Float
 }
 
+type Product_TravelDetails_Tags {
+  tag: Product_TravelDetails_Tags_tag
+  id: String
+}
+
+enum Product_TravelDetails_Tags_tag {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
 type Product_TravelDetails_Flights {
   flightNumber: String
   departureAirport: String
@@ -1701,8 +1720,8 @@ type Product_TravelDetails_Flights {
   departureTime: DateTime
   arrivalTime: DateTime
   airline: String
-  travelTimeMinutes: Float
-  transitTimeMinutes: Float
+  travelTimeHours: Float
+  transitTimeHours: Float
   baggageAllowance: Product_TravelDetails_Flights_BaggageAllowance
   id: String
 }
@@ -4123,6 +4142,7 @@ type Products {
 input Product_where {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  price: Product_price_operator
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
@@ -4137,14 +4157,16 @@ input Product_where {
   travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
   travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
   travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__tags__tag: Product_travelDetails__tags__tag_operator
+  travelDetails__tags__id: Product_travelDetails__tags__id_operator
   travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
   travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
   travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
   travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
   travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
   travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
-  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
-  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__travelTimeHours: Product_travelDetails__flights__travelTimeHours_operator
+  travelDetails__flights__transitTimeHours: Product_travelDetails__flights__transitTimeHours_operator
   travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
   travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
   travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -4192,6 +4214,15 @@ input Product_publishedOn_operator {
   less_than: DateTime
   like: DateTime
   exists: Boolean
+}
+
+input Product_price_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
 }
 
 input Product_isPackage_operator {
@@ -4311,6 +4342,37 @@ input Product_travelDetails__travelInsuranceIncluded_operator {
   exists: Boolean
 }
 
+input Product_travelDetails__tags__tag_operator {
+  equals: Product_travelDetails__tags__tag_Input
+  not_equals: Product_travelDetails__tags__tag_Input
+  in: [Product_travelDetails__tags__tag_Input]
+  not_in: [Product_travelDetails__tags__tag_Input]
+  all: [Product_travelDetails__tags__tag_Input]
+}
+
+enum Product_travelDetails__tags__tag_Input {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
+input Product_travelDetails__tags__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
 input Product_travelDetails__flights__flightNumber_operator {
   equals: String
   not_equals: String
@@ -4373,7 +4435,7 @@ input Product_travelDetails__flights__airline_operator {
   exists: Boolean
 }
 
-input Product_travelDetails__flights__travelTimeMinutes_operator {
+input Product_travelDetails__flights__travelTimeHours_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4382,7 +4444,7 @@ input Product_travelDetails__flights__travelTimeMinutes_operator {
   less_than: Float
 }
 
-input Product_travelDetails__flights__transitTimeMinutes_operator {
+input Product_travelDetails__flights__transitTimeHours_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4633,6 +4695,7 @@ input Product_id_operator {
 input Product_where_and {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  price: Product_price_operator
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
@@ -4647,14 +4710,16 @@ input Product_where_and {
   travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
   travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
   travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__tags__tag: Product_travelDetails__tags__tag_operator
+  travelDetails__tags__id: Product_travelDetails__tags__id_operator
   travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
   travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
   travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
   travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
   travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
   travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
-  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
-  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__travelTimeHours: Product_travelDetails__flights__travelTimeHours_operator
+  travelDetails__flights__transitTimeHours: Product_travelDetails__flights__transitTimeHours_operator
   travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
   travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
   travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -4686,6 +4751,7 @@ input Product_where_and {
 input Product_where_or {
   title: Product_title_operator
   publishedOn: Product_publishedOn_operator
+  price: Product_price_operator
   isPackage: Product_isPackage_operator
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
@@ -4700,14 +4766,16 @@ input Product_where_or {
   travelDetails__visaRequired: Product_travelDetails__visaRequired_operator
   travelDetails__visaIncluded: Product_travelDetails__visaIncluded_operator
   travelDetails__travelInsuranceIncluded: Product_travelDetails__travelInsuranceIncluded_operator
+  travelDetails__tags__tag: Product_travelDetails__tags__tag_operator
+  travelDetails__tags__id: Product_travelDetails__tags__id_operator
   travelDetails__flights__flightNumber: Product_travelDetails__flights__flightNumber_operator
   travelDetails__flights__departureAirport: Product_travelDetails__flights__departureAirport_operator
   travelDetails__flights__arrivalAirport: Product_travelDetails__flights__arrivalAirport_operator
   travelDetails__flights__departureTime: Product_travelDetails__flights__departureTime_operator
   travelDetails__flights__arrivalTime: Product_travelDetails__flights__arrivalTime_operator
   travelDetails__flights__airline: Product_travelDetails__flights__airline_operator
-  travelDetails__flights__travelTimeMinutes: Product_travelDetails__flights__travelTimeMinutes_operator
-  travelDetails__flights__transitTimeMinutes: Product_travelDetails__flights__transitTimeMinutes_operator
+  travelDetails__flights__travelTimeHours: Product_travelDetails__flights__travelTimeHours_operator
+  travelDetails__flights__transitTimeHours: Product_travelDetails__flights__transitTimeHours_operator
   travelDetails__flights__baggageAllowance__checkedInKg: Product_travelDetails__flights__baggageAllowance__checkedInKg_operator
   travelDetails__flights__baggageAllowance__cabinKg: Product_travelDetails__flights__baggageAllowance__cabinKg_operator
   travelDetails__flights__baggageAllowance__bagNumber: Product_travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -4753,6 +4821,7 @@ type ProductsDocAccessFields {
   title: ProductsDocAccessFields_title
   publishedOn: ProductsDocAccessFields_publishedOn
   layout: ProductsDocAccessFields_layout
+  price: ProductsDocAccessFields_price
   isPackage: ProductsDocAccessFields_isPackage
   benefits: ProductsDocAccessFields_benefits
   diamond: ProductsDocAccessFields_diamond
@@ -4837,6 +4906,29 @@ type ProductsDocAccessFields_layout_Update {
 }
 
 type ProductsDocAccessFields_layout_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_price {
+  create: ProductsDocAccessFields_price_Create
+  read: ProductsDocAccessFields_price_Read
+  update: ProductsDocAccessFields_price_Update
+  delete: ProductsDocAccessFields_price_Delete
+}
+
+type ProductsDocAccessFields_price_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_price_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_price_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_price_Delete {
   permission: Boolean!
 }
 
@@ -4993,6 +5085,7 @@ type ProductsDocAccessFields_travelDetails_Fields {
   visaRequired: ProductsDocAccessFields_travelDetails_visaRequired
   visaIncluded: ProductsDocAccessFields_travelDetails_visaIncluded
   travelInsuranceIncluded: ProductsDocAccessFields_travelDetails_travelInsuranceIncluded
+  tags: ProductsDocAccessFields_travelDetails_tags
   flights: ProductsDocAccessFields_travelDetails_flights
   destinations: ProductsDocAccessFields_travelDetails_destinations
 }
@@ -5314,6 +5407,81 @@ type ProductsDocAccessFields_travelDetails_travelInsuranceIncluded_Delete {
   permission: Boolean!
 }
 
+type ProductsDocAccessFields_travelDetails_tags {
+  create: ProductsDocAccessFields_travelDetails_tags_Create
+  read: ProductsDocAccessFields_travelDetails_tags_Read
+  update: ProductsDocAccessFields_travelDetails_tags_Update
+  delete: ProductsDocAccessFields_travelDetails_tags_Delete
+  fields: ProductsDocAccessFields_travelDetails_tags_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_tags_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_Fields {
+  tag: ProductsDocAccessFields_travelDetails_tags_tag
+  id: ProductsDocAccessFields_travelDetails_tags_id
+}
+
+type ProductsDocAccessFields_travelDetails_tags_tag {
+  create: ProductsDocAccessFields_travelDetails_tags_tag_Create
+  read: ProductsDocAccessFields_travelDetails_tags_tag_Read
+  update: ProductsDocAccessFields_travelDetails_tags_tag_Update
+  delete: ProductsDocAccessFields_travelDetails_tags_tag_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_tags_tag_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_tag_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_tag_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_tag_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_id {
+  create: ProductsDocAccessFields_travelDetails_tags_id_Create
+  read: ProductsDocAccessFields_travelDetails_tags_id_Read
+  update: ProductsDocAccessFields_travelDetails_tags_id_Update
+  delete: ProductsDocAccessFields_travelDetails_tags_id_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_tags_id_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_id_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_id_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_tags_id_Delete {
+  permission: Boolean!
+}
+
 type ProductsDocAccessFields_travelDetails_flights {
   create: ProductsDocAccessFields_travelDetails_flights_Create
   read: ProductsDocAccessFields_travelDetails_flights_Read
@@ -5345,8 +5513,8 @@ type ProductsDocAccessFields_travelDetails_flights_Fields {
   departureTime: ProductsDocAccessFields_travelDetails_flights_departureTime
   arrivalTime: ProductsDocAccessFields_travelDetails_flights_arrivalTime
   airline: ProductsDocAccessFields_travelDetails_flights_airline
-  travelTimeMinutes: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes
-  transitTimeMinutes: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes
+  travelTimeHours: ProductsDocAccessFields_travelDetails_flights_travelTimeHours
+  transitTimeHours: ProductsDocAccessFields_travelDetails_flights_transitTimeHours
   baggageAllowance: ProductsDocAccessFields_travelDetails_flights_baggageAllowance
   id: ProductsDocAccessFields_travelDetails_flights_id
 }
@@ -5489,49 +5657,49 @@ type ProductsDocAccessFields_travelDetails_flights_airline_Delete {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes {
-  create: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Create
-  read: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Read
-  update: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Update
-  delete: ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Delete
+type ProductsDocAccessFields_travelDetails_flights_travelTimeHours {
+  create: ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Create
+  read: ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Read
+  update: ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Create {
+type ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Read {
+type ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Update {
+type ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_travelTimeMinutes_Delete {
+type ProductsDocAccessFields_travelDetails_flights_travelTimeHours_Delete {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes {
-  create: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Create
-  read: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Read
-  update: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Update
-  delete: ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Delete
+type ProductsDocAccessFields_travelDetails_flights_transitTimeHours {
+  create: ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Create
+  read: ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Read
+  update: ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Update
+  delete: ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Create {
+type ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Read {
+type ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Update {
+type ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_flights_transitTimeMinutes_Delete {
+type ProductsDocAccessFields_travelDetails_flights_transitTimeHours_Delete {
   permission: Boolean!
 }
 
@@ -6246,6 +6414,7 @@ type ProductVersion_Version {
   title: String
   publishedOn: DateTime
   layout: [ProductVersion_Version_Layout!]!
+  price: Float
   isPackage: Boolean
   benefits: [ProductVersion_Version_Benefits!]
   diamond: Boolean
@@ -6279,6 +6448,7 @@ type ProductVersion_Version_TravelDetails {
   visaRequired: Boolean
   visaIncluded: Boolean
   travelInsuranceIncluded: Boolean
+  tags: [ProductVersion_Version_TravelDetails_Tags!]
   flights: [ProductVersion_Version_TravelDetails_Flights!]
   destinations: [ProductVersion_Version_TravelDetails_Destinations!]
 }
@@ -6298,6 +6468,23 @@ type ProductVersion_Version_TravelDetails_AmountSaved {
   value: Float
 }
 
+type ProductVersion_Version_TravelDetails_Tags {
+  tag: ProductVersion_Version_TravelDetails_Tags_tag
+  id: String
+}
+
+enum ProductVersion_Version_TravelDetails_Tags_tag {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
 type ProductVersion_Version_TravelDetails_Flights {
   flightNumber: String
   departureAirport: String
@@ -6305,8 +6492,8 @@ type ProductVersion_Version_TravelDetails_Flights {
   departureTime: DateTime
   arrivalTime: DateTime
   airline: String
-  travelTimeMinutes: Float
-  transitTimeMinutes: Float
+  travelTimeHours: Float
+  transitTimeHours: Float
   baggageAllowance: ProductVersion_Version_TravelDetails_Flights_BaggageAllowance
   id: String
 }
@@ -6549,6 +6736,7 @@ input versionsProduct_where {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__price: versionsProduct_version__price_operator
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
@@ -6563,14 +6751,16 @@ input versionsProduct_where {
   version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
   version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
   version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__tags__tag: versionsProduct_version__travelDetails__tags__tag_operator
+  version__travelDetails__tags__id: versionsProduct_version__travelDetails__tags__id_operator
   version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
   version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
   version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
   version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
   version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
   version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
-  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
-  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__travelTimeHours: versionsProduct_version__travelDetails__flights__travelTimeHours_operator
+  version__travelDetails__flights__transitTimeHours: versionsProduct_version__travelDetails__flights__transitTimeHours_operator
   version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
   version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
   version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -6630,6 +6820,15 @@ input versionsProduct_version__publishedOn_operator {
   less_than: DateTime
   like: DateTime
   exists: Boolean
+}
+
+input versionsProduct_version__price_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
 }
 
 input versionsProduct_version__isPackage_operator {
@@ -6749,6 +6948,37 @@ input versionsProduct_version__travelDetails__travelInsuranceIncluded_operator {
   exists: Boolean
 }
 
+input versionsProduct_version__travelDetails__tags__tag_operator {
+  equals: versionsProduct_version__travelDetails__tags__tag_Input
+  not_equals: versionsProduct_version__travelDetails__tags__tag_Input
+  in: [versionsProduct_version__travelDetails__tags__tag_Input]
+  not_in: [versionsProduct_version__travelDetails__tags__tag_Input]
+  all: [versionsProduct_version__travelDetails__tags__tag_Input]
+}
+
+enum versionsProduct_version__travelDetails__tags__tag_Input {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
+input versionsProduct_version__travelDetails__tags__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
 input versionsProduct_version__travelDetails__flights__flightNumber_operator {
   equals: String
   not_equals: String
@@ -6811,7 +7041,7 @@ input versionsProduct_version__travelDetails__flights__airline_operator {
   exists: Boolean
 }
 
-input versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator {
+input versionsProduct_version__travelDetails__flights__travelTimeHours_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -6820,7 +7050,7 @@ input versionsProduct_version__travelDetails__flights__travelTimeMinutes_operato
   less_than: Float
 }
 
-input versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator {
+input versionsProduct_version__travelDetails__flights__transitTimeHours_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -7100,6 +7330,7 @@ input versionsProduct_where_and {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__price: versionsProduct_version__price_operator
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
@@ -7114,14 +7345,16 @@ input versionsProduct_where_and {
   version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
   version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
   version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__tags__tag: versionsProduct_version__travelDetails__tags__tag_operator
+  version__travelDetails__tags__id: versionsProduct_version__travelDetails__tags__id_operator
   version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
   version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
   version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
   version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
   version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
   version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
-  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
-  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__travelTimeHours: versionsProduct_version__travelDetails__flights__travelTimeHours_operator
+  version__travelDetails__flights__transitTimeHours: versionsProduct_version__travelDetails__flights__transitTimeHours_operator
   version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
   version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
   version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -7157,6 +7390,7 @@ input versionsProduct_where_or {
   parent: versionsProduct_parent_operator
   version__title: versionsProduct_version__title_operator
   version__publishedOn: versionsProduct_version__publishedOn_operator
+  version__price: versionsProduct_version__price_operator
   version__isPackage: versionsProduct_version__isPackage_operator
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
@@ -7171,14 +7405,16 @@ input versionsProduct_where_or {
   version__travelDetails__visaRequired: versionsProduct_version__travelDetails__visaRequired_operator
   version__travelDetails__visaIncluded: versionsProduct_version__travelDetails__visaIncluded_operator
   version__travelDetails__travelInsuranceIncluded: versionsProduct_version__travelDetails__travelInsuranceIncluded_operator
+  version__travelDetails__tags__tag: versionsProduct_version__travelDetails__tags__tag_operator
+  version__travelDetails__tags__id: versionsProduct_version__travelDetails__tags__id_operator
   version__travelDetails__flights__flightNumber: versionsProduct_version__travelDetails__flights__flightNumber_operator
   version__travelDetails__flights__departureAirport: versionsProduct_version__travelDetails__flights__departureAirport_operator
   version__travelDetails__flights__arrivalAirport: versionsProduct_version__travelDetails__flights__arrivalAirport_operator
   version__travelDetails__flights__departureTime: versionsProduct_version__travelDetails__flights__departureTime_operator
   version__travelDetails__flights__arrivalTime: versionsProduct_version__travelDetails__flights__arrivalTime_operator
   version__travelDetails__flights__airline: versionsProduct_version__travelDetails__flights__airline_operator
-  version__travelDetails__flights__travelTimeMinutes: versionsProduct_version__travelDetails__flights__travelTimeMinutes_operator
-  version__travelDetails__flights__transitTimeMinutes: versionsProduct_version__travelDetails__flights__transitTimeMinutes_operator
+  version__travelDetails__flights__travelTimeHours: versionsProduct_version__travelDetails__flights__travelTimeHours_operator
+  version__travelDetails__flights__transitTimeHours: versionsProduct_version__travelDetails__flights__transitTimeHours_operator
   version__travelDetails__flights__baggageAllowance__checkedInKg: versionsProduct_version__travelDetails__flights__baggageAllowance__checkedInKg_operator
   version__travelDetails__flights__baggageAllowance__cabinKg: versionsProduct_version__travelDetails__flights__baggageAllowance__cabinKg_operator
   version__travelDetails__flights__baggageAllowance__bagNumber: versionsProduct_version__travelDetails__flights__baggageAllowance__bagNumber_operator
@@ -12148,6 +12384,7 @@ type ProductsFields {
   title: ProductsFields_title
   publishedOn: ProductsFields_publishedOn
   layout: ProductsFields_layout
+  price: ProductsFields_price
   isPackage: ProductsFields_isPackage
   benefits: ProductsFields_benefits
   diamond: ProductsFields_diamond
@@ -12232,6 +12469,29 @@ type ProductsFields_layout_Update {
 }
 
 type ProductsFields_layout_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_price {
+  create: ProductsFields_price_Create
+  read: ProductsFields_price_Read
+  update: ProductsFields_price_Update
+  delete: ProductsFields_price_Delete
+}
+
+type ProductsFields_price_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_price_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_price_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_price_Delete {
   permission: Boolean!
 }
 
@@ -12388,6 +12648,7 @@ type ProductsFields_travelDetails_Fields {
   visaRequired: ProductsFields_travelDetails_visaRequired
   visaIncluded: ProductsFields_travelDetails_visaIncluded
   travelInsuranceIncluded: ProductsFields_travelDetails_travelInsuranceIncluded
+  tags: ProductsFields_travelDetails_tags
   flights: ProductsFields_travelDetails_flights
   destinations: ProductsFields_travelDetails_destinations
 }
@@ -12709,6 +12970,81 @@ type ProductsFields_travelDetails_travelInsuranceIncluded_Delete {
   permission: Boolean!
 }
 
+type ProductsFields_travelDetails_tags {
+  create: ProductsFields_travelDetails_tags_Create
+  read: ProductsFields_travelDetails_tags_Read
+  update: ProductsFields_travelDetails_tags_Update
+  delete: ProductsFields_travelDetails_tags_Delete
+  fields: ProductsFields_travelDetails_tags_Fields
+}
+
+type ProductsFields_travelDetails_tags_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_Fields {
+  tag: ProductsFields_travelDetails_tags_tag
+  id: ProductsFields_travelDetails_tags_id
+}
+
+type ProductsFields_travelDetails_tags_tag {
+  create: ProductsFields_travelDetails_tags_tag_Create
+  read: ProductsFields_travelDetails_tags_tag_Read
+  update: ProductsFields_travelDetails_tags_tag_Update
+  delete: ProductsFields_travelDetails_tags_tag_Delete
+}
+
+type ProductsFields_travelDetails_tags_tag_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_tag_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_tag_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_tag_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_id {
+  create: ProductsFields_travelDetails_tags_id_Create
+  read: ProductsFields_travelDetails_tags_id_Read
+  update: ProductsFields_travelDetails_tags_id_Update
+  delete: ProductsFields_travelDetails_tags_id_Delete
+}
+
+type ProductsFields_travelDetails_tags_id_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_id_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_id_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_tags_id_Delete {
+  permission: Boolean!
+}
+
 type ProductsFields_travelDetails_flights {
   create: ProductsFields_travelDetails_flights_Create
   read: ProductsFields_travelDetails_flights_Read
@@ -12740,8 +13076,8 @@ type ProductsFields_travelDetails_flights_Fields {
   departureTime: ProductsFields_travelDetails_flights_departureTime
   arrivalTime: ProductsFields_travelDetails_flights_arrivalTime
   airline: ProductsFields_travelDetails_flights_airline
-  travelTimeMinutes: ProductsFields_travelDetails_flights_travelTimeMinutes
-  transitTimeMinutes: ProductsFields_travelDetails_flights_transitTimeMinutes
+  travelTimeHours: ProductsFields_travelDetails_flights_travelTimeHours
+  transitTimeHours: ProductsFields_travelDetails_flights_transitTimeHours
   baggageAllowance: ProductsFields_travelDetails_flights_baggageAllowance
   id: ProductsFields_travelDetails_flights_id
 }
@@ -12884,49 +13220,49 @@ type ProductsFields_travelDetails_flights_airline_Delete {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_travelTimeMinutes {
-  create: ProductsFields_travelDetails_flights_travelTimeMinutes_Create
-  read: ProductsFields_travelDetails_flights_travelTimeMinutes_Read
-  update: ProductsFields_travelDetails_flights_travelTimeMinutes_Update
-  delete: ProductsFields_travelDetails_flights_travelTimeMinutes_Delete
+type ProductsFields_travelDetails_flights_travelTimeHours {
+  create: ProductsFields_travelDetails_flights_travelTimeHours_Create
+  read: ProductsFields_travelDetails_flights_travelTimeHours_Read
+  update: ProductsFields_travelDetails_flights_travelTimeHours_Update
+  delete: ProductsFields_travelDetails_flights_travelTimeHours_Delete
 }
 
-type ProductsFields_travelDetails_flights_travelTimeMinutes_Create {
+type ProductsFields_travelDetails_flights_travelTimeHours_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_travelTimeMinutes_Read {
+type ProductsFields_travelDetails_flights_travelTimeHours_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_travelTimeMinutes_Update {
+type ProductsFields_travelDetails_flights_travelTimeHours_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_travelTimeMinutes_Delete {
+type ProductsFields_travelDetails_flights_travelTimeHours_Delete {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_transitTimeMinutes {
-  create: ProductsFields_travelDetails_flights_transitTimeMinutes_Create
-  read: ProductsFields_travelDetails_flights_transitTimeMinutes_Read
-  update: ProductsFields_travelDetails_flights_transitTimeMinutes_Update
-  delete: ProductsFields_travelDetails_flights_transitTimeMinutes_Delete
+type ProductsFields_travelDetails_flights_transitTimeHours {
+  create: ProductsFields_travelDetails_flights_transitTimeHours_Create
+  read: ProductsFields_travelDetails_flights_transitTimeHours_Read
+  update: ProductsFields_travelDetails_flights_transitTimeHours_Update
+  delete: ProductsFields_travelDetails_flights_transitTimeHours_Delete
 }
 
-type ProductsFields_travelDetails_flights_transitTimeMinutes_Create {
+type ProductsFields_travelDetails_flights_transitTimeHours_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_transitTimeMinutes_Read {
+type ProductsFields_travelDetails_flights_transitTimeHours_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_transitTimeMinutes_Update {
+type ProductsFields_travelDetails_flights_transitTimeHours_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_flights_transitTimeMinutes_Delete {
+type ProductsFields_travelDetails_flights_transitTimeHours_Delete {
   permission: Boolean!
 }
 
@@ -16304,6 +16640,7 @@ input mutationProductInput {
   title: String!
   publishedOn: String
   layout: JSON
+  price: Float!
   isPackage: Boolean
   benefits: [mutationProduct_BenefitsInput]
   diamond: Boolean
@@ -16335,6 +16672,7 @@ input mutationProduct_TravelDetailsInput {
   visaRequired: Boolean
   visaIncluded: Boolean
   travelInsuranceIncluded: Boolean
+  tags: [mutationProduct_TravelDetails_TagsInput]
   flights: [mutationProduct_TravelDetails_FlightsInput]
   destinations: [mutationProduct_TravelDetails_DestinationsInput]
 }
@@ -16354,6 +16692,23 @@ input mutationProduct_TravelDetails_AmountSavedInput {
   value: Float
 }
 
+input mutationProduct_TravelDetails_TagsInput {
+  tag: Product_TravelDetails_Tags_tag_MutationInput!
+  id: String
+}
+
+enum Product_TravelDetails_Tags_tag_MutationInput {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
 input mutationProduct_TravelDetails_FlightsInput {
   flightNumber: String
   departureAirport: String!
@@ -16361,8 +16716,8 @@ input mutationProduct_TravelDetails_FlightsInput {
   departureTime: String!
   arrivalTime: String!
   airline: String
-  travelTimeMinutes: Float!
-  transitTimeMinutes: Float
+  travelTimeHours: Float!
+  transitTimeHours: Float
   baggageAllowance: mutationProduct_TravelDetails_Flights_BaggageAllowanceInput
   id: String
 }
@@ -16401,6 +16756,7 @@ input mutationProductUpdateInput {
   title: String
   publishedOn: String
   layout: JSON
+  price: Float
   isPackage: Boolean
   benefits: [mutationProductUpdate_BenefitsInput]
   diamond: Boolean
@@ -16432,6 +16788,7 @@ input mutationProductUpdate_TravelDetailsInput {
   visaRequired: Boolean
   visaIncluded: Boolean
   travelInsuranceIncluded: Boolean
+  tags: [mutationProductUpdate_TravelDetails_TagsInput]
   flights: [mutationProductUpdate_TravelDetails_FlightsInput]
   destinations: [mutationProductUpdate_TravelDetails_DestinationsInput]
 }
@@ -16451,6 +16808,23 @@ input mutationProductUpdate_TravelDetails_AmountSavedInput {
   value: Float
 }
 
+input mutationProductUpdate_TravelDetails_TagsInput {
+  tag: ProductUpdate_TravelDetails_Tags_tag_MutationInput!
+  id: String
+}
+
+enum ProductUpdate_TravelDetails_Tags_tag_MutationInput {
+  adults_only
+  family
+  sale
+  beach
+  romantic
+  all_inclusive
+  relax
+  adventure
+  city
+}
+
 input mutationProductUpdate_TravelDetails_FlightsInput {
   flightNumber: String
   departureAirport: String!
@@ -16458,8 +16832,8 @@ input mutationProductUpdate_TravelDetails_FlightsInput {
   departureTime: String!
   arrivalTime: String!
   airline: String
-  travelTimeMinutes: Float!
-  transitTimeMinutes: Float
+  travelTimeHours: Float!
+  transitTimeHours: Float
   baggageAllowance: mutationProductUpdate_TravelDetails_Flights_BaggageAllowanceInput
   id: String
 }
