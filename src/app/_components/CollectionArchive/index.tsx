@@ -135,14 +135,22 @@ export const CollectionArchive: React.FC<Props> = props => {
           const { docs } = json as { docs: Product[] }
 
           if (docs && Array.isArray(docs)) {
-            setResults(json)
+            // Filter docs to exclude those where isPackage is false
+            const filteredDocs = docs.filter(doc => doc.isPackage !== false)
+
+            setResults({
+              ...json,
+              docs: filteredDocs,
+              totalDocs: filteredDocs.length, // Update totalDocs after filtering
+            })
+
             setIsLoading(false)
+
             if (typeof onResultChange === 'function') {
-              onResultChange(json)
+              onResultChange({ ...json, docs: filteredDocs, totalDocs: filteredDocs.length })
             }
           }
         } catch (err) {
-          // console.warn(err)
           setIsLoading(false)
           setError(`Unable to load "${relationTo} archive" data at this time.`)
         }
@@ -178,7 +186,7 @@ export const CollectionArchive: React.FC<Props> = props => {
         <div>
           <div className={classes.grid}>
             {results.docs?.map((result, index) => {
-              if (typeof result === 'object' && result !== null) {
+              if (typeof result === 'object' && result !== null && result.isPackage === true) {
                 const { slug, title, meta, price, travelDetails, benefits, isPackage } =
                   result as Product
 

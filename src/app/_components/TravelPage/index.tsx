@@ -518,7 +518,15 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.departureTime}
+                                    {transport.departureTime
+                                      ? new Date(transport.departureTime).toLocaleString(
+                                          undefined,
+                                          {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short',
+                                          },
+                                        )
+                                      : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
                                     {transport.departurePort}
@@ -530,7 +538,12 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.arrivalTime}
+                                    {transport.arrivalTime
+                                      ? new Date(transport.arrivalTime).toLocaleString(undefined, {
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                        })
+                                      : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
                                     {transport.arrivalPort}
@@ -552,7 +565,15 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.departureTime}
+                                    {transport.departureTime
+                                      ? new Date(transport.departureTime).toLocaleString(
+                                          undefined,
+                                          {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short',
+                                          },
+                                        )
+                                      : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
                                     {transport.departureStation}
@@ -564,7 +585,12 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.arrivalTime}
+                                    {transport.arrivalTime
+                                      ? new Date(transport.arrivalTime).toLocaleString(undefined, {
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                        })
+                                      : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
                                     {transport.arrivalStation}
@@ -585,7 +611,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               </div>
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
-                                  <div className={classes.locationTime}>{transport.pickupTime}</div>
+                                  <div className={classes.locationTime}>
+                                    {transport.pickupTime
+                                      ? new Date(transport.pickupTime).toLocaleString(undefined, {
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                        })
+                                      : 'N/A'}
+                                  </div>
                                   <div className={classes.locationName}>
                                     {transport.pickupLocation}
                                   </div>
@@ -596,7 +629,12 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.dropoffTime}
+                                    {transport.dropoffTime
+                                      ? new Date(transport.dropoffTime).toLocaleString(undefined, {
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                        })
+                                      : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
                                     {transport.dropoffLocation}
