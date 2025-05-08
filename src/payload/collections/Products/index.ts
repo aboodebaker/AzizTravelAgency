@@ -83,6 +83,14 @@ const Products: CollectionConfig = {
               required: true,
             },
             {
+              name: 'description',
+              type: 'textarea',
+              required: true,
+              admin: {
+                rows: 5,
+              },
+            },
+            {
               name: 'isPackage',
               label: 'Is a Package?',
               type: 'checkbox',
@@ -124,11 +132,23 @@ const Products: CollectionConfig = {
                       name: 'departureDate',
                       type: 'date',
                       required: true,
+                      admin: {
+                        date: {
+                          pickerAppearance: 'dayAndTime', // optional: improves UI
+                        },
+                        // time: true,
+                      },
                     },
                     {
                       name: 'returnDate',
                       type: 'date',
                       required: true,
+                      admin: {
+                        date: {
+                          pickerAppearance: 'dayAndTime', // optional: improves UI
+                        },
+                        // time: true,
+                      },
                     },
                     {
                       name: 'flexibility',
@@ -199,66 +219,242 @@ const Products: CollectionConfig = {
                   ],
                 },
                 {
-                  name: 'flights',
-                  type: 'array',
-                  fields: [
+                  name: 'transport',
+                  type: 'blocks',
+                  blocks: [
                     {
-                      name: 'flightNumber',
-                      type: 'text',
-                    },
-                    {
-                      name: 'departureAirport',
-                      type: 'text',
-                      required: true,
-                    },
-                    {
-                      name: 'arrivalAirport',
-                      type: 'text',
-                      required: true,
-                    },
-                    {
-                      name: 'departureTime',
-                      type: 'date',
-                      required: true,
-                    },
-                    {
-                      name: 'arrivalTime',
-                      type: 'date',
-                      required: true,
-                    },
-                    {
-                      name: 'airline',
-                      type: 'text',
-                    },
-                    {
-                      name: 'travelTimeHours',
-                      type: 'number',
-                      required: true,
-                    },
-                    {
-                      name: 'transitTimeHours',
-                      type: 'number',
-                    },
-                    {
-                      name: 'baggageAllowance',
-                      type: 'group',
+                      slug: 'flight',
+                      labels: {
+                        singular: 'Flight',
+                        plural: 'Flights',
+                      },
                       fields: [
                         {
-                          name: 'checkedInKg',
+                          name: 'flightNumber',
+                          type: 'text',
+                        },
+                        {
+                          name: 'departureAirport',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'arrivalAirport',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'departureTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'arrivalTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'airline',
+                          type: 'text',
+                        },
+                        {
+                          name: 'travelTimeHours',
+                          type: 'number',
+                          required: true,
+                        },
+                        {
+                          name: 'transitTimeHours',
                           type: 'number',
                         },
                         {
-                          name: 'cabinKg',
-                          type: 'number',
+                          name: 'baggageAllowance',
+                          type: 'group',
+                          fields: [
+                            {
+                              name: 'checkedInKg',
+                              type: 'number',
+                            },
+                            {
+                              name: 'cabinKg',
+                              type: 'number',
+                            },
+                            {
+                              name: 'bagNumber',
+                              type: 'number',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      slug: 'car',
+                      labels: {
+                        singular: 'Car Ride',
+                        plural: 'Car Rides',
+                      },
+                      fields: [
+                        {
+                          name: 'pickupLocation',
+                          type: 'text',
+                          required: true,
                         },
                         {
-                          name: 'bagNumber',
+                          name: 'dropoffLocation',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'pickupTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'dropoffTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'travelTimeHours',
                           type: 'number',
+                          required: true,
+                        },
+                        {
+                          name: 'provider',
+                          type: 'text',
+                        },
+                      ],
+                    },
+                    {
+                      slug: 'train',
+                      labels: {
+                        singular: 'Train Ride',
+                        plural: 'Train Rides',
+                      },
+                      fields: [
+                        {
+                          name: 'departureStation',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'arrivalStation',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'departureTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'arrivalTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'travelTimeHours',
+                          type: 'number',
+                          required: true,
+                        },
+                        {
+                          name: 'trainCompany',
+                          type: 'text',
+                        },
+                      ],
+                    },
+                    {
+                      slug: 'ferry',
+                      labels: {
+                        singular: 'Ferry Ride',
+                        plural: 'Ferry Rides',
+                      },
+                      fields: [
+                        {
+                          name: 'departurePort',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'arrivalPort',
+                          type: 'text',
+                          required: true,
+                        },
+                        {
+                          name: 'departureTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'arrivalTime',
+                          type: 'date',
+                          required: true,
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'travelTimeHours',
+                          type: 'number',
+                          required: true,
+                        },
+                        {
+                          name: 'ferryCompany',
+                          type: 'text',
+                        },
+                        {
+                          name: 'cabinType',
+                          type: 'text',
                         },
                       ],
                     },
                   ],
                 },
+
                 {
                   name: 'destinations',
                   type: 'array',
@@ -281,6 +477,39 @@ const Products: CollectionConfig = {
                         },
                         {
                           name: 'stars',
+                          type: 'number',
+                        },
+                        {
+                          name: 'checkInDate',
+                          type: 'date',
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'checkOutDate',
+                          type: 'date',
+                          admin: {
+                            date: {
+                              pickerAppearance: 'dayAndTime', // optional: improves UI
+                            },
+                            // time: true,
+                          },
+                        },
+                        {
+                          name: 'hotelLink',
+                          type: 'text',
+                        },
+                        {
+                          name: 'hotelImage',
+                          type: 'upload',
+                          relationTo: 'media',
+                        },
+                        {
+                          name: 'nights',
                           type: 'number',
                         },
                       ],

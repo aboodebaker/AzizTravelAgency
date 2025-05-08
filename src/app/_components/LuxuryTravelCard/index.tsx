@@ -83,7 +83,7 @@ export const TravelCard = ({
 
         <div className="travel-card-button">
           <Link href={`/products/${slug}`}>
-            <Button appearance="primary" className="travel-card-button">
+            <Button appearance="primary" className="travel-card-button" href={`/products/${slug}`}>
               View Details
             </Button>
           </Link>

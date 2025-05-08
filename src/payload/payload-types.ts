@@ -313,6 +313,7 @@ export interface Product {
       }
   )[];
   price: number;
+  description: string;
   isPackage?: boolean | null;
   benefits?:
     | {
@@ -353,23 +354,61 @@ export interface Product {
           id?: string | null;
         }[]
       | null;
-    flights?:
-      | {
-          flightNumber?: string | null;
-          departureAirport: string;
-          arrivalAirport: string;
-          departureTime: string;
-          arrivalTime: string;
-          airline?: string | null;
-          travelTimeHours: number;
-          transitTimeHours?: number | null;
-          baggageAllowance?: {
-            checkedInKg?: number | null;
-            cabinKg?: number | null;
-            bagNumber?: number | null;
-          };
-          id?: string | null;
-        }[]
+    transport?:
+      | (
+          | {
+              flightNumber?: string | null;
+              departureAirport: string;
+              arrivalAirport: string;
+              departureTime: string;
+              arrivalTime: string;
+              airline?: string | null;
+              travelTimeHours: number;
+              transitTimeHours?: number | null;
+              baggageAllowance?: {
+                checkedInKg?: number | null;
+                cabinKg?: number | null;
+                bagNumber?: number | null;
+              };
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'flight';
+            }
+          | {
+              pickupLocation: string;
+              dropoffLocation: string;
+              pickupTime: string;
+              dropoffTime: string;
+              travelTimeHours: number;
+              provider?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'car';
+            }
+          | {
+              departureStation: string;
+              arrivalStation: string;
+              departureTime: string;
+              arrivalTime: string;
+              travelTimeHours: number;
+              trainCompany?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'train';
+            }
+          | {
+              departurePort: string;
+              arrivalPort: string;
+              departureTime: string;
+              arrivalTime: string;
+              travelTimeHours: number;
+              ferryCompany?: string | null;
+              cabinType?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ferry';
+            }
+        )[]
       | null;
     destinations?:
       | {
@@ -379,6 +418,11 @@ export interface Product {
             | {
                 name?: string | null;
                 stars?: number | null;
+                checkInDate?: string | null;
+                checkOutDate?: string | null;
+                hotelLink?: string | null;
+                hotelImage?: string | Media | null;
+                nights?: number | null;
                 id?: string | null;
               }[]
             | null;

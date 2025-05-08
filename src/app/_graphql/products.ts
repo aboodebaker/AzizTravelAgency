@@ -1,5 +1,6 @@
 import { ARCHIVE_BLOCK, CALL_TO_ACTION, CONTENT, MEDIA_BLOCK } from './blocks'
 import { PRODUCT_CATEGORIES } from './categories'
+import { MEDIA_FIELDS } from './media'
 import { META } from './meta'
 
 export const PRODUCT_DETAILS = `
@@ -20,7 +21,9 @@ export const PRODUCT_DETAILS = `
     visaRequired
     visaIncluded
     travelInsuranceIncluded
-    flights {
+    transport {
+    ... on Flight {
+      blockType
       flightNumber
       departureAirport
       arrivalAirport
@@ -35,12 +38,48 @@ export const PRODUCT_DETAILS = `
         bagNumber
       }
     }
+    ... on Car {
+      blockType
+      pickupLocation
+      dropoffLocation
+      pickupTime
+      dropoffTime
+      travelTimeHours
+      provider
+    }
+    ... on Train {
+      blockType
+      departureStation
+      arrivalStation
+      departureTime
+      arrivalTime
+      travelTimeHours
+      trainCompany
+    }
+    ... on Ferry {
+      blockType
+      departurePort
+      arrivalPort
+      departureTime
+      arrivalTime
+      travelTimeHours
+      ferryCompany
+      cabinType
+    }
+  }
     destinations {
       city
       country
       hotels {
         name
         stars
+        checkInDate
+        checkOutDate
+        hotelLink
+        hotelImage {
+        ${MEDIA_FIELDS}
+        }
+        nights
       }
     }
     tags {
@@ -81,6 +120,8 @@ export const PRODUCT = `
           benefit
           id
         }
+        price
+        description
         diamond
         ${PRODUCT_DETAILS}
         ${PRODUCT_CATEGORIES}

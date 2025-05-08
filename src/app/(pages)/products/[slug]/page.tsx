@@ -9,6 +9,7 @@ import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Blocks } from '../../../_components/Blocks'
 import { PaywallBlocks } from '../../../_components/PaywallBlocks'
+import TravelProductPage from '../../../_components/TravelPage'
 import { ProductHero } from '../../../_heros/Product'
 import { generateMeta } from '../../../_utilities/generateMeta'
 
@@ -37,9 +38,22 @@ export default async function Product({ params: { slug } }) {
 
   const { layout, relatedProducts } = product
 
+  const ProductDetails = {
+    title: product.title,
+    description: product.description,
+    isPackage: product.isPackage,
+    benefits: product.benefits,
+    diamond: product.diamond,
+    price: product.price,
+    travelDetails: product.travelDetails,
+    tag: product.travelDetails.tags[0].tag.toUpperCase(),
+  }
+  console.log(ProductDetails) // eslint-disable-line no-console
+
   return (
     <React.Fragment>
-      <ProductHero product={product} />
+      <TravelProductPage tripData={ProductDetails} />
+      {/* <ProductHero product={product} /> */}
       {/* <Blocks blocks={layout} />
       {product?.enablePaywall && <PaywallBlocks productSlug={slug as string} disableTopPadding />}
       <Blocks
