@@ -48,7 +48,6 @@ export default async function Product({ params: { slug } }) {
     travelDetails: product.travelDetails,
     tag: product.travelDetails.tags[0].tag.toUpperCase(),
   }
-  console.log(ProductDetails) // eslint-disable-line no-console
 
   return (
     <React.Fragment>

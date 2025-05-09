@@ -1,0 +1,75 @@
+
+.message {
+  display: flex;
+  opacity: 0;
+  animation: message-fade-in 0.2s ease-out forwards;
+}
+
+@keyframes message-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+}
+
+.message-content {
+  display: flex;
+  max-width: 80%;
+  gap: 0.5rem;
+  transition: all 0.9s ease;
+}
+
+.message.user .message-content {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.9s ease;
+}
+
+.user .avatar {
+  background-color: hsl(222.2, 47.4%, 11.2%);
+  color: white;
+}
+
+.assistant .avatar {
+  background-color: hsl(210, 40%, 96.1%);
+  color: hsl(222.2, 47.4%, 11.2%);
+}
+
+.message-bubble {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.9s ease;
+}
+
+.user .message-bubble {
+  background-color: hsl(222.2, 47.4%, 11.2%);
+  color: hsl(210, 40%, 98%);
+  border-bottom-right-radius: 0;
+}
+
+.assistant .message-bubble {
+  background-color: hsl(210, 40%, 96.1%);
+  color: hsl(222.2, 47.4%, 11.2%);
+  border-bottom-left-radius: 0;
+}

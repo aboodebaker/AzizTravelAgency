@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { Jost } from 'next/font/google'
 
 import { AdminBar } from './_components/AdminBar'
+import ChatBot from './_components/Chatbot.tsx'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
 import { Providers } from './_providers'
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* @ts-expect-error */}
           <Footer />
         </Providers>
+        <ChatBot />
       </body>
     </html>
   )

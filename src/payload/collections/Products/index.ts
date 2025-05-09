@@ -100,6 +100,7 @@ const Products: CollectionConfig = {
               name: 'benefits',
               label: 'Benefits (for hilton Promo or the package)',
               type: 'array',
+              required: true,
               fields: [
                 {
                   name: 'benefit',

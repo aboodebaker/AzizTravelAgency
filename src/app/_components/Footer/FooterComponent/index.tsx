@@ -67,10 +67,10 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
 
       <div className={classes.windowSeat}>
         <h2 className={classes.sectionTitle}>
-          {footer.windowSeatTitle || 'New views from the Window Seat'}
+          {footer?.windowSeatTitle || 'New views from the Window Seat'}
         </h2>
         <p className={classes.sectionSubtitle}>
-          {footer.windowSeatSubtitle || 'Get the latest inspo before you touch down'}
+          {footer?.windowSeatSubtitle || 'Get the latest inspo before you touch down'}
         </p>
         <div className={classes.articles}>
           {footer.windowSeatArticles?.map((article, index) => {

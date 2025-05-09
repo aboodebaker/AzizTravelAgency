@@ -315,12 +315,10 @@ export interface Product {
   price: number;
   description: string;
   isPackage?: boolean | null;
-  benefits?:
-    | {
-        benefit: string;
-        id?: string | null;
-      }[]
-    | null;
+  benefits: {
+    benefit: string;
+    id?: string | null;
+  }[];
   diamond?: boolean | null;
   travelDetails?: {
     travelDates: {

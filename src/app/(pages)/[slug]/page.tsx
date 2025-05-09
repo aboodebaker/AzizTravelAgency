@@ -84,6 +84,9 @@ export default async function Page({ params: { slug = 'home' } }) {
   ]
 
   const { hero, layout } = page
+  const diamondProduct = productsInCategory.find(product => product.diamond === true)
+  const goldProduct = productsInCategory.find(product => product.diamond !== true)
+
 
   return (
     <React.Fragment>
@@ -93,20 +96,33 @@ export default async function Page({ params: { slug = 'home' } }) {
 
           <Gutter className={classes.home}>
             <Categories categories={catergories} />
-            <HiltonPromo
-              benefits={productsInCategory.filter(product => product.diamond == true)[0].benefits.map(item => item.benefit)}
-              source={`/media/${productsInCategory.filter(product => product.diamond == true)[0].meta.image.filename}`}
-              title={'Diamond Tier Benefits'}
-              href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
-              product={productsInCategory.filter(product => product.diamond == true)[0] }
-            />
-            <HiltonPromo
-              benefits={productsInCategory.filter(product => product.diamond !== true)[0].benefits.map(item => item.benefit)}
-              source={`/media/${productsInCategory.filter(product => product.diamond !== true)[0].meta.image.filename}`}
-              title={`Gold Tier Benefits`}
-              href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
-              product={productsInCategory.filter(product => product.diamond !== true)[0] }
-            />
+            {diamondProduct && (
+              <HiltonPromo
+                benefits={diamondProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  diamondProduct?.meta?.image?.filename
+                    ? `/media/${diamondProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Diamond Tier Benefits"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
+                product={diamondProduct}
+              />
+            )}
+
+            {goldProduct && (
+              <HiltonPromo
+                benefits={goldProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  goldProduct?.meta?.image?.filename
+                    ? `/media/${goldProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Gold Tier Benefits"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
+                product={goldProduct}
+              />
+            )}
           </Gutter>
         </section>
       ) : (

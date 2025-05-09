@@ -1645,7 +1645,7 @@ type Product {
   price: Float
   description: String
   isPackage: Boolean
-  benefits: [Product_Benefits!]
+  benefits: [Product_Benefits!]!
   diamond: Boolean
   travelDetails: Product_TravelDetails
   stripeProductID: String
@@ -1665,7 +1665,7 @@ type Product {
 union Product_Layout = Cta | Content | MediaBlock | Archive
 
 type Product_Benefits {
-  benefit: String
+  benefit: String!
   id: String
 }
 
@@ -6392,7 +6392,7 @@ type ProductVersion_Version {
   price: Float
   description: String
   isPackage: Boolean
-  benefits: [ProductVersion_Version_Benefits!]
+  benefits: [ProductVersion_Version_Benefits!]!
   diamond: Boolean
   travelDetails: ProductVersion_Version_TravelDetails
   stripeProductID: String
@@ -6412,7 +6412,7 @@ type ProductVersion_Version {
 union ProductVersion_Version_Layout = Cta | Content | MediaBlock | Archive
 
 type ProductVersion_Version_Benefits {
-  benefit: String
+  benefit: String!
   id: String
 }
 
@@ -16535,7 +16535,7 @@ input mutationProductInput {
   price: Float!
   description: String!
   isPackage: Boolean
-  benefits: [mutationProduct_BenefitsInput]
+  benefits: [mutationProduct_BenefitsInput!]
   diamond: Boolean
   travelDetails: mutationProduct_TravelDetailsInput!
   stripeProductID: String

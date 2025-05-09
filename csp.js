@@ -10,7 +10,14 @@ const policies = {
   ],
   'child-src': ["'self'"],
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-  'img-src': ["'self'", 'https://*.stripe.com', 'https://raw.githubusercontent.com'],
+  'img-src': [
+    "'self'",
+    'https://*.stripe.com',
+    'https://raw.githubusercontent.com',
+    'https://your-payload-cms-url.com',
+    'https://hook.eu2.make.com/smd5pbv5py9cm3nnp4arddtkqfgnma24', // Added Make.com
+    'https://api.make.com', // Added Make.com API
+  ],
   'font-src': ["'self'"],
   'frame-src': [
     "'self'",
@@ -23,6 +30,10 @@ const policies = {
     'https://checkout.stripe.com',
     'https://api.stripe.com',
     'https://maps.googleapis.com',
+    'https://api.openai.com', // Added OpenAI API
+    'https://your-payload-cms-url.com', // Added Payload CMS
+    'https://hook.eu2.make.com/smd5pbv5py9cm3nnp4arddtkqfgnma24', // Added Make.com
+    'https://api.make.com', // Added Make.com API
   ],
 }
 
