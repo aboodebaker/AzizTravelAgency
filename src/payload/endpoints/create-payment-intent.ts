@@ -1,19 +1,31 @@
-//@ts-nocheck
-import type { PayloadHandler } from 'payload/config'
-import Stripe from 'stripe'
+// import type { PayloadHandler } from 'payload/config'
 
-import type { CartItems } from '../payload-types'
+async function convertCartTotalToZAR(): Promise<number | null> {
+  try {
+    const res = await fetch(
+      'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
+    )
+    const data = await res.json()
+    const exchangeRate = data.conversion_rates.ZAR
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2022-08-01',
-})
+    return exchangeRate
+  } catch (error: unknown) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching exchange rate:', error)
+    const rand = 18
+    return rand
+  }
+}
 
-// this endpoint creates a `PaymentIntent` with the items in the cart
-// to do this, we loop through the items in the cart and lookup the product in Stripe
-// we then add the price of the product to the total
-// once completed, we pass the `client_secret` of the `PaymentIntent` back to the client which can process the payment
-export const createPaymentIntent: PayloadHandler = async (req, res): Promise<void> => {
+export const createYocoCheckoutSession = async (req, res): Promise<void> => {
   const { user, payload } = req
+  let newOrder = null
+  const exchangeRate = await convertCartTotalToZAR()
+
+  const { paymentStatus, membershipId } = req.body as {
+    paymentStatus?: 'paid' | 'pending' | 'fulfilled'
+    membershipId?: string
+  }
 
   if (!user) {
     res.status(401).send('Unauthorized')
@@ -22,7 +34,7 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
 
   const fullUser = await payload.findByID({
     collection: 'users',
-    id: user?.id,
+    id: user.id,
   })
 
   if (!fullUser) {
@@ -30,81 +42,104 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
     return
   }
 
+  if (!membershipId) {
+    res.status(400).json({ error: 'Missing order detail, your MembershipID' })
+    return
+  }
+
   try {
-    let stripeCustomerID = fullUser?.stripeCustomerID
+    const cartItems = fullUser.cart?.items || []
 
-    // lookup user in Stripe and create one if not found
-    if (!stripeCustomerID) {
-      const customer = await stripe.customers.create({
-        email: fullUser?.email,
-        name: fullUser?.name,
-      })
+    if (cartItems.length === 0) {
+      res.status(400).json({ error: 'No items in cart' })
+      return
+    }
 
-      stripeCustomerID = customer.id
+    let totalAmount = 0
+    const lineItems = []
 
-      await payload.update({
-        collection: 'users',
-        id: user?.id,
-        data: {
-          stripeCustomerID,
+    for (const item of cartItems) {
+      const { product, quantity } = item
+
+      if (!quantity || typeof product === 'string' || !product.price) {
+        continue
+      }
+
+      const priceInCents = Math.round(product.price * exchangeRate) * 100 // Assuming price is in ZAR
+      totalAmount += priceInCents * quantity
+
+      lineItems.push({
+        displayName: product.title,
+        quantity,
+        pricingDetails: {
+          price: priceInCents,
         },
       })
     }
 
-    let total = 0
-
-    const hasItems = fullUser?.cart?.items?.length > 0
-
-    if (!hasItems) {
-      throw new Error('No items in cart')
+    if (totalAmount === 0) {
+      res.status(400).json({ error: 'Cart total is zero' })
+      return
     }
 
-    // for each item in cart, lookup the product in Stripe and add its price to the total
-    await Promise.all(
-      fullUser?.cart?.items?.map(async (item: CartItems[0]): Promise<null> => {
-        const { product, quantity } = item
+    try {
+      newOrder = await payload.create({
+        collection: 'orders',
+        data: {
+          orderedBy: user.id, // The ID of the user placing the order
+          items: cartItems
+            .filter(item => item.product && typeof item.product !== 'string') // Ensure product exists
+            .map(item => ({
+              product: typeof item.product === 'string' ? item.product : item.product.id, // Pass only the product ID
+              price: item.price || null, // Include price if available, else null
+              quantity: item.quantity || null, // Include quantity if available, else null
+              id: item.id || null, // Include item ID if available, else null
+            })),
+          total: totalAmount, // Total amount for the order
+          status: paymentStatus || 'pending', // Status of the payment, default is 'pending'
+          membershipId: membershipId, // Membership ID for the order
+          updatedAt: new Date().toISOString(), // Current timestamp when the order is created
+          createdAt: new Date().toISOString(), // Current timestamp when the order is created
+        },
+      })
+      // eslint-disable-next-line no-console
+      console.log(newOrder)
+    } catch (err: unknown) {
+      req.payload.logger.error('Error creating order:', err)
+      res.status(500).json({ error: 'Failed to create order' })
+      return
+    }
 
-        if (!quantity) {
-          return null
-        }
-
-        if (typeof product === 'string' || !product?.stripeProductID) {
-          throw new Error('No Stripe Product ID')
-        }
-
-        const prices = await stripe.prices.list({
-          product: product.stripeProductID,
-          limit: 100,
-          expand: ['data.product'],
-        })
-
-        if (prices.data.length === 0) {
-          res.status(404).json({ error: 'There are no items in your cart to checkout with' })
-          return null
-        }
-
-        const price = prices.data[0]
-        total += price.unit_amount * quantity
-
-        return null
+    const response = await fetch('https://payments.yoco.com/api/checkouts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.YOCO_SECRET_KEY}`,
+      },
+      body: JSON.stringify({
+        amount: totalAmount,
+        currency: 'ZAR',
+        lineItems,
+        successUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/order-confirmation?order_id=${newOrder.id}`,
+        cancelUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
+        failureUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
+        metadata: {
+          userId: user.id,
+        },
       }),
-    )
-
-    if (total === 0) {
-      throw new Error('There is nothing to pay for, add some items to your cart and try again.')
-    }
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      customer: stripeCustomerID,
-      amount: total,
-      currency: 'usd',
-      payment_method_types: ['card'],
     })
 
-    res.send({ client_secret: paymentIntent.client_secret })
+    const data = await response.json()
+
+    if (!response.ok) {
+      res.status(response.status).json({ error: data })
+      return
+    }
+
+    res.status(200).json({ redirectUrl: data.redirectUrl })
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    payload.logger.error(message)
-    res.json({ error: message })
+    // eslint-disable-next-line no-console
+    console.error('Error creating Yoco checkout session:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
 }

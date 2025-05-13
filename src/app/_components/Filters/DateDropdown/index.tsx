@@ -14,6 +14,7 @@ const DateDropdown = ({ options, value, onChange }) => {
     container: {
       position: 'relative' as 'relative',
       display: 'inline-block',
+      marginBotton: '10px',
     },
     button: {
       display: 'flex',

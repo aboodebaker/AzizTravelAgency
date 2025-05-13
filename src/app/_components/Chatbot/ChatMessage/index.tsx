@@ -4,7 +4,7 @@ import './index.css'
 
 interface MessageProps {
   message: {
-    role: 'user' | 'assistant' | 'system'
+    role: 'user' | 'assistant' | 'system' | 'tool'
     content: string
   }
   isNew?: boolean
@@ -53,7 +53,7 @@ const ChatMessage: React.FC<MessageProps> = ({ message, isNew }) => {
             </svg>
           )}
         </div>
-        <div className="message-bubble">{message.content}</div>
+        <div className="message-bubble" dangerouslySetInnerHTML={{ __html: message.content }} />
       </div>
     </div>
   )

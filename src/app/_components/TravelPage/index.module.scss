@@ -468,3 +468,38 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.modernDateInput {
+  padding: 10px 15px;
+  font-size: 16px;
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #333;
+  width: 100%; /* Optional: Ensure it stretches to the container's width */
+}
+
+.modernDateInput::-webkit-calendar-picker-indicator {
+  /* Removed display: none; so the calendar icon appears */
+  cursor: pointer;
+  width: 30px;  /* Enlarge the calendar icon */
+  height: 30px; /* Enlarge the calendar icon */
+  background-color: transparent;
+}
+
+.modernDateInput:focus {
+  border-color: #007BFF;
+  // box-shadow: 0 0 0px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.modernDateInput::-webkit-input-placeholder {
+  color: #888;
+}
+
+.modernDateInput:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  border-color: #ccc;
+}

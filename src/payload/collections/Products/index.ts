@@ -118,6 +118,13 @@ const Products: CollectionConfig = {
               },
             },
             {
+              name: 'image',
+              label: 'Header Image',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+            },
+            {
               name: 'travelDetails',
               label: 'Travel Details',
               type: 'group',
@@ -130,7 +137,7 @@ const Products: CollectionConfig = {
                   type: 'group',
                   fields: [
                     {
-                      name: 'departureDate',
+                      name: 'departureDateExample',
                       type: 'date',
                       required: true,
                       admin: {
@@ -141,7 +148,7 @@ const Products: CollectionConfig = {
                       },
                     },
                     {
-                      name: 'returnDate',
+                      name: 'returnDateExample',
                       type: 'date',
                       required: true,
                       admin: {
@@ -150,10 +157,35 @@ const Products: CollectionConfig = {
                         },
                         // time: true,
                       },
+                    },
+                    {
+                      name: 'packageDates',
+                      label: 'Package Dates between what dates does this package apply to leave',
+                      type: 'group',
+                      fields: [
+                        {
+                          name: 'firstDate',
+                          type: 'date',
+                          required: true,
+                        },
+                        {
+                          name: 'lastDate',
+                          label: 'Last Date Of Depature',
+                          type: 'date',
+                          required: true,
+                        },
+                      ],
+                    },
+                    {
+                      name: 'validUntil',
+                      label: 'When Is the last day of booking',
+                      type: 'date',
+                      required: true,
                     },
                     {
                       name: 'flexibility',
                       type: 'group',
+                      admin: { condition: (_, siblingData) => siblingData?.isPackage === true },
                       fields: [
                         {
                           name: 'beforeDays',
@@ -245,7 +277,7 @@ const Products: CollectionConfig = {
                           required: true,
                         },
                         {
-                          name: 'departureTime',
+                          name: 'departureTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -256,7 +288,7 @@ const Products: CollectionConfig = {
                           },
                         },
                         {
-                          name: 'arrivalTime',
+                          name: 'arrivalTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -317,7 +349,7 @@ const Products: CollectionConfig = {
                           required: true,
                         },
                         {
-                          name: 'pickupTime',
+                          name: 'pickupTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -328,7 +360,7 @@ const Products: CollectionConfig = {
                           },
                         },
                         {
-                          name: 'dropoffTime',
+                          name: 'dropoffTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -367,7 +399,7 @@ const Products: CollectionConfig = {
                           required: true,
                         },
                         {
-                          name: 'departureTime',
+                          name: 'departureTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -378,7 +410,7 @@ const Products: CollectionConfig = {
                           },
                         },
                         {
-                          name: 'arrivalTime',
+                          name: 'arrivalTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -417,7 +449,7 @@ const Products: CollectionConfig = {
                           required: true,
                         },
                         {
-                          name: 'departureTime',
+                          name: 'departureTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -428,7 +460,7 @@ const Products: CollectionConfig = {
                           },
                         },
                         {
-                          name: 'arrivalTime',
+                          name: 'arrivalTimeExample',
                           type: 'date',
                           required: true,
                           admin: {
@@ -481,7 +513,7 @@ const Products: CollectionConfig = {
                           type: 'number',
                         },
                         {
-                          name: 'checkInDate',
+                          name: 'checkInDateExample',
                           type: 'date',
                           admin: {
                             date: {
@@ -491,7 +523,7 @@ const Products: CollectionConfig = {
                           },
                         },
                         {
-                          name: 'checkOutDate',
+                          name: 'checkOutDateExample',
                           type: 'date',
                           admin: {
                             date: {

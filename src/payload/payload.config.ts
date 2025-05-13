@@ -19,7 +19,9 @@ import Products from './collections/Products'
 import Users from './collections/Users'
 import BeforeDashboard from './components/BeforeDashboard'
 import BeforeLogin from './components/BeforeLogin'
-import { createPaymentIntent } from './endpoints/create-payment-intent'
+import { chatbot } from './endpoints/chatbot'
+import { createOrder } from './endpoints/create-order'
+import { createYocoCheckoutSession } from './endpoints/create-payment-intent'
 import { customersProxy } from './endpoints/customers'
 import { productsProxy } from './endpoints/products'
 import { seed } from './endpoints/seed'
@@ -65,7 +67,9 @@ export default buildConfig({
             [path.resolve(__dirname, 'collections/Users/endpoints/customer')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/create-payment-intent')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/customers')]: mockModulePath,
+            [path.resolve(__dirname, 'endpoints/create-order')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/products')]: mockModulePath,
+            [path.resolve(__dirname, 'endpoints/chatbot')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
             stripe: mockModulePath,
             express: mockModulePath,
@@ -99,7 +103,7 @@ export default buildConfig({
     {
       path: '/create-payment-intent',
       method: 'post',
-      handler: createPaymentIntent,
+      handler: createYocoCheckoutSession,
     },
     {
       path: '/stripe/customers',
@@ -110,6 +114,16 @@ export default buildConfig({
       path: '/stripe/products',
       method: 'get',
       handler: productsProxy,
+    },
+    {
+      path: '/chatbot',
+      method: 'post',
+      handler: chatbot,
+    },
+    {
+      path: '/create-order',
+      method: 'post',
+      handler: createOrder,
     },
     // The seed endpoint is used to populate the database with some example data
     // You should delete this endpoint before deploying your site to production

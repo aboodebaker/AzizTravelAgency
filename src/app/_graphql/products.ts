@@ -6,8 +6,13 @@ import { META } from './meta'
 export const PRODUCT_DETAILS = `
   travelDetails {
     travelDates {
-      departureDate
-      returnDate
+      departureDateExample
+      returnDateExample
+      packageDates {
+        firstDate
+        lastDate
+      }
+      validUntil
       flexibility {
         beforeDays
         afterDays
@@ -27,8 +32,8 @@ export const PRODUCT_DETAILS = `
       flightNumber
       departureAirport
       arrivalAirport
-      departureTime
-      arrivalTime
+      departureTimeExample
+      arrivalTimeExample
       airline
       travelTimeHours
       transitTimeHours
@@ -42,8 +47,8 @@ export const PRODUCT_DETAILS = `
       blockType
       pickupLocation
       dropoffLocation
-      pickupTime
-      dropoffTime
+      pickupTimeExample
+      dropoffTimeExample
       travelTimeHours
       provider
     }
@@ -51,8 +56,8 @@ export const PRODUCT_DETAILS = `
       blockType
       departureStation
       arrivalStation
-      departureTime
-      arrivalTime
+      departureTimeExample
+      arrivalTimeExample
       travelTimeHours
       trainCompany
     }
@@ -60,8 +65,8 @@ export const PRODUCT_DETAILS = `
       blockType
       departurePort
       arrivalPort
-      departureTime
-      arrivalTime
+      departureTimeExample
+      arrivalTimeExample
       travelTimeHours
       ferryCompany
       cabinType
@@ -73,8 +78,8 @@ export const PRODUCT_DETAILS = `
       hotels {
         name
         stars
-        checkInDate
-        checkOutDate
+        checkInDateExample
+        checkOutDateExample
         hotelLink
         hotelImage {
         ${MEDIA_FIELDS}
@@ -101,6 +106,9 @@ export const PRODUCTS = `
         }
         ${META}
         diamond
+        image {
+        ${MEDIA_FIELDS}
+        }
         ${PRODUCT_DETAILS}
       }
     }
@@ -123,6 +131,9 @@ export const PRODUCT = `
         price
         description
         diamond
+        image {
+        ${MEDIA_FIELDS}
+        }
         ${PRODUCT_DETAILS}
         ${PRODUCT_CATEGORIES}
         layout {

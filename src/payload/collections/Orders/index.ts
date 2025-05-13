@@ -34,8 +34,8 @@ export const Orders: CollectionConfig = {
       },
     },
     {
-      name: 'stripePaymentIntentID',
-      label: 'Stripe Payment Intent ID',
+      name: 'yocoPaymentId',
+      label: 'Yoco Payment ID',
       type: 'text',
       admin: {
         position: 'sidebar',
@@ -45,10 +45,34 @@ export const Orders: CollectionConfig = {
       },
     },
     {
+      name: 'status',
+      type: 'select',
+      required: true,
+      options: [
+        {
+          label: 'Paid',
+          value: 'paid',
+        },
+        {
+          label: 'Pending',
+          value: 'pending',
+        },
+        {
+          label: 'Fulfilled',
+          value: 'fulfilled',
+        },
+      ],
+    },
+    {
       name: 'total',
       type: 'number',
       required: true,
       min: 0,
+    },
+    {
+      name: 'membershipId',
+      type: 'text',
+      required: true,
     },
     {
       name: 'items',

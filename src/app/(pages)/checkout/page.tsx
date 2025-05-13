@@ -28,36 +28,27 @@ export default async function Checkout() {
     console.error(error) // eslint-disable-line no-console
   }
 
+  async function convertCartTotalToZAR(): Promise<number | null> {
+    try {
+      const res = await fetch(
+        'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
+      )
+      const data = await res.json()
+      const exchangeRate = data.conversion_rates.ZAR
+
+      return exchangeRate
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching exchange rate:', error)
+      const rand = 18
+      return rand
+    }
+  }
+
+  const exchangeRate = await convertCartTotalToZAR()
+
   return (
     <Fragment>
-      {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
-        <Gutter>
-          <Message
-            className={classes.message}
-            warning={
-              <Fragment>
-                {'To enable checkout, you must '}
-                <a
-                  href="https://dashboard.stripe.com/test/apikeys"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {'obtain your Stripe API Keys'}
-                </a>
-                {' then set them as environment variables. See the '}
-                <a
-                  href="https://github.com/payloadcms/payload/blob/main/templates/ecommerce/README.md#stripe"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {'README'}
-                </a>
-                {' for more details.'}
-              </Fragment>
-            }
-          />
-        </Gutter>
-      )}
       <LowImpactHero
         type="lowImpact"
         media={null}
@@ -70,37 +61,10 @@ export default async function Checkout() {
               },
             ],
           },
-          {
-            type: 'paragraph',
-            children: [
-              {
-                text: `This is a self-hosted, secure checkout using Stripe's Payment Element component. To create a mock purchase, use a `,
-              },
-              {
-                type: 'link',
-                url: 'https://stripe.com/docs/testing#cards',
-                children: [
-                  {
-                    text: 'test credit card',
-                  },
-                ],
-              },
-              {
-                text: ' like ',
-              },
-              {
-                text: '4242 4242 4242 4242',
-                bold: true,
-              },
-              {
-                text: ' with any future date and CVC. An order will be generated in Stripe and will appear in your account. In production, this checkout form will require a real card with sufficient funds.',
-              },
-            ],
-          },
         ]}
       />
       <Gutter className={classes.checkoutPage}>
-        <CheckoutPage settings={settings} />
+        <CheckoutPage settings={settings} exchangeRate={exchangeRate} />
       </Gutter>
     </Fragment>
   )

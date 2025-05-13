@@ -14,6 +14,13 @@ import { Pagination } from '../Pagination'
 
 import classes from './index.module.scss'
 
+const getLastDayOfMonth = (month: unknown) => {
+  const date = new Date(`${month}-01`)
+  date.setMonth(date.getMonth() + 1) // Move to next month
+  date.setDate(0) // Move to last day of the previous month
+  return date.getDate() // Get last day
+}
+
 type Result = {
   docs: (Product | string)[]
   hasNextPage: boolean
@@ -40,7 +47,7 @@ export type Props = {
 }
 
 export const CollectionArchive: React.FC<Props> = props => {
-  const { categoryFilters, sort } = useFilter()
+  const { categoryFilters, sort, date, tags } = useFilter()
 
   const {
     className,
@@ -101,27 +108,33 @@ export const CollectionArchive: React.FC<Props> = props => {
         }
       }, 500)
 
-      const searchQuery = qs.stringify(
-        {
-          depth: 1,
-          limit,
-          page,
-          sort,
-          where: {
-            ...(categoryFilters && categoryFilters?.length > 0
-              ? {
-                  categories: {
-                    in:
-                      typeof categoryFilters === 'string'
-                        ? [categoryFilters]
-                        : categoryFilters.map((cat: string) => cat).join(','),
-                  },
-                }
-              : {}),
-          },
+      const startDate = new Date(`${date}-01T00:00:00.000Z`) // First day of the month
+      const endDate = new Date(`${date}-${new Date(`${date}-01`).getDate()}T23:59:59.999Z`)
+
+      const searchQuery = qs.stringify({
+        depth: 1,
+        limit,
+        page,
+        sort,
+        where: {
+          ...(categoryFilters?.length > 0 && {
+            categories: {
+              in: categoryFilters,
+            },
+          }),
+          ...(tags?.length > 0 && {
+            'travelDetails.tags.tag': {
+              in: tags,
+            },
+          }),
+
+          ...(date && {
+            'travelDetails.travelDates.packageDates.firstDate': {
+              includes: date,
+            },
+          }),
         },
-        { encode: false },
-      )
+      })
 
       const makeRequest = async () => {
         try {
@@ -136,7 +149,23 @@ export const CollectionArchive: React.FC<Props> = props => {
 
           if (docs && Array.isArray(docs)) {
             // Filter docs to exclude those where isPackage is false
-            const filteredDocs = docs.filter(doc => doc.isPackage !== false)
+            const filteredDocs = docs.filter(doc => {
+              const isPackage = doc.isPackage !== false
+
+              const firstDateStr = doc?.travelDetails?.travelDates?.packageDates?.firstDate
+
+              if (!firstDateStr) return false // Exclude if no firstDate
+
+              const firstDate = new Date(firstDateStr)
+              const inputDate = new Date(`${date}-01`) // `date` is like "2025-05"
+
+              // Match by year and month
+              const sameMonth =
+                firstDate.getUTCFullYear() === inputDate.getUTCFullYear() &&
+                firstDate.getUTCMonth() === inputDate.getUTCMonth()
+
+              return isPackage && sameMonth
+            })
 
             setResults({
               ...json,
@@ -165,7 +194,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     return () => {
       if (timer) clearTimeout(timer)
     }
-  }, [page, categoryFilters, relationTo, onResultChange, sort, limit, populateBy])
+  }, [page, categoryFilters, relationTo, onResultChange, sort, limit, populateBy, date, tags])
 
   return (
     <div className={[classes.collectionArchive, className].filter(Boolean).join(' ')}>
@@ -206,11 +235,11 @@ export const CollectionArchive: React.FC<Props> = props => {
                 }
 
                 // If travelDates are available
-                const departureDateFormatted = travelDetails?.travelDates.departureDate
-                  ? formatDate(travelDetails?.travelDates.departureDate)
+                const departureDateFormatted = travelDetails?.travelDates.packageDates.firstDate
+                  ? formatDate(travelDetails?.travelDates.packageDates.firstDate)
                   : ''
-                const arrivalDateFormatted = travelDetails?.travelDates.returnDate
-                  ? formatDate(travelDetails?.travelDates.returnDate)
+                const arrivalDateFormatted = travelDetails?.travelDates.packageDates.lastDate
+                  ? formatDate(travelDetails?.travelDates.packageDates.lastDate)
                   : ''
 
                 return isPackage ? (
@@ -221,7 +250,7 @@ export const CollectionArchive: React.FC<Props> = props => {
                     imageUrl={imageUrl}
                     price={price}
                     originalPrice={travelDetails.originalPrice}
-                    travelDates={`${departureDateFormatted} - ${arrivalDateFormatted}`}
+                    travelDates={`Valid from ${departureDateFormatted} until ${arrivalDateFormatted}`}
                     destination={travelDetails.destinations.map(dest => dest.city).join(', ')}
                     hotel={travelDetails.destinations
                       .map(dest => dest.hotels.map(des => des.name))

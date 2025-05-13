@@ -53,11 +53,23 @@ export const ProductHero: React.FC<{ product: Product }> = ({ product }) => {
 
         {/* Price and Description */}
         <div className={classes.infoSection}>
-          <Price product={product} button={false} />
+          <div className={classes.actions}>
+            <div className={classes.price}>
+              <p>${product.price}</p>
+            </div>
+          </div>
 
           <div className={classes.description}>
             <h6>Description</h6>
-            <p>{description}</p>
+            <p>{product.description}</p>
+          </div>
+          <div className={classes.benefitsWrapper}>
+            {product.benefits.map((benefit, index) => (
+              <div key={index} className={classes.benefitItem}>
+                <img src="/assets/icons/tick.svg" alt="✓" />
+                <span>{benefit.benefit}</span>
+              </div>
+            ))}
           </div>
 
           <AddToCartButton product={product} className={classes.addToCartButton} />

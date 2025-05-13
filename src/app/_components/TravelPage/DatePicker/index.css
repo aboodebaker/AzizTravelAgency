@@ -1,0 +1,303 @@
+:root {
+  /* === Brand Colors === */
+  --color-primary: #08092E; /* Deep Blue */
+  --color-primary-foreground: #ffffff; /* White Text */
+  
+  --color-accent: #CCA063; /* Gold */
+  --color-accent-foreground: #08092E; /* Dark Blue for Text */
+  
+  /* === Popover === */
+  --color-popover: #ffffff; /* White background for popovers */
+  --color-popover-foreground: #08092E; /* Dark text inside popover */
+  
+  /* === Shadow === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  
+  /* === Day States === */
+  --color-day-selected-bg: var(--color-primary); /* Selected day background */
+  --color-day-selected-text: var(--color-primary-foreground); /* Selected day text */
+  --color-day-hover-bg: var(--color-accent); /* Hover background for day */
+  --color-day-hover-text: var(--color-accent-foreground); /* Hover text color */
+  --color-day-disabled-bg: rgba(0, 0, 0, 0.05); /* Disabled day background */
+  --color-day-disabled-text: #a3a3a3; /* Disabled text color */
+  
+  /* === Accent Colors === */
+  --color-muted-foreground: #6b7280; /* Muted Text */
+  --color-secondary: #f3f4f6; /* Light Gray */
+  --color-secondary-foreground: #111827; /* Dark Gray */
+  
+  /* === Border Colors === */
+  --color-input: #d1d5db; /* Border color for input fields */
+  --color-background: #ffffff; /* Page background */
+}
+
+.inline-flex { display: inline-flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 0.5rem; }
+.whitespace-nowrap { white-space: nowrap; }
+
+/* === Borders === */
+.rounded-md { border-radius: 0.375rem; }
+.border { border-width: 1px; }
+.border-input { border-color: var(--color-input); }
+
+/* === Text === */
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-medium { font-weight: 500; }
+.text-primary { color: var(--color-primary); }
+.text-primary-foreground { color: var(--color-primary-foreground); }
+.text-destructive { color: var(--color-destructive); }
+.text-destructive-foreground { color: var(--color-destructive-foreground); }
+.text-secondary-foreground { color: var(--color-secondary-foreground); }
+.text-accent-foreground { color: var(--color-accent-foreground); }
+
+/* === Backgrounds === */
+.bg-primary { background-color: var(--color-primary); }
+.bg-destructive { background-color: var(--color-destructive); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-background { background-color: var(--color-background); }
+.bg-accent { background-color: var(--color-accent); }
+
+/* === Hover States === */
+.hover\:bg-primary\/90:hover { background-color: rgba(var(--color-primary-rgb), 0.9); }
+.hover\:bg-destructive\/90:hover { background-color: rgba(var(--color-destructive-rgb), 0.9); }
+.hover\:bg-secondary\/80:hover { background-color: rgba(var(--color-secondary-rgb), 0.8); }
+.hover\:bg-accent:hover { background-color: var(--color-accent); }
+.hover\:text-accent-foreground:hover { color: var(--color-accent-foreground); }
+.hover\:underline:hover { text-decoration: underline; }
+
+/* === Text Decorations === */
+.underline-offset-4 { text-underline-offset: 4px; }
+
+/* === Shadows === */
+.shadow { box-shadow: var(--shadow); }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+
+/* === Ring & Focus === */
+.focus-visible\:outline-none:focus-visible { outline: none; }
+.focus-visible\:ring-1:focus-visible { box-shadow: 0 0 0 1px var(--ring-color); }
+.focus-visible\:ring-ring:focus-visible { --ring-color: var(--color-ring); }
+
+/* === Disabled === */
+.disabled\:pointer-events-none:disabled { pointer-events: none; }
+.disabled\:opacity-50:disabled { opacity: 0.5; }
+
+/* === Heights, Widths, Padding === */
+.h-9 { height: 2.25rem; }
+.h-8 { height: 2rem; }
+.h-10 { height: 2.5rem; }
+.w-9 { width: 2.25rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+/* === SVG Specific === */
+.\[\&_svg\]\:pointer-events-none svg { pointer-events: none; }
+.\[\&_svg\]\:size-4 svg {
+  width: 1rem;
+  height: 1rem;
+}
+.\[\&_svg\]\:shrink-0 svg { flex-shrink: 0; }
+/* === Layout and Spacing === */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.sm\:flex-row { @media (min-width: 640px) { flex-direction: row; } }
+.space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+.sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) { @media (min-width: 640px) { margin-left: 1rem; } }
+.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]) { @media (min-width: 640px) { margin-top: 0; } }
+.space-x-1 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.25rem; }
+.p-0 { padding: 0; }
+.p-3 { padding: 0.75rem; }
+.pt-1 { padding-top: 0.25rem; }
+
+/* === Sizing === */
+.h-7 { height: 1.75rem; }
+.h-8 { height: 2rem; }
+.w-7 { width: 1.75rem; }
+.w-8 { width: 2rem; }
+.w-full { width: 100%; }
+
+/* === Text === */
+.text-sm { font-size: 0.875rem; }
+.text-08rem { font-size: 0.8rem; }
+.font-medium { font-weight: 500; }
+.font-normal { font-weight: 400; }
+
+/* === Position === */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.left-1 { left: 0.25rem; }
+.right-1 { right: 0.25rem; }
+
+/* === Table === */
+.border-collapse { border-collapse: collapse; }
+
+/* === Margin === */
+.mt-2 { margin-top: 0.5rem; }
+
+/* === Colors (Assumes CSS variables are defined) === */
+.bg-primary { background-color: var(--color-primary); }
+.text-primary-foreground { color: var(--color-primary-foreground); }
+.bg-accent { background-color: var(--color-accent); }
+.text-accent-foreground { color: var(--color-accent-foreground); }
+.text-muted-foreground { color: var(--color-muted-foreground); }
+
+/* === States (Hover, Focus, etc.) === */
+.hover\:bg-primary:hover { background-color: var(--color-primary); }
+.hover\:text-primary-foreground:hover { color: var(--color-primary-foreground); }
+.focus\:bg-primary:focus { background-color: var(--color-primary); }
+.focus\:text-primary-foreground:focus { color: var(--color-primary-foreground); }
+.hover\:opacity-100:hover { opacity: 1; }
+.aria-selected\:opacity-100[aria-selected="true"] { opacity: 1; }
+.aria-selected\:bg-accent\/50[aria-selected="true"] { background-color: rgba(var(--color-accent-rgb), 0.5); }
+.aria-selected\:text-muted-foreground[aria-selected="true"] { color: var(--color-muted-foreground); }
+.aria-selected\:bg-accent[aria-selected="true"] { background-color: var(--color-accent); }
+.aria-selected\:text-accent-foreground[aria-selected="true"] { color: var(--color-accent-foreground); }
+
+/* === Focus-within === */
+.focus-within\:relative:focus-within { position: relative; }
+.focus-within\:z-20:focus-within { z-index: 20; }
+
+/* === Rounding === */
+.rounded-md { border-radius: 0.375rem; }
+.rounded-l-md { border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem; }
+.rounded-r-md { border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; }
+
+/* === Visibility === */
+.invisible { visibility: hidden; }
+
+/* === Complex Selectors === */
+.\[\&\:has\(>\.day-range-end\)\]\:rounded-r-md:has(>.day-range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+.\[\&\:has\(>\.day-range-start\)\]\:rounded-l-md:has(>.day-range-start) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+.first\:\[\&\:has\(\[aria-selected\]\)\]\:rounded-l-md:first-child:has([aria-selected]) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+.last\:\[\&\:has\(\[aria-selected\]\)\]\:rounded-r-md:last-child:has([aria-selected]) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+.\[\&\:has\(\[aria-selected\]\)\]\:bg-accent:has([aria-selected]) {
+  background-color: var(--color-accent);
+}
+.\[\&\:has\(\[aria-selected\]\.day-outside\)\]\:bg-accent\/50:has([aria-selected].day-outside) {
+  background-color: rgba(var(--color-accent-rgb), 0.5);
+}
+.\[\&\:has\(\[aria-selected\]\.day-range-end\)\]\:rounded-r-md:has([aria-selected].day-range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+.\[\&\:has\(\[aria-selected\]\)\]\:rounded-md:has([aria-selected]) {
+  border-radius: 0.375rem;
+}
+/* === Z-Index === */
+.z-50 { z-index: 50; }
+
+/* === Width === */
+.w-72 { width: 18rem; }
+
+/* === Border & Radius === */
+.rounded-md { border-radius: 0.375rem; }
+.border { border-width: 1px; }
+
+/* === Padding === */
+.p-4 { padding: 1rem; }
+
+/* === Colors (Assume CSS Variables) === */
+.bg-popover { background-color: var(--color-popover); }
+.text-popover-foreground { color: var(--color-popover-foreground); }
+
+/* === Shadow === */
+.shadow-md { box-shadow: var(--shadow-md); }
+
+/* === Outline === */
+.outline-none { outline: none; }
+
+/* === Animations via Data Attributes === */
+.data-\[state\=open\]\:animate-in[data-state="open"] {
+  animation: animate-in 0.2s ease-out forwards;
+}
+.data-\[state\=closed\]\:animate-out[data-state="closed"] {
+  animation: animate-out 0.2s ease-in forwards;
+}
+.data-\[state\=open\]\:fade-in-0[data-state="open"] {
+  animation: fade-in 0s ease-in forwards;
+}
+.data-\[state\=closed\]\:fade-out-0[data-state="closed"] {
+  animation: fade-out 0s ease-out forwards;
+}
+.data-\[state\=open\]\:zoom-in-95[data-state="open"] {
+  transform: scale(0.95);
+}
+.data-\[state\=closed\]\:zoom-out-95[data-state="closed"] {
+  transform: scale(0.95);
+}
+.data-\[side\=bottom\]\:slide-in-from-top-2[data-side="bottom"] {
+  transform: translateY(-0.5rem);
+}
+.data-\[side\=top\]\:slide-in-from-bottom-2[data-side="top"] {
+  transform: translateY(0.5rem);
+}
+.data-\[side\=left\]\:slide-in-from-right-2[data-side="left"] {
+  transform: translateX(0.5rem);
+}
+.data-\[side\=right\]\:slide-in-from-left-2[data-side="right"] {
+  transform: translateX(-0.5rem);
+}
+
+/* === Transform Origin (custom) === */
+.origin-\[\-\-radix-popover-content-transform-origin\] {
+  transform-origin: var(--radix-popover-content-transform-origin);
+}
+@keyframes animate-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes animate-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+/* Define variables like --color-popover, --shadow-md, etc. in :root or a theme class */
+
+.p-0 {
+  padding: 0;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.text-muted-foreground {
+  color: var(--color-muted-foreground);
+}
+.font-normal {
+  font-weight: 400;
+}
+.text-left {
+  text-align: left;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.w-\[240px\] {
+  width: 240px;
+}
+/* Selected day (primary) */
+.\[\&\:has\(\[aria-selected\]\)\]\:bg-primary:has([aria-selected]) {
+  background-color: var(--color-day-selected-bg);
+  color: var(--color-day-selected-text);
+  box-shadow: var(--shadow-md);
+}
+
+/* Hover state for day (accent) */
+.\[\&\:has\(\[aria-selected\]\)\]\:hover\:bg-accent\:hover:has([aria-selected]) {
+  background-color: var(--color-day-hover-bg);
+  color: var(--color-day-hover-text);
+  box-shadow: var(--shadow-sm);
+}

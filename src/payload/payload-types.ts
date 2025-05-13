@@ -320,10 +320,16 @@ export interface Product {
     id?: string | null;
   }[];
   diamond?: boolean | null;
+  image: string | Media;
   travelDetails?: {
     travelDates: {
-      departureDate: string;
-      returnDate: string;
+      departureDateExample: string;
+      returnDateExample: string;
+      packageDates: {
+        firstDate: string;
+        lastDate: string;
+      };
+      validUntil: string;
       flexibility?: {
         beforeDays?: number | null;
         afterDays?: number | null;
@@ -358,8 +364,8 @@ export interface Product {
               flightNumber?: string | null;
               departureAirport: string;
               arrivalAirport: string;
-              departureTime: string;
-              arrivalTime: string;
+              departureTimeExample: string;
+              arrivalTimeExample: string;
               airline?: string | null;
               travelTimeHours: number;
               transitTimeHours?: number | null;
@@ -375,8 +381,8 @@ export interface Product {
           | {
               pickupLocation: string;
               dropoffLocation: string;
-              pickupTime: string;
-              dropoffTime: string;
+              pickupTimeExample: string;
+              dropoffTimeExample: string;
               travelTimeHours: number;
               provider?: string | null;
               id?: string | null;
@@ -386,8 +392,8 @@ export interface Product {
           | {
               departureStation: string;
               arrivalStation: string;
-              departureTime: string;
-              arrivalTime: string;
+              departureTimeExample: string;
+              arrivalTimeExample: string;
               travelTimeHours: number;
               trainCompany?: string | null;
               id?: string | null;
@@ -397,8 +403,8 @@ export interface Product {
           | {
               departurePort: string;
               arrivalPort: string;
-              departureTime: string;
-              arrivalTime: string;
+              departureTimeExample: string;
+              arrivalTimeExample: string;
               travelTimeHours: number;
               ferryCompany?: string | null;
               cabinType?: string | null;
@@ -416,8 +422,8 @@ export interface Product {
             | {
                 name?: string | null;
                 stars?: number | null;
-                checkInDate?: string | null;
-                checkOutDate?: string | null;
+                checkInDateExample?: string | null;
+                checkOutDateExample?: string | null;
                 hotelLink?: string | null;
                 hotelImage?: string | Media | null;
                 nights?: number | null;
@@ -544,8 +550,10 @@ export interface Product {
 export interface Order {
   id: string;
   orderedBy?: (string | null) | User;
-  stripePaymentIntentID?: string | null;
+  yocoPaymentId?: string | null;
+  status: 'paid' | 'pending' | 'fulfilled';
   total: number;
+  membershipId: string;
   items?:
     | {
         product: string | Product;
@@ -709,4 +717,9 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+
+
+declare module 'payload' {
+  export interface GeneratedTypes extends Config {}
 }

@@ -1,43 +1,40 @@
 'use client'
 
-import React, { Fragment, useEffect } from 'react'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
+import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { Settings } from '../../../../payload/payload-types'
 import { Button } from '../../../_components/Button'
+import { CheckoutItem } from '../../../_components/CheckoutItem'
 import { HR } from '../../../_components/HR'
+import { Input } from '../../../_components/Input'
 import { LoadingShimmer } from '../../../_components/LoadingShimmer'
 import { Media } from '../../../_components/Media'
 import { Price } from '../../../_components/Price'
 import { useAuth } from '../../../_providers/Auth'
 import { useCart } from '../../../_providers/Cart'
-import { useTheme } from '../../../_providers/Theme'
-import cssVariables from '../../../cssVariables'
-import { CheckoutForm } from '../CheckoutForm'
 
 import classes from './index.module.scss'
 
-const apiKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`
-const stripe = loadStripe(apiKey)
-
-export const CheckoutPage: React.FC<{
+export const CheckoutPage = ({
+  settings,
+  exchangeRate,
+}: {
   settings: Settings
-}> = props => {
-  const {
-    settings: { productsPage },
-  } = props
-
+  exchangeRate: number
+}) => {
+  const { productsPage } = settings
   const { user } = useAuth()
   const router = useRouter()
-  const [error, setError] = React.useState<string | null>(null)
-  const [clientSecret, setClientSecret] = React.useState()
-  const hasMadePaymentIntent = React.useRef(false)
-  const { theme } = useTheme()
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null)
+  const [membership, setMembership] = useState<string | null>(null)
 
   const { cart, cartIsEmpty, cartTotal } = useCart()
+
+  const rand = Math.round(cartTotal.raw * exchangeRate)
 
   useEffect(() => {
     if (user !== null && cartIsEmpty) {
@@ -45,38 +42,40 @@ export const CheckoutPage: React.FC<{
     }
   }, [router, user, cartIsEmpty])
 
-  useEffect(() => {
-    if (user && cart && hasMadePaymentIntent.current === false) {
-      hasMadePaymentIntent.current = true
+  const handleCheckoutClick = async () => {
+    setLoading(true)
+    setError(null)
 
-      const makeIntent = async () => {
-        try {
-          const paymentReq = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-payment-intent`,
-            {
-              method: 'POST',
-              credentials: 'include',
-            },
-          )
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-payment-intent`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json', // Tell the server that we're sending JSON
+          },
+          body: JSON.stringify({
+            membershipId: membership,
+            status: 'pending',
+          }),
+        },
+      )
 
-          const res = await paymentReq.json()
+      const data = await response.json()
 
-          if (res.error) {
-            setError(res.error)
-          } else if (res.client_secret) {
-            setError(null)
-            setClientSecret(res.client_secret)
-          }
-        } catch (e) {
-          setError('Something went wrong.')
-        }
+      if (data.redirectUrl) {
+        setCheckoutUrl(data.redirectUrl)
+        window.location.href = data.redirectUrl
+      } else {
+        setError('Failed to retrieve redirect URL.')
       }
-
-      makeIntent()
+    } catch (err) {
+      setError('An error occurred while creating the checkout session.')
+    } finally {
+      setLoading(false)
     }
-  }, [cart, user])
-
-  if (!user || !stripe) return null
+  }
 
   return (
     <Fragment>
@@ -100,96 +99,75 @@ export const CheckoutPage: React.FC<{
               const {
                 quantity,
                 product,
-                product: { id, stripeProductID, title, meta },
+                product: { title, meta },
               } = item
-
               if (!quantity) return null
-
               const isLast = index === (cart?.items?.length || 0) - 1
-
               const metaImage = meta?.image
-
               return (
                 <Fragment key={index}>
-                  <div className={classes.row}>
-                    <div className={classes.mediaWrapper}>
-                      {!metaImage && <span className={classes.placeholder}>No image</span>}
-                      {metaImage && typeof metaImage !== 'string' && (
-                        <Media
-                          className={classes.media}
-                          imgClassName={classes.image}
-                          resource={metaImage}
-                          fill
-                        />
-                      )}
-                    </div>
-                    <div className={classes.rowContent}>
-                      {!stripeProductID && (
-                        <p className={classes.warning}>
-                          {'This product is not yet connected to Stripe. To link this product, '}
-                          <Link
-                            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/products/${id}`}
-                          >
-                            edit this product in the admin panel
-                          </Link>
-                          {'.'}
-                        </p>
-                      )}
-                      <h6 className={classes.title}>{title}</h6>
-                      <Price product={product} button={false} quantity={quantity} />
-                    </div>
-                  </div>
-                  {!isLast && <HR />}
+                  <CheckoutItem
+                    product={product}
+                    title={title}
+                    metaImage={metaImage}
+                    quantity={quantity}
+                    index={index}
+                  />
                 </Fragment>
               )
             }
             return null
           })}
-          <div className={classes.orderTotal}>{`Order total: ${cartTotal.formatted}`}</div>
+          <div
+            className={classes.orderTotal}
+          >{`Order total: ${cartTotal.formatted}, R ${rand}.00`}</div>
+          <label htmlFor="" className={classes.inputLabel}>
+            Hilton Membership ID
+          </label>
+          <p className={classes.warningLabel}>
+            *Please note that this is only for 1 membership, the quantity is equivalent to the how
+            long the membership lasts
+          </p>
+          <input
+            name="membershipId"
+            onChange={e => setMembership(e.target.value)}
+            value={membership}
+            className={classes.modernInput}
+            placeholder="1234567890"
+            minLength={9}
+          />
+
+          {/* {loading && (
+            <div className={classes.loading}>
+              <LoadingShimmer number={2} />
+            </div>
+          )} */}
+
+          {error && (
+            <div className={classes.error}>
+              <p>{`Error: ${error}`}</p>
+              <Button label="Back to cart" href="/cart" appearance="secondary" />
+            </div>
+          )}
+
+          {!loading && (
+            <Button
+              label="Proceed to Payment"
+              onClick={handleCheckoutClick}
+              appearance="secondary"
+              disabled={membership === null || membership.length < 9}
+            />
+          )}
+
+          {loading && (
+            <Button
+              label="Loading..."
+              onClick={handleCheckoutClick}
+              appearance="secondary"
+              disabled={true}
+            />
+          )}
         </div>
-      )}
-      {!clientSecret && !error && (
-        <div className={classes.loading}>
-          <LoadingShimmer number={2} />
-        </div>
-      )}
-      {!clientSecret && error && (
-        <div className={classes.error}>
-          <p>{`Error: ${error}`}</p>
-          <Button label="Back to cart" href="/cart" appearance="secondary" />
-        </div>
-      )}
-      {clientSecret && (
-        <Fragment>
-          {error && <p>{`Error: ${error}`}</p>}
-          <Elements
-            stripe={stripe}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'stripe',
-                variables: {
-                  colorText:
-                    theme === 'dark' ? cssVariables.colors.base0 : cssVariables.colors.base1000,
-                  fontSizeBase: '16px',
-                  fontWeightNormal: '500',
-                  fontWeightBold: '600',
-                  colorBackground:
-                    theme === 'dark' ? cssVariables.colors.base850 : cssVariables.colors.base0,
-                  fontFamily: 'Inter, sans-serif',
-                  colorTextPlaceholder: cssVariables.colors.base500,
-                  colorIcon:
-                    theme === 'dark' ? cssVariables.colors.base0 : cssVariables.colors.base1000,
-                  borderRadius: '0px',
-                  colorDanger: cssVariables.colors.error500,
-                  colorDangerText: cssVariables.colors.error500,
-                },
-              },
-            }}
-          >
-            <CheckoutForm />
-          </Elements>
-        </Fragment>
       )}
     </Fragment>
   )

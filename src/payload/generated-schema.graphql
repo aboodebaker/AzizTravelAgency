@@ -1647,6 +1647,7 @@ type Product {
   isPackage: Boolean
   benefits: [Product_Benefits!]!
   diamond: Boolean
+  image(where: Product_Image_where): Media
   travelDetails: Product_TravelDetails
   stripeProductID: String
   priceJSON: String
@@ -1669,6 +1670,194 @@ type Product_Benefits {
   id: String
 }
 
+input Product_Image_where {
+  alt: Product_Image_alt_operator
+  caption: Product_Image_caption_operator
+  updatedAt: Product_Image_updatedAt_operator
+  createdAt: Product_Image_createdAt_operator
+  url: Product_Image_url_operator
+  filename: Product_Image_filename_operator
+  mimeType: Product_Image_mimeType_operator
+  filesize: Product_Image_filesize_operator
+  width: Product_Image_width_operator
+  height: Product_Image_height_operator
+  focalX: Product_Image_focalX_operator
+  focalY: Product_Image_focalY_operator
+  id: Product_Image_id_operator
+  AND: [Product_Image_where_and]
+  OR: [Product_Image_where_or]
+}
+
+input Product_Image_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Product_Image_caption_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+  exists: Boolean
+}
+
+input Product_Image_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Product_Image_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Product_Image_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_Image_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_Image_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_Image_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Image_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Image_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Product_Image_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Product_Image_where_and {
+  alt: Product_Image_alt_operator
+  caption: Product_Image_caption_operator
+  updatedAt: Product_Image_updatedAt_operator
+  createdAt: Product_Image_createdAt_operator
+  url: Product_Image_url_operator
+  filename: Product_Image_filename_operator
+  mimeType: Product_Image_mimeType_operator
+  filesize: Product_Image_filesize_operator
+  width: Product_Image_width_operator
+  height: Product_Image_height_operator
+  focalX: Product_Image_focalX_operator
+  focalY: Product_Image_focalY_operator
+  id: Product_Image_id_operator
+  AND: [Product_Image_where_and]
+  OR: [Product_Image_where_or]
+}
+
+input Product_Image_where_or {
+  alt: Product_Image_alt_operator
+  caption: Product_Image_caption_operator
+  updatedAt: Product_Image_updatedAt_operator
+  createdAt: Product_Image_createdAt_operator
+  url: Product_Image_url_operator
+  filename: Product_Image_filename_operator
+  mimeType: Product_Image_mimeType_operator
+  filesize: Product_Image_filesize_operator
+  width: Product_Image_width_operator
+  height: Product_Image_height_operator
+  focalX: Product_Image_focalX_operator
+  focalY: Product_Image_focalY_operator
+  id: Product_Image_id_operator
+  AND: [Product_Image_where_and]
+  OR: [Product_Image_where_or]
+}
+
 type Product_TravelDetails {
   travelDates: Product_TravelDetails_TravelDates
   originalPrice: Float
@@ -1683,9 +1872,16 @@ type Product_TravelDetails {
 }
 
 type Product_TravelDetails_TravelDates {
-  departureDate: DateTime
-  returnDate: DateTime
+  departureDateExample: DateTime
+  returnDateExample: DateTime
+  packageDates: Product_TravelDetails_TravelDates_PackageDates
+  validUntil: DateTime
   flexibility: Product_TravelDetails_TravelDates_Flexibility
+}
+
+type Product_TravelDetails_TravelDates_PackageDates {
+  firstDate: DateTime
+  lastDate: DateTime
 }
 
 type Product_TravelDetails_TravelDates_Flexibility {
@@ -1720,8 +1916,8 @@ type Flight {
   flightNumber: String
   departureAirport: String
   arrivalAirport: String
-  departureTime: DateTime
-  arrivalTime: DateTime
+  departureTimeExample: DateTime
+  arrivalTimeExample: DateTime
   airline: String
   travelTimeHours: Float
   transitTimeHours: Float
@@ -1740,8 +1936,8 @@ type Flight_BaggageAllowance {
 type Car {
   pickupLocation: String
   dropoffLocation: String
-  pickupTime: DateTime
-  dropoffTime: DateTime
+  pickupTimeExample: DateTime
+  dropoffTimeExample: DateTime
   travelTimeHours: Float
   provider: String
   id: String
@@ -1752,8 +1948,8 @@ type Car {
 type Train {
   departureStation: String
   arrivalStation: String
-  departureTime: DateTime
-  arrivalTime: DateTime
+  departureTimeExample: DateTime
+  arrivalTimeExample: DateTime
   travelTimeHours: Float
   trainCompany: String
   id: String
@@ -1764,8 +1960,8 @@ type Train {
 type Ferry {
   departurePort: String
   arrivalPort: String
-  departureTime: DateTime
-  arrivalTime: DateTime
+  departureTimeExample: DateTime
+  arrivalTimeExample: DateTime
   travelTimeHours: Float
   ferryCompany: String
   cabinType: String
@@ -1784,8 +1980,8 @@ type Product_TravelDetails_Destinations {
 type Product_TravelDetails_Destinations_Hotels {
   name: String
   stars: Float
-  checkInDate: DateTime
-  checkOutDate: DateTime
+  checkInDateExample: DateTime
+  checkOutDateExample: DateTime
   hotelLink: String
   hotelImage(where: Product_TravelDetails_Destinations_Hotels_HotelImage_where): Media
   nights: Float
@@ -4383,8 +4579,12 @@ input Product_where {
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
   diamond: Product_diamond_operator
-  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
-  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  image: Product_image_operator
+  travelDetails__travelDates__departureDateExample: Product_travelDetails__travelDates__departureDateExample_operator
+  travelDetails__travelDates__returnDateExample: Product_travelDetails__travelDates__returnDateExample_operator
+  travelDetails__travelDates__packageDates__firstDate: Product_travelDetails__travelDates__packageDates__firstDate_operator
+  travelDetails__travelDates__packageDates__lastDate: Product_travelDetails__travelDates__packageDates__lastDate_operator
+  travelDetails__travelDates__validUntil: Product_travelDetails__travelDates__validUntil_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
   travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
   travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
@@ -4399,8 +4599,8 @@ input Product_where {
   travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
   travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
   travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
-  travelDetails__destinations__hotels__checkInDate: Product_travelDetails__destinations__hotels__checkInDate_operator
-  travelDetails__destinations__hotels__checkOutDate: Product_travelDetails__destinations__hotels__checkOutDate_operator
+  travelDetails__destinations__hotels__checkInDateExample: Product_travelDetails__destinations__hotels__checkInDateExample_operator
+  travelDetails__destinations__hotels__checkOutDateExample: Product_travelDetails__destinations__hotels__checkOutDateExample_operator
   travelDetails__destinations__hotels__hotelLink: Product_travelDetails__destinations__hotels__hotelLink_operator
   travelDetails__destinations__hotels__hotelImage: Product_travelDetails__destinations__hotels__hotelImage_operator
   travelDetails__destinations__hotels__nights: Product_travelDetails__destinations__hotels__nights_operator
@@ -4494,7 +4694,12 @@ input Product_diamond_operator {
   exists: Boolean
 }
 
-input Product_travelDetails__travelDates__departureDate_operator {
+input Product_image_operator {
+  equals: String
+  not_equals: String
+}
+
+input Product_travelDetails__travelDates__departureDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4504,7 +4709,37 @@ input Product_travelDetails__travelDates__departureDate_operator {
   like: DateTime
 }
 
-input Product_travelDetails__travelDates__returnDate_operator {
+input Product_travelDetails__travelDates__returnDateExample_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__travelDates__packageDates__firstDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__travelDates__packageDates__lastDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Product_travelDetails__travelDates__validUntil_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4652,7 +4887,7 @@ input Product_travelDetails__destinations__hotels__stars_operator {
   exists: Boolean
 }
 
-input Product_travelDetails__destinations__hotels__checkInDate_operator {
+input Product_travelDetails__destinations__hotels__checkInDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4663,7 +4898,7 @@ input Product_travelDetails__destinations__hotels__checkInDate_operator {
   exists: Boolean
 }
 
-input Product_travelDetails__destinations__hotels__checkOutDate_operator {
+input Product_travelDetails__destinations__hotels__checkOutDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4864,8 +5099,12 @@ input Product_where_and {
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
   diamond: Product_diamond_operator
-  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
-  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  image: Product_image_operator
+  travelDetails__travelDates__departureDateExample: Product_travelDetails__travelDates__departureDateExample_operator
+  travelDetails__travelDates__returnDateExample: Product_travelDetails__travelDates__returnDateExample_operator
+  travelDetails__travelDates__packageDates__firstDate: Product_travelDetails__travelDates__packageDates__firstDate_operator
+  travelDetails__travelDates__packageDates__lastDate: Product_travelDetails__travelDates__packageDates__lastDate_operator
+  travelDetails__travelDates__validUntil: Product_travelDetails__travelDates__validUntil_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
   travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
   travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
@@ -4880,8 +5119,8 @@ input Product_where_and {
   travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
   travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
   travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
-  travelDetails__destinations__hotels__checkInDate: Product_travelDetails__destinations__hotels__checkInDate_operator
-  travelDetails__destinations__hotels__checkOutDate: Product_travelDetails__destinations__hotels__checkOutDate_operator
+  travelDetails__destinations__hotels__checkInDateExample: Product_travelDetails__destinations__hotels__checkInDateExample_operator
+  travelDetails__destinations__hotels__checkOutDateExample: Product_travelDetails__destinations__hotels__checkOutDateExample_operator
   travelDetails__destinations__hotels__hotelLink: Product_travelDetails__destinations__hotels__hotelLink_operator
   travelDetails__destinations__hotels__hotelImage: Product_travelDetails__destinations__hotels__hotelImage_operator
   travelDetails__destinations__hotels__nights: Product_travelDetails__destinations__hotels__nights_operator
@@ -4914,8 +5153,12 @@ input Product_where_or {
   benefits__benefit: Product_benefits__benefit_operator
   benefits__id: Product_benefits__id_operator
   diamond: Product_diamond_operator
-  travelDetails__travelDates__departureDate: Product_travelDetails__travelDates__departureDate_operator
-  travelDetails__travelDates__returnDate: Product_travelDetails__travelDates__returnDate_operator
+  image: Product_image_operator
+  travelDetails__travelDates__departureDateExample: Product_travelDetails__travelDates__departureDateExample_operator
+  travelDetails__travelDates__returnDateExample: Product_travelDetails__travelDates__returnDateExample_operator
+  travelDetails__travelDates__packageDates__firstDate: Product_travelDetails__travelDates__packageDates__firstDate_operator
+  travelDetails__travelDates__packageDates__lastDate: Product_travelDetails__travelDates__packageDates__lastDate_operator
+  travelDetails__travelDates__validUntil: Product_travelDetails__travelDates__validUntil_operator
   travelDetails__travelDates__flexibility__beforeDays: Product_travelDetails__travelDates__flexibility__beforeDays_operator
   travelDetails__travelDates__flexibility__afterDays: Product_travelDetails__travelDates__flexibility__afterDays_operator
   travelDetails__originalPrice: Product_travelDetails__originalPrice_operator
@@ -4930,8 +5173,8 @@ input Product_where_or {
   travelDetails__destinations__country: Product_travelDetails__destinations__country_operator
   travelDetails__destinations__hotels__name: Product_travelDetails__destinations__hotels__name_operator
   travelDetails__destinations__hotels__stars: Product_travelDetails__destinations__hotels__stars_operator
-  travelDetails__destinations__hotels__checkInDate: Product_travelDetails__destinations__hotels__checkInDate_operator
-  travelDetails__destinations__hotels__checkOutDate: Product_travelDetails__destinations__hotels__checkOutDate_operator
+  travelDetails__destinations__hotels__checkInDateExample: Product_travelDetails__destinations__hotels__checkInDateExample_operator
+  travelDetails__destinations__hotels__checkOutDateExample: Product_travelDetails__destinations__hotels__checkOutDateExample_operator
   travelDetails__destinations__hotels__hotelLink: Product_travelDetails__destinations__hotels__hotelLink_operator
   travelDetails__destinations__hotels__hotelImage: Product_travelDetails__destinations__hotels__hotelImage_operator
   travelDetails__destinations__hotels__nights: Product_travelDetails__destinations__hotels__nights_operator
@@ -4977,6 +5220,7 @@ type ProductsDocAccessFields {
   isPackage: ProductsDocAccessFields_isPackage
   benefits: ProductsDocAccessFields_benefits
   diamond: ProductsDocAccessFields_diamond
+  image: ProductsDocAccessFields_image
   travelDetails: ProductsDocAccessFields_travelDetails
   stripeProductID: ProductsDocAccessFields_stripeProductID
   priceJSON: ProductsDocAccessFields_priceJSON
@@ -5228,6 +5472,29 @@ type ProductsDocAccessFields_diamond_Delete {
   permission: Boolean!
 }
 
+type ProductsDocAccessFields_image {
+  create: ProductsDocAccessFields_image_Create
+  read: ProductsDocAccessFields_image_Read
+  update: ProductsDocAccessFields_image_Update
+  delete: ProductsDocAccessFields_image_Delete
+}
+
+type ProductsDocAccessFields_image_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_image_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_image_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_image_Delete {
+  permission: Boolean!
+}
+
 type ProductsDocAccessFields_travelDetails {
   create: ProductsDocAccessFields_travelDetails_Create
   read: ProductsDocAccessFields_travelDetails_Read
@@ -5290,54 +5557,154 @@ type ProductsDocAccessFields_travelDetails_travelDates_Delete {
 }
 
 type ProductsDocAccessFields_travelDetails_travelDates_Fields {
-  departureDate: ProductsDocAccessFields_travelDetails_travelDates_departureDate
-  returnDate: ProductsDocAccessFields_travelDetails_travelDates_returnDate
+  departureDateExample: ProductsDocAccessFields_travelDetails_travelDates_departureDateExample
+  returnDateExample: ProductsDocAccessFields_travelDetails_travelDates_returnDateExample
+  packageDates: ProductsDocAccessFields_travelDetails_travelDates_packageDates
+  validUntil: ProductsDocAccessFields_travelDetails_travelDates_validUntil
   flexibility: ProductsDocAccessFields_travelDetails_travelDates_flexibility
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_departureDate {
-  create: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Create
-  read: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Read
-  update: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Update
-  delete: ProductsDocAccessFields_travelDetails_travelDates_departureDate_Delete
+type ProductsDocAccessFields_travelDetails_travelDates_departureDateExample {
+  create: ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Create {
+type ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Read {
+type ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Update {
+type ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_departureDate_Delete {
+type ProductsDocAccessFields_travelDetails_travelDates_departureDateExample_Delete {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_returnDate {
-  create: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Create
-  read: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Read
-  update: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Update
-  delete: ProductsDocAccessFields_travelDetails_travelDates_returnDate_Delete
+type ProductsDocAccessFields_travelDetails_travelDates_returnDateExample {
+  create: ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Create {
+type ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Read {
+type ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Update {
+type ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_travelDates_returnDate_Delete {
+type ProductsDocAccessFields_travelDetails_travelDates_returnDateExample_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates {
+  create: ProductsDocAccessFields_travelDetails_travelDates_packageDates_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_packageDates_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_packageDates_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_packageDates_Delete
+  fields: ProductsDocAccessFields_travelDetails_travelDates_packageDates_Fields
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_Fields {
+  firstDate: ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate
+  lastDate: ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate {
+  create: ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_firstDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate {
+  create: ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_packageDates_lastDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_validUntil {
+  create: ProductsDocAccessFields_travelDetails_travelDates_validUntil_Create
+  read: ProductsDocAccessFields_travelDetails_travelDates_validUntil_Read
+  update: ProductsDocAccessFields_travelDetails_travelDates_validUntil_Update
+  delete: ProductsDocAccessFields_travelDetails_travelDates_validUntil_Delete
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_validUntil_Create {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_validUntil_Read {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_validUntil_Update {
+  permission: Boolean!
+}
+
+type ProductsDocAccessFields_travelDetails_travelDates_validUntil_Delete {
   permission: Boolean!
 }
 
@@ -5784,8 +6151,8 @@ type ProductsDocAccessFields_travelDetails_destinations_hotels_Delete {
 type ProductsDocAccessFields_travelDetails_destinations_hotels_Fields {
   name: ProductsDocAccessFields_travelDetails_destinations_hotels_name
   stars: ProductsDocAccessFields_travelDetails_destinations_hotels_stars
-  checkInDate: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate
-  checkOutDate: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate
+  checkInDateExample: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample
+  checkOutDateExample: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample
   hotelLink: ProductsDocAccessFields_travelDetails_destinations_hotels_hotelLink
   hotelImage: ProductsDocAccessFields_travelDetails_destinations_hotels_hotelImage
   nights: ProductsDocAccessFields_travelDetails_destinations_hotels_nights
@@ -5838,49 +6205,49 @@ type ProductsDocAccessFields_travelDetails_destinations_hotels_stars_Delete {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate {
-  create: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Create
-  read: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Read
-  update: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Update
-  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Delete
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Create {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Read {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Update {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDate_Delete {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkInDateExample_Delete {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate {
-  create: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Create
-  read: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Read
-  update: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Update
-  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Delete
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample {
+  create: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Create
+  read: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Read
+  update: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Update
+  delete: ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Delete
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Create {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Read {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Update {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDate_Delete {
+type ProductsDocAccessFields_travelDetails_destinations_hotels_checkOutDateExample_Delete {
   permission: Boolean!
 }
 
@@ -6394,6 +6761,7 @@ type ProductVersion_Version {
   isPackage: Boolean
   benefits: [ProductVersion_Version_Benefits!]!
   diamond: Boolean
+  image(where: ProductVersion_Version_Image_where): Media
   travelDetails: ProductVersion_Version_TravelDetails
   stripeProductID: String
   priceJSON: String
@@ -6416,6 +6784,194 @@ type ProductVersion_Version_Benefits {
   id: String
 }
 
+input ProductVersion_Version_Image_where {
+  alt: ProductVersion_Version_Image_alt_operator
+  caption: ProductVersion_Version_Image_caption_operator
+  updatedAt: ProductVersion_Version_Image_updatedAt_operator
+  createdAt: ProductVersion_Version_Image_createdAt_operator
+  url: ProductVersion_Version_Image_url_operator
+  filename: ProductVersion_Version_Image_filename_operator
+  mimeType: ProductVersion_Version_Image_mimeType_operator
+  filesize: ProductVersion_Version_Image_filesize_operator
+  width: ProductVersion_Version_Image_width_operator
+  height: ProductVersion_Version_Image_height_operator
+  focalX: ProductVersion_Version_Image_focalX_operator
+  focalY: ProductVersion_Version_Image_focalY_operator
+  id: ProductVersion_Version_Image_id_operator
+  AND: [ProductVersion_Version_Image_where_and]
+  OR: [ProductVersion_Version_Image_where_or]
+}
+
+input ProductVersion_Version_Image_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input ProductVersion_Version_Image_caption_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProductVersion_Version_Image_where_and {
+  alt: ProductVersion_Version_Image_alt_operator
+  caption: ProductVersion_Version_Image_caption_operator
+  updatedAt: ProductVersion_Version_Image_updatedAt_operator
+  createdAt: ProductVersion_Version_Image_createdAt_operator
+  url: ProductVersion_Version_Image_url_operator
+  filename: ProductVersion_Version_Image_filename_operator
+  mimeType: ProductVersion_Version_Image_mimeType_operator
+  filesize: ProductVersion_Version_Image_filesize_operator
+  width: ProductVersion_Version_Image_width_operator
+  height: ProductVersion_Version_Image_height_operator
+  focalX: ProductVersion_Version_Image_focalX_operator
+  focalY: ProductVersion_Version_Image_focalY_operator
+  id: ProductVersion_Version_Image_id_operator
+  AND: [ProductVersion_Version_Image_where_and]
+  OR: [ProductVersion_Version_Image_where_or]
+}
+
+input ProductVersion_Version_Image_where_or {
+  alt: ProductVersion_Version_Image_alt_operator
+  caption: ProductVersion_Version_Image_caption_operator
+  updatedAt: ProductVersion_Version_Image_updatedAt_operator
+  createdAt: ProductVersion_Version_Image_createdAt_operator
+  url: ProductVersion_Version_Image_url_operator
+  filename: ProductVersion_Version_Image_filename_operator
+  mimeType: ProductVersion_Version_Image_mimeType_operator
+  filesize: ProductVersion_Version_Image_filesize_operator
+  width: ProductVersion_Version_Image_width_operator
+  height: ProductVersion_Version_Image_height_operator
+  focalX: ProductVersion_Version_Image_focalX_operator
+  focalY: ProductVersion_Version_Image_focalY_operator
+  id: ProductVersion_Version_Image_id_operator
+  AND: [ProductVersion_Version_Image_where_and]
+  OR: [ProductVersion_Version_Image_where_or]
+}
+
 type ProductVersion_Version_TravelDetails {
   travelDates: ProductVersion_Version_TravelDetails_TravelDates
   originalPrice: Float
@@ -6430,9 +6986,16 @@ type ProductVersion_Version_TravelDetails {
 }
 
 type ProductVersion_Version_TravelDetails_TravelDates {
-  departureDate: DateTime
-  returnDate: DateTime
+  departureDateExample: DateTime
+  returnDateExample: DateTime
+  packageDates: ProductVersion_Version_TravelDetails_TravelDates_PackageDates
+  validUntil: DateTime
   flexibility: ProductVersion_Version_TravelDetails_TravelDates_Flexibility
+}
+
+type ProductVersion_Version_TravelDetails_TravelDates_PackageDates {
+  firstDate: DateTime
+  lastDate: DateTime
 }
 
 type ProductVersion_Version_TravelDetails_TravelDates_Flexibility {
@@ -6473,8 +7036,8 @@ type ProductVersion_Version_TravelDetails_Destinations {
 type ProductVersion_Version_TravelDetails_Destinations_Hotels {
   name: String
   stars: Float
-  checkInDate: DateTime
-  checkOutDate: DateTime
+  checkInDateExample: DateTime
+  checkOutDateExample: DateTime
   hotelLink: String
   hotelImage(where: ProductVersion_Version_TravelDetails_Destinations_Hotels_HotelImage_where): Media
   nights: Float
@@ -6894,8 +7457,12 @@ input versionsProduct_where {
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
   version__diamond: versionsProduct_version__diamond_operator
-  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
-  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__image: versionsProduct_version__image_operator
+  version__travelDetails__travelDates__departureDateExample: versionsProduct_version__travelDetails__travelDates__departureDateExample_operator
+  version__travelDetails__travelDates__returnDateExample: versionsProduct_version__travelDetails__travelDates__returnDateExample_operator
+  version__travelDetails__travelDates__packageDates__firstDate: versionsProduct_version__travelDetails__travelDates__packageDates__firstDate_operator
+  version__travelDetails__travelDates__packageDates__lastDate: versionsProduct_version__travelDetails__travelDates__packageDates__lastDate_operator
+  version__travelDetails__travelDates__validUntil: versionsProduct_version__travelDetails__travelDates__validUntil_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
   version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
   version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
@@ -6910,8 +7477,8 @@ input versionsProduct_where {
   version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
   version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
   version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
-  version__travelDetails__destinations__hotels__checkInDate: versionsProduct_version__travelDetails__destinations__hotels__checkInDate_operator
-  version__travelDetails__destinations__hotels__checkOutDate: versionsProduct_version__travelDetails__destinations__hotels__checkOutDate_operator
+  version__travelDetails__destinations__hotels__checkInDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkInDateExample_operator
+  version__travelDetails__destinations__hotels__checkOutDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkOutDateExample_operator
   version__travelDetails__destinations__hotels__hotelLink: versionsProduct_version__travelDetails__destinations__hotels__hotelLink_operator
   version__travelDetails__destinations__hotels__hotelImage: versionsProduct_version__travelDetails__destinations__hotels__hotelImage_operator
   version__travelDetails__destinations__hotels__nights: versionsProduct_version__travelDetails__destinations__hotels__nights_operator
@@ -7017,7 +7584,12 @@ input versionsProduct_version__diamond_operator {
   exists: Boolean
 }
 
-input versionsProduct_version__travelDetails__travelDates__departureDate_operator {
+input versionsProduct_version__image_operator {
+  equals: String
+  not_equals: String
+}
+
+input versionsProduct_version__travelDetails__travelDates__departureDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7027,7 +7599,37 @@ input versionsProduct_version__travelDetails__travelDates__departureDate_operato
   like: DateTime
 }
 
-input versionsProduct_version__travelDetails__travelDates__returnDate_operator {
+input versionsProduct_version__travelDetails__travelDates__returnDateExample_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__travelDates__packageDates__firstDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__travelDates__packageDates__lastDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input versionsProduct_version__travelDetails__travelDates__validUntil_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7175,7 +7777,7 @@ input versionsProduct_version__travelDetails__destinations__hotels__stars_operat
   exists: Boolean
 }
 
-input versionsProduct_version__travelDetails__destinations__hotels__checkInDate_operator {
+input versionsProduct_version__travelDetails__destinations__hotels__checkInDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7186,7 +7788,7 @@ input versionsProduct_version__travelDetails__destinations__hotels__checkInDate_
   exists: Boolean
 }
 
-input versionsProduct_version__travelDetails__destinations__hotels__checkOutDate_operator {
+input versionsProduct_version__travelDetails__destinations__hotels__checkOutDateExample_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7416,8 +8018,12 @@ input versionsProduct_where_and {
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
   version__diamond: versionsProduct_version__diamond_operator
-  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
-  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__image: versionsProduct_version__image_operator
+  version__travelDetails__travelDates__departureDateExample: versionsProduct_version__travelDetails__travelDates__departureDateExample_operator
+  version__travelDetails__travelDates__returnDateExample: versionsProduct_version__travelDetails__travelDates__returnDateExample_operator
+  version__travelDetails__travelDates__packageDates__firstDate: versionsProduct_version__travelDetails__travelDates__packageDates__firstDate_operator
+  version__travelDetails__travelDates__packageDates__lastDate: versionsProduct_version__travelDetails__travelDates__packageDates__lastDate_operator
+  version__travelDetails__travelDates__validUntil: versionsProduct_version__travelDetails__travelDates__validUntil_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
   version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
   version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
@@ -7432,8 +8038,8 @@ input versionsProduct_where_and {
   version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
   version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
   version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
-  version__travelDetails__destinations__hotels__checkInDate: versionsProduct_version__travelDetails__destinations__hotels__checkInDate_operator
-  version__travelDetails__destinations__hotels__checkOutDate: versionsProduct_version__travelDetails__destinations__hotels__checkOutDate_operator
+  version__travelDetails__destinations__hotels__checkInDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkInDateExample_operator
+  version__travelDetails__destinations__hotels__checkOutDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkOutDateExample_operator
   version__travelDetails__destinations__hotels__hotelLink: versionsProduct_version__travelDetails__destinations__hotels__hotelLink_operator
   version__travelDetails__destinations__hotels__hotelImage: versionsProduct_version__travelDetails__destinations__hotels__hotelImage_operator
   version__travelDetails__destinations__hotels__nights: versionsProduct_version__travelDetails__destinations__hotels__nights_operator
@@ -7470,8 +8076,12 @@ input versionsProduct_where_or {
   version__benefits__benefit: versionsProduct_version__benefits__benefit_operator
   version__benefits__id: versionsProduct_version__benefits__id_operator
   version__diamond: versionsProduct_version__diamond_operator
-  version__travelDetails__travelDates__departureDate: versionsProduct_version__travelDetails__travelDates__departureDate_operator
-  version__travelDetails__travelDates__returnDate: versionsProduct_version__travelDetails__travelDates__returnDate_operator
+  version__image: versionsProduct_version__image_operator
+  version__travelDetails__travelDates__departureDateExample: versionsProduct_version__travelDetails__travelDates__departureDateExample_operator
+  version__travelDetails__travelDates__returnDateExample: versionsProduct_version__travelDetails__travelDates__returnDateExample_operator
+  version__travelDetails__travelDates__packageDates__firstDate: versionsProduct_version__travelDetails__travelDates__packageDates__firstDate_operator
+  version__travelDetails__travelDates__packageDates__lastDate: versionsProduct_version__travelDetails__travelDates__packageDates__lastDate_operator
+  version__travelDetails__travelDates__validUntil: versionsProduct_version__travelDetails__travelDates__validUntil_operator
   version__travelDetails__travelDates__flexibility__beforeDays: versionsProduct_version__travelDetails__travelDates__flexibility__beforeDays_operator
   version__travelDetails__travelDates__flexibility__afterDays: versionsProduct_version__travelDetails__travelDates__flexibility__afterDays_operator
   version__travelDetails__originalPrice: versionsProduct_version__travelDetails__originalPrice_operator
@@ -7486,8 +8096,8 @@ input versionsProduct_where_or {
   version__travelDetails__destinations__country: versionsProduct_version__travelDetails__destinations__country_operator
   version__travelDetails__destinations__hotels__name: versionsProduct_version__travelDetails__destinations__hotels__name_operator
   version__travelDetails__destinations__hotels__stars: versionsProduct_version__travelDetails__destinations__hotels__stars_operator
-  version__travelDetails__destinations__hotels__checkInDate: versionsProduct_version__travelDetails__destinations__hotels__checkInDate_operator
-  version__travelDetails__destinations__hotels__checkOutDate: versionsProduct_version__travelDetails__destinations__hotels__checkOutDate_operator
+  version__travelDetails__destinations__hotels__checkInDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkInDateExample_operator
+  version__travelDetails__destinations__hotels__checkOutDateExample: versionsProduct_version__travelDetails__destinations__hotels__checkOutDateExample_operator
   version__travelDetails__destinations__hotels__hotelLink: versionsProduct_version__travelDetails__destinations__hotels__hotelLink_operator
   version__travelDetails__destinations__hotels__hotelImage: versionsProduct_version__travelDetails__destinations__hotels__hotelImage_operator
   version__travelDetails__destinations__hotels__nights: versionsProduct_version__travelDetails__destinations__hotels__nights_operator
@@ -7517,8 +8127,10 @@ input versionsProduct_where_or {
 type Order {
   id: String
   orderedBy: User
-  stripePaymentIntentID: String
+  yocoPaymentId: String
+  status: Order_status!
   total: Float!
+  membershipId: String!
   items: [Order_Items!]
   updatedAt: DateTime
   createdAt: DateTime
@@ -7564,6 +8176,12 @@ A field whose value conforms to the standard internet email address format as sp
 """
 scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
+enum Order_status {
+  paid
+  pending
+  fulfilled
+}
+
 type Order_Items {
   product(draft: Boolean): Product
   price: Float
@@ -7587,8 +8205,10 @@ type Orders {
 
 input Order_where {
   orderedBy: Order_orderedBy_operator
-  stripePaymentIntentID: Order_stripePaymentIntentID_operator
+  yocoPaymentId: Order_yocoPaymentId_operator
+  status: Order_status_operator
   total: Order_total_operator
+  membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
@@ -7609,7 +8229,7 @@ input Order_orderedBy_operator {
   exists: Boolean
 }
 
-input Order_stripePaymentIntentID_operator {
+input Order_yocoPaymentId_operator {
   equals: String
   not_equals: String
   like: String
@@ -7620,6 +8240,20 @@ input Order_stripePaymentIntentID_operator {
   exists: Boolean
 }
 
+input Order_status_operator {
+  equals: Order_status_Input
+  not_equals: Order_status_Input
+  in: [Order_status_Input]
+  not_in: [Order_status_Input]
+  all: [Order_status_Input]
+}
+
+enum Order_status_Input {
+  paid
+  pending
+  fulfilled
+}
+
 input Order_total_operator {
   equals: Float
   not_equals: Float
@@ -7627,6 +8261,16 @@ input Order_total_operator {
   greater_than: Float
   less_than_equal: Float
   less_than: Float
+}
+
+input Order_membershipId_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
 }
 
 input Order_items__product_operator {
@@ -7703,8 +8347,10 @@ input Order_id_operator {
 
 input Order_where_and {
   orderedBy: Order_orderedBy_operator
-  stripePaymentIntentID: Order_stripePaymentIntentID_operator
+  yocoPaymentId: Order_yocoPaymentId_operator
+  status: Order_status_operator
   total: Order_total_operator
+  membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
@@ -7718,8 +8364,10 @@ input Order_where_and {
 
 input Order_where_or {
   orderedBy: Order_orderedBy_operator
-  stripePaymentIntentID: Order_stripePaymentIntentID_operator
+  yocoPaymentId: Order_yocoPaymentId_operator
+  status: Order_status_operator
   total: Order_total_operator
+  membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
@@ -7745,8 +8393,10 @@ type ordersDocAccess {
 
 type OrdersDocAccessFields {
   orderedBy: OrdersDocAccessFields_orderedBy
-  stripePaymentIntentID: OrdersDocAccessFields_stripePaymentIntentID
+  yocoPaymentId: OrdersDocAccessFields_yocoPaymentId
+  status: OrdersDocAccessFields_status
   total: OrdersDocAccessFields_total
+  membershipId: OrdersDocAccessFields_membershipId
   items: OrdersDocAccessFields_items
   updatedAt: OrdersDocAccessFields_updatedAt
   createdAt: OrdersDocAccessFields_createdAt
@@ -7775,26 +8425,49 @@ type OrdersDocAccessFields_orderedBy_Delete {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_stripePaymentIntentID {
-  create: OrdersDocAccessFields_stripePaymentIntentID_Create
-  read: OrdersDocAccessFields_stripePaymentIntentID_Read
-  update: OrdersDocAccessFields_stripePaymentIntentID_Update
-  delete: OrdersDocAccessFields_stripePaymentIntentID_Delete
+type OrdersDocAccessFields_yocoPaymentId {
+  create: OrdersDocAccessFields_yocoPaymentId_Create
+  read: OrdersDocAccessFields_yocoPaymentId_Read
+  update: OrdersDocAccessFields_yocoPaymentId_Update
+  delete: OrdersDocAccessFields_yocoPaymentId_Delete
 }
 
-type OrdersDocAccessFields_stripePaymentIntentID_Create {
+type OrdersDocAccessFields_yocoPaymentId_Create {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_stripePaymentIntentID_Read {
+type OrdersDocAccessFields_yocoPaymentId_Read {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_stripePaymentIntentID_Update {
+type OrdersDocAccessFields_yocoPaymentId_Update {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_stripePaymentIntentID_Delete {
+type OrdersDocAccessFields_yocoPaymentId_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_status {
+  create: OrdersDocAccessFields_status_Create
+  read: OrdersDocAccessFields_status_Read
+  update: OrdersDocAccessFields_status_Update
+  delete: OrdersDocAccessFields_status_Delete
+}
+
+type OrdersDocAccessFields_status_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_status_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_status_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_status_Delete {
   permission: Boolean!
 }
 
@@ -7818,6 +8491,29 @@ type OrdersDocAccessFields_total_Update {
 }
 
 type OrdersDocAccessFields_total_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_membershipId {
+  create: OrdersDocAccessFields_membershipId_Create
+  read: OrdersDocAccessFields_membershipId_Read
+  update: OrdersDocAccessFields_membershipId_Update
+  delete: OrdersDocAccessFields_membershipId_Delete
+}
+
+type OrdersDocAccessFields_membershipId_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_membershipId_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_membershipId_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_membershipId_Delete {
   permission: Boolean!
 }
 
@@ -12457,6 +13153,7 @@ type ProductsFields {
   isPackage: ProductsFields_isPackage
   benefits: ProductsFields_benefits
   diamond: ProductsFields_diamond
+  image: ProductsFields_image
   travelDetails: ProductsFields_travelDetails
   stripeProductID: ProductsFields_stripeProductID
   priceJSON: ProductsFields_priceJSON
@@ -12708,6 +13405,29 @@ type ProductsFields_diamond_Delete {
   permission: Boolean!
 }
 
+type ProductsFields_image {
+  create: ProductsFields_image_Create
+  read: ProductsFields_image_Read
+  update: ProductsFields_image_Update
+  delete: ProductsFields_image_Delete
+}
+
+type ProductsFields_image_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_image_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_image_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_image_Delete {
+  permission: Boolean!
+}
+
 type ProductsFields_travelDetails {
   create: ProductsFields_travelDetails_Create
   read: ProductsFields_travelDetails_Read
@@ -12770,54 +13490,154 @@ type ProductsFields_travelDetails_travelDates_Delete {
 }
 
 type ProductsFields_travelDetails_travelDates_Fields {
-  departureDate: ProductsFields_travelDetails_travelDates_departureDate
-  returnDate: ProductsFields_travelDetails_travelDates_returnDate
+  departureDateExample: ProductsFields_travelDetails_travelDates_departureDateExample
+  returnDateExample: ProductsFields_travelDetails_travelDates_returnDateExample
+  packageDates: ProductsFields_travelDetails_travelDates_packageDates
+  validUntil: ProductsFields_travelDetails_travelDates_validUntil
   flexibility: ProductsFields_travelDetails_travelDates_flexibility
 }
 
-type ProductsFields_travelDetails_travelDates_departureDate {
-  create: ProductsFields_travelDetails_travelDates_departureDate_Create
-  read: ProductsFields_travelDetails_travelDates_departureDate_Read
-  update: ProductsFields_travelDetails_travelDates_departureDate_Update
-  delete: ProductsFields_travelDetails_travelDates_departureDate_Delete
+type ProductsFields_travelDetails_travelDates_departureDateExample {
+  create: ProductsFields_travelDetails_travelDates_departureDateExample_Create
+  read: ProductsFields_travelDetails_travelDates_departureDateExample_Read
+  update: ProductsFields_travelDetails_travelDates_departureDateExample_Update
+  delete: ProductsFields_travelDetails_travelDates_departureDateExample_Delete
 }
 
-type ProductsFields_travelDetails_travelDates_departureDate_Create {
+type ProductsFields_travelDetails_travelDates_departureDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_departureDate_Read {
+type ProductsFields_travelDetails_travelDates_departureDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_departureDate_Update {
+type ProductsFields_travelDetails_travelDates_departureDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_departureDate_Delete {
+type ProductsFields_travelDetails_travelDates_departureDateExample_Delete {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_returnDate {
-  create: ProductsFields_travelDetails_travelDates_returnDate_Create
-  read: ProductsFields_travelDetails_travelDates_returnDate_Read
-  update: ProductsFields_travelDetails_travelDates_returnDate_Update
-  delete: ProductsFields_travelDetails_travelDates_returnDate_Delete
+type ProductsFields_travelDetails_travelDates_returnDateExample {
+  create: ProductsFields_travelDetails_travelDates_returnDateExample_Create
+  read: ProductsFields_travelDetails_travelDates_returnDateExample_Read
+  update: ProductsFields_travelDetails_travelDates_returnDateExample_Update
+  delete: ProductsFields_travelDetails_travelDates_returnDateExample_Delete
 }
 
-type ProductsFields_travelDetails_travelDates_returnDate_Create {
+type ProductsFields_travelDetails_travelDates_returnDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_returnDate_Read {
+type ProductsFields_travelDetails_travelDates_returnDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_returnDate_Update {
+type ProductsFields_travelDetails_travelDates_returnDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_travelDates_returnDate_Delete {
+type ProductsFields_travelDetails_travelDates_returnDateExample_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates {
+  create: ProductsFields_travelDetails_travelDates_packageDates_Create
+  read: ProductsFields_travelDetails_travelDates_packageDates_Read
+  update: ProductsFields_travelDetails_travelDates_packageDates_Update
+  delete: ProductsFields_travelDetails_travelDates_packageDates_Delete
+  fields: ProductsFields_travelDetails_travelDates_packageDates_Fields
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_Fields {
+  firstDate: ProductsFields_travelDetails_travelDates_packageDates_firstDate
+  lastDate: ProductsFields_travelDetails_travelDates_packageDates_lastDate
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_firstDate {
+  create: ProductsFields_travelDetails_travelDates_packageDates_firstDate_Create
+  read: ProductsFields_travelDetails_travelDates_packageDates_firstDate_Read
+  update: ProductsFields_travelDetails_travelDates_packageDates_firstDate_Update
+  delete: ProductsFields_travelDetails_travelDates_packageDates_firstDate_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_firstDate_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_firstDate_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_firstDate_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_firstDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_lastDate {
+  create: ProductsFields_travelDetails_travelDates_packageDates_lastDate_Create
+  read: ProductsFields_travelDetails_travelDates_packageDates_lastDate_Read
+  update: ProductsFields_travelDetails_travelDates_packageDates_lastDate_Update
+  delete: ProductsFields_travelDetails_travelDates_packageDates_lastDate_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_lastDate_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_lastDate_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_lastDate_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_packageDates_lastDate_Delete {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_validUntil {
+  create: ProductsFields_travelDetails_travelDates_validUntil_Create
+  read: ProductsFields_travelDetails_travelDates_validUntil_Read
+  update: ProductsFields_travelDetails_travelDates_validUntil_Update
+  delete: ProductsFields_travelDetails_travelDates_validUntil_Delete
+}
+
+type ProductsFields_travelDetails_travelDates_validUntil_Create {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_validUntil_Read {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_validUntil_Update {
+  permission: Boolean!
+}
+
+type ProductsFields_travelDetails_travelDates_validUntil_Delete {
   permission: Boolean!
 }
 
@@ -13264,8 +14084,8 @@ type ProductsFields_travelDetails_destinations_hotels_Delete {
 type ProductsFields_travelDetails_destinations_hotels_Fields {
   name: ProductsFields_travelDetails_destinations_hotels_name
   stars: ProductsFields_travelDetails_destinations_hotels_stars
-  checkInDate: ProductsFields_travelDetails_destinations_hotels_checkInDate
-  checkOutDate: ProductsFields_travelDetails_destinations_hotels_checkOutDate
+  checkInDateExample: ProductsFields_travelDetails_destinations_hotels_checkInDateExample
+  checkOutDateExample: ProductsFields_travelDetails_destinations_hotels_checkOutDateExample
   hotelLink: ProductsFields_travelDetails_destinations_hotels_hotelLink
   hotelImage: ProductsFields_travelDetails_destinations_hotels_hotelImage
   nights: ProductsFields_travelDetails_destinations_hotels_nights
@@ -13318,49 +14138,49 @@ type ProductsFields_travelDetails_destinations_hotels_stars_Delete {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkInDate {
-  create: ProductsFields_travelDetails_destinations_hotels_checkInDate_Create
-  read: ProductsFields_travelDetails_destinations_hotels_checkInDate_Read
-  update: ProductsFields_travelDetails_destinations_hotels_checkInDate_Update
-  delete: ProductsFields_travelDetails_destinations_hotels_checkInDate_Delete
+type ProductsFields_travelDetails_destinations_hotels_checkInDateExample {
+  create: ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Create
+  read: ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Read
+  update: ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Delete
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkInDate_Create {
+type ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkInDate_Read {
+type ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkInDate_Update {
+type ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkInDate_Delete {
+type ProductsFields_travelDetails_destinations_hotels_checkInDateExample_Delete {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkOutDate {
-  create: ProductsFields_travelDetails_destinations_hotels_checkOutDate_Create
-  read: ProductsFields_travelDetails_destinations_hotels_checkOutDate_Read
-  update: ProductsFields_travelDetails_destinations_hotels_checkOutDate_Update
-  delete: ProductsFields_travelDetails_destinations_hotels_checkOutDate_Delete
+type ProductsFields_travelDetails_destinations_hotels_checkOutDateExample {
+  create: ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Create
+  read: ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Read
+  update: ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Update
+  delete: ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Delete
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkOutDate_Create {
+type ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Create {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkOutDate_Read {
+type ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Read {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkOutDate_Update {
+type ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Update {
   permission: Boolean!
 }
 
-type ProductsFields_travelDetails_destinations_hotels_checkOutDate_Delete {
+type ProductsFields_travelDetails_destinations_hotels_checkOutDateExample_Delete {
   permission: Boolean!
 }
 
@@ -13866,8 +14686,10 @@ type ordersAccess {
 
 type OrdersFields {
   orderedBy: OrdersFields_orderedBy
-  stripePaymentIntentID: OrdersFields_stripePaymentIntentID
+  yocoPaymentId: OrdersFields_yocoPaymentId
+  status: OrdersFields_status
   total: OrdersFields_total
+  membershipId: OrdersFields_membershipId
   items: OrdersFields_items
   updatedAt: OrdersFields_updatedAt
   createdAt: OrdersFields_createdAt
@@ -13896,26 +14718,49 @@ type OrdersFields_orderedBy_Delete {
   permission: Boolean!
 }
 
-type OrdersFields_stripePaymentIntentID {
-  create: OrdersFields_stripePaymentIntentID_Create
-  read: OrdersFields_stripePaymentIntentID_Read
-  update: OrdersFields_stripePaymentIntentID_Update
-  delete: OrdersFields_stripePaymentIntentID_Delete
+type OrdersFields_yocoPaymentId {
+  create: OrdersFields_yocoPaymentId_Create
+  read: OrdersFields_yocoPaymentId_Read
+  update: OrdersFields_yocoPaymentId_Update
+  delete: OrdersFields_yocoPaymentId_Delete
 }
 
-type OrdersFields_stripePaymentIntentID_Create {
+type OrdersFields_yocoPaymentId_Create {
   permission: Boolean!
 }
 
-type OrdersFields_stripePaymentIntentID_Read {
+type OrdersFields_yocoPaymentId_Read {
   permission: Boolean!
 }
 
-type OrdersFields_stripePaymentIntentID_Update {
+type OrdersFields_yocoPaymentId_Update {
   permission: Boolean!
 }
 
-type OrdersFields_stripePaymentIntentID_Delete {
+type OrdersFields_yocoPaymentId_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_status {
+  create: OrdersFields_status_Create
+  read: OrdersFields_status_Read
+  update: OrdersFields_status_Update
+  delete: OrdersFields_status_Delete
+}
+
+type OrdersFields_status_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_status_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_status_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_status_Delete {
   permission: Boolean!
 }
 
@@ -13939,6 +14784,29 @@ type OrdersFields_total_Update {
 }
 
 type OrdersFields_total_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_membershipId {
+  create: OrdersFields_membershipId_Create
+  read: OrdersFields_membershipId_Read
+  update: OrdersFields_membershipId_Update
+  delete: OrdersFields_membershipId_Delete
+}
+
+type OrdersFields_membershipId_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_membershipId_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_membershipId_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_membershipId_Delete {
   permission: Boolean!
 }
 
@@ -16537,6 +17405,7 @@ input mutationProductInput {
   isPackage: Boolean
   benefits: [mutationProduct_BenefitsInput!]
   diamond: Boolean
+  image: String!
   travelDetails: mutationProduct_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String
@@ -16571,9 +17440,16 @@ input mutationProduct_TravelDetailsInput {
 }
 
 input mutationProduct_TravelDetails_TravelDatesInput {
-  departureDate: String!
-  returnDate: String!
+  departureDateExample: String!
+  returnDateExample: String!
+  packageDates: mutationProduct_TravelDetails_TravelDates_PackageDatesInput!
+  validUntil: String!
   flexibility: mutationProduct_TravelDetails_TravelDates_FlexibilityInput
+}
+
+input mutationProduct_TravelDetails_TravelDates_PackageDatesInput {
+  firstDate: String!
+  lastDate: String!
 }
 
 input mutationProduct_TravelDetails_TravelDates_FlexibilityInput {
@@ -16612,8 +17488,8 @@ input mutationProduct_TravelDetails_DestinationsInput {
 input mutationProduct_TravelDetails_Destinations_HotelsInput {
   name: String
   stars: Float
-  checkInDate: String
-  checkOutDate: String
+  checkInDateExample: String
+  checkOutDateExample: String
   hotelLink: String
   hotelImage: String
   nights: Float
@@ -16640,6 +17516,7 @@ input mutationProductUpdateInput {
   isPackage: Boolean
   benefits: [mutationProductUpdate_BenefitsInput]
   diamond: Boolean
+  image: String
   travelDetails: mutationProductUpdate_TravelDetailsInput!
   stripeProductID: String
   priceJSON: String
@@ -16674,9 +17551,16 @@ input mutationProductUpdate_TravelDetailsInput {
 }
 
 input mutationProductUpdate_TravelDetails_TravelDatesInput {
-  departureDate: String!
-  returnDate: String!
+  departureDateExample: String!
+  returnDateExample: String!
+  packageDates: mutationProductUpdate_TravelDetails_TravelDates_PackageDatesInput!
+  validUntil: String!
   flexibility: mutationProductUpdate_TravelDetails_TravelDates_FlexibilityInput
+}
+
+input mutationProductUpdate_TravelDetails_TravelDates_PackageDatesInput {
+  firstDate: String!
+  lastDate: String!
 }
 
 input mutationProductUpdate_TravelDetails_TravelDates_FlexibilityInput {
@@ -16715,8 +17599,8 @@ input mutationProductUpdate_TravelDetails_DestinationsInput {
 input mutationProductUpdate_TravelDetails_Destinations_HotelsInput {
   name: String
   stars: Float
-  checkInDate: String
-  checkOutDate: String
+  checkInDateExample: String
+  checkOutDateExample: String
   hotelLink: String
   hotelImage: String
   nights: Float
@@ -16736,11 +17620,19 @@ enum ProductUpdate__status_MutationInput {
 
 input mutationOrderInput {
   orderedBy: String
-  stripePaymentIntentID: String
+  yocoPaymentId: String
+  status: Order_status_MutationInput!
   total: Float!
+  membershipId: String!
   items: [mutationOrder_ItemsInput]
   updatedAt: String
   createdAt: String
+}
+
+enum Order_status_MutationInput {
+  paid
+  pending
+  fulfilled
 }
 
 input mutationOrder_ItemsInput {
@@ -16752,11 +17644,19 @@ input mutationOrder_ItemsInput {
 
 input mutationOrderUpdateInput {
   orderedBy: String
-  stripePaymentIntentID: String
+  yocoPaymentId: String
+  status: OrderUpdate_status_MutationInput
   total: Float
+  membershipId: String
   items: [mutationOrderUpdate_ItemsInput]
   updatedAt: String
   createdAt: String
+}
+
+enum OrderUpdate_status_MutationInput {
+  paid
+  pending
+  fulfilled
 }
 
 input mutationOrderUpdate_ItemsInput {

@@ -49,38 +49,40 @@ export default async function Orders() {
   return (
     <Gutter className={classes.orders}>
       <h1>Orders</h1>
-      {(!orders || !Array.isArray(orders) || orders?.length === 0) && (
-        <p className={classes.noOrders}>You have no orders.</p>
-      )}
+      {(!orders?.filter(doc => doc.status !== 'pending') ||
+        !Array.isArray(orders) ||
+        orders?.length === 0) && <p className={classes.noOrders}>You have no orders.</p>}
       <RenderParams />
       {orders && orders.length > 0 && (
         <ul className={classes.ordersList}>
-          {orders?.map((order, index) => (
-            <li key={order.id} className={classes.listItem}>
-              <Link className={classes.item} href={`/orders/${order.id}`}>
-                <div className={classes.itemContent}>
-                  <h4 className={classes.itemTitle}>{`Order ${order.id}`}</h4>
-                  <div className={classes.itemMeta}>
-                    <p>{`Ordered On: ${formatDateTime(order.createdAt)}`}</p>
-                    <p>
-                      {'Total: '}
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'usd',
-                      }).format(order.total / 100)}
-                    </p>
+          {orders
+            ?.filter(doc => doc.status !== 'pending')
+            .map((order, index) => (
+              <li key={order.id} className={classes.listItem}>
+                <Link className={classes.item} href={`/orders/${order.id}`}>
+                  <div className={classes.itemContent}>
+                    <h4 className={classes.itemTitle}>{`Order ${order.id}`}</h4>
+                    <div className={classes.itemMeta}>
+                      <p>{`Ordered On: ${formatDateTime(order.createdAt)}`}</p>
+                      <p>
+                        {'Total: '}
+                        {new Intl.NumberFormat('en-US', {
+                          style: 'currency',
+                          currency: 'usd',
+                        }).format(order.total / 100)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <Button
-                  appearance="secondary"
-                  label="View Order"
-                  className={classes.button}
-                  el="button"
-                />
-              </Link>
-              {index !== orders.length - 1 && <HR />}
-            </li>
-          ))}
+                  <Button
+                    appearance="secondary"
+                    label="View Order"
+                    className={classes.button}
+                    el="button"
+                  />
+                </Link>
+                {index !== orders.length - 1 && <HR />}
+              </li>
+            ))}
         </ul>
       )}
       <HR />

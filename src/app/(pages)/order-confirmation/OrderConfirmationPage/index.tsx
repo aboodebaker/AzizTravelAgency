@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 import { Button } from '../../../_components/Button'
@@ -12,13 +12,42 @@ import classes from './index.module.scss'
 export const OrderConfirmationPage: React.FC<{}> = () => {
   const searchParams = useSearchParams()
   const orderID = searchParams.get('order_id')
-  const error = searchParams.get('error')
-
   const { clearCart } = useCart()
+  const [error, setError] = useState<string | null>(null)
+  const hasFulfilledRef = useRef(false)
 
   useEffect(() => {
     clearCart()
   }, [clearCart])
+
+  useEffect(() => {
+    const fulfillOrder = async () => {
+      if (!orderID || hasFulfilledRef.current) return
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-order`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: orderID, paymentStatus: 'paid' }),
+        })
+
+        if (!res.ok) {
+          throw new Error('Failed to update order status')
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err)
+        window.location.reload()
+        setError('There was an issue updating your order status. Please contact support.')
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
+    }
+
+    fulfillOrder()
+  }, [orderID])
 
   return (
     <div>

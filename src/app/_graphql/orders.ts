@@ -16,6 +16,8 @@ export const ORDER = `
       docs {
         id
         orderedBy
+        status
+        membershipId
         items {
           product ${PRODUCT}
           title

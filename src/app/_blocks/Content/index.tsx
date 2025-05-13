@@ -7,30 +7,67 @@ import RichText from '../../_components/RichText'
 
 import classes from './index.module.scss'
 
-type Props = Extract<Page['layout'][0], { blockType: 'content' }>
+type Props = Extract<Page['layout'][0], { blockType: 'content' }> & {
+  id?: string
+}
 
-export const ContentBlock: React.FC<
-  Props & {
-    id?: string
-  }
-> = props => {
-  const { columns } = props
+export const ContentBlock: React.FC<Props> = props => {
+  const { columns, invertBackground, id } = props
 
   return (
-    <Gutter className={classes.content}>
+    <Gutter
+      className={[
+        classes.content,
+        // invertBackground ? classes.invert : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <div className={classes.grid}>
-        {columns &&
-          columns.length > 0 &&
-          columns.map((col, index) => {
-            const { enableLink, richText, link, size } = col
+        {columns?.map((col, index) => {
+          const {
+            size = 'full',
+            richText,
+            enableLink,
+            link,
+            media,
+            mediaPosition = 'right',
+            id: colId,
+          } = col
 
-            return (
-              <div key={index} className={[classes.column, classes[`column--${size}`]].join(' ')}>
+          const columnClass = [
+            classes.column,
+            classes[`column--${size}`],
+            classes[`media--${mediaPosition}`],
+          ]
+            .filter(Boolean)
+            .join(' ')
+
+          return (
+            <div key={index} className={classes.row} id={colId || undefined}>
+              {media && mediaPosition === 'left' && (
+                <div className={classes.media}>
+                  <img
+                    src={typeof media === 'string' ? media : `/media/${media?.filename}`}
+                    alt=""
+                  />
+                </div>
+              )}
+              <div className={columnClass}>
                 <RichText content={richText} />
-                {enableLink && <CMSLink className={classes.link} {...link} />}
+                {enableLink && link && <CMSLink className={classes.link} {...link} />}
               </div>
-            )
-          })}
+              {media && mediaPosition === 'right' && (
+                <div className={classes.media}>
+                  <img
+                    src={typeof media === 'string' ? media : `/media/${media?.filename}`}
+                    alt=""
+                  />
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </Gutter>
   )

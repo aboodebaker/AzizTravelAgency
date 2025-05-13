@@ -1,4 +1,4 @@
-@import "../../../_css/common";
+@import '../../../_css/common.scss';
 
 .items {
   margin-bottom: var(--base);
@@ -78,4 +78,34 @@
 .loading,
 .error {
   margin-top: calc(var(--block-padding) - var(--base));
+}
+
+.inputLabel {
+  display: block;
+  font-weight: 600;
+  margin-top: 15px;
+  color: #1b2a49; /* Dark blue */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modernInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #1b2a49;
+  margin-top: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.modernInput:focus {
+  outline: none;
+  border-color: #1b2a49;
+  box-shadow: 0 0 0 3px rgba(27, 42, 73, 0.2);
+}
+.warningLabel {
+  color: #6b7280; /* text-gray-500 */
+  font-size: 0.875rem;
 }

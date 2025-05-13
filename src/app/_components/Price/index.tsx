@@ -54,28 +54,11 @@ export const Price: React.FC<{
 }> = props => {
   const { product, product: { priceJSON } = {}, button = 'addToCart', quantity } = props
 
-  const [price, setPrice] = useState<{
-    actualPrice: string
-    withQuantity: string
-  }>(() => ({
-    actualPrice: priceFromJSON(priceJSON),
-    withQuantity: priceFromJSON(priceJSON, quantity),
-  }))
-
-  useEffect(() => {
-    setPrice({
-      actualPrice: priceFromJSON(priceJSON),
-      withQuantity: priceFromJSON(priceJSON, quantity),
-    })
-  }, [priceJSON, quantity])
-
   return (
     <div className={classes.actions}>
-      {typeof price?.actualPrice !== 'undefined' && price?.withQuantity !== '' && (
-        <div className={classes.price}>
-          <p>{price?.withQuantity}</p>
-        </div>
-      )}
+      <div className={classes.price}>
+        <p>${product.price * quantity}</p>
+      </div>
     </div>
   )
 }

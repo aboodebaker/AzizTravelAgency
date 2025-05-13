@@ -39,7 +39,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           invert={true}
         />
       )}
-      {user ? <CartLink /> : <></>}
+      {user ? <CartLink className={classes.white} /> : <></>}
     </nav>
   )
 }

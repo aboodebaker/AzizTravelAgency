@@ -24,6 +24,7 @@ const policies = {
     'https://checkout.stripe.com',
     'https://js.stripe.com',
     'https://hooks.stripe.com',
+    'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
   ],
   'connect-src': [
     "'self'",
@@ -34,6 +35,8 @@ const policies = {
     'https://your-payload-cms-url.com', // Added Payload CMS
     'https://hook.eu2.make.com/smd5pbv5py9cm3nnp4arddtkqfgnma24', // Added Make.com
     'https://api.make.com', // Added Make.com API
+    'https://api.brevo.com/v3/contacts',
+    'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
   ],
 }
 

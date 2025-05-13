@@ -1,13 +1,39 @@
+/* eslint-disable no-console */
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import axios from 'axios'
 import { Star } from 'lucide-react'
 
 import { Media } from '../../../payload/payload-types'
+import { Button } from '../Button'
+import { DatePickerDemo } from './DatePicker'
 import TimelineItem from './TimelineItem'
 
 // import { useIsMobile } from '@/hooks/use-mobile'
 import classes from './index.module.scss'
+
+function adjustEventTimeByInputDate(
+  eventTime: string | undefined,
+  inputDate: Date,
+  departureDate: Date,
+): string {
+  if (!eventTime) return ''
+
+  const originalDate = new Date(eventTime)
+  if (isNaN(originalDate.getTime())) return eventTime
+
+  const baseDate = inputDate ?? departureDate
+  const dayOffset = Math.ceil(
+    (baseDate.getTime() - departureDate.getTime()) / (1000 * 60 * 60 * 24),
+  )
+
+  const shiftedDate = new Date(originalDate)
+  shiftedDate.setDate(shiftedDate.getDate() + dayOffset)
+
+  return shiftedDate.toISOString().slice(0, 16).replace('T', ' ')
+}
 
 // Typescript types based on the provided schema
 type BenefitType = {
@@ -32,8 +58,8 @@ type TagType = {
 type HotelType = {
   name?: string | null
   stars?: number | null
-  checkInDate?: string | null
-  checkOutDate?: string | null
+  checkInDateExample?: string | null
+  checkOutDateExample?: string | null
   hotelLink?: string | null
   hotelImage?: string | null | Media
   nights?: number | null
@@ -55,8 +81,8 @@ type TransportType = {
   flightNumber?: string | null
   departureAirport?: string | null
   arrivalAirport?: string | null
-  departureTime?: string | null
-  arrivalTime?: string | null
+  departureTimeExample?: string | null
+  arrivalTimeExample?: string | null
   airline?: string | null
   travelTimeHours?: number | null
   transitTimeHours?: number | null
@@ -68,8 +94,8 @@ type TransportType = {
   // Car specific
   pickupLocation?: string | null
   dropoffLocation?: string | null
-  pickupTime?: string | null
-  dropoffTime?: string | null
+  pickupTimeExample?: string | null
+  dropoffTimeExample?: string | null
   provider?: string | null
   // Train specific
   departureStation?: string | null
@@ -84,12 +110,16 @@ type TransportType = {
 
 type TravelDetailsType = {
   travelDates: {
-    departureDate: string
-    returnDate: string
+    departureDateExample: string
+    returnDateExample: string
     flexibility?: {
       beforeDays?: number | null
       afterDays?: number | null
     } | null
+    packageDates: {
+      firstDate: string
+      lastDate: string
+    }
   }
   originalPrice?: number | null
   amountSaved?: {
@@ -105,20 +135,26 @@ type TravelDetailsType = {
 }
 
 type TripDataType = {
-  title: string
-  price: number
+  title?: string
+  price?: number
   isPackage?: boolean | null
   benefits?: BenefitType[] | null
   diamond?: boolean | null
   travelDetails?: TravelDetailsType
-  description: string
-  tag: string
+  description?: string
+  tag?: string
+  image?: Media | string
+  slug?: string | null
 }
 
 const Index = ({ tripData }: { tripData: TripDataType }) => {
   // Reference for timeline items
   const timelineRef = useRef<HTMLDivElement>(null)
   const [activeTimelineItem, setActiveTimelineItem] = useState(0)
+
+  const depatureDate = new Date(tripData.travelDetails.travelDates.departureDateExample)
+
+  const [date, setDate] = useState<Date | null>(depatureDate)
 
   // Initialize timeline events array
   const timelineEvents = []
@@ -132,44 +168,44 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
           type: 'flight' as const,
           title: `${transport.airline} ${transport.flightNumber}`,
           subtitle: `${transport.departureAirport} → ${transport.arrivalAirport}`,
-          date: transport.departureTime ? transport.departureTime.split(' ')[0] : '',
-          time: transport.departureTime,
+          date: transport.departureTimeExample ? transport.departureTimeExample.split(' ')[0] : '',
+          time: transport.departureTimeExample,
           location: 'Departure',
           locationDetail: `Baggage: ${transport.baggageAllowance?.bagNumber} x ${transport.baggageAllowance?.checkedInKg}kg`,
-          sortDate: new Date(transport.departureTime || ''),
+          sortDate: new Date(transport.departureTimeExample || ''),
         })
       } else if (transport.blockType === 'ferry') {
         timelineEvents.push({
           type: 'ferry' as const,
           title: transport.ferryCompany || 'Ferry',
           subtitle: `${transport.departurePort} → ${transport.arrivalPort}`,
-          date: transport.departureTime ? transport.departureTime.split(' ')[0] : '',
-          time: transport.departureTime,
+          date: transport.departureTimeExample ? transport.departureTimeExample.split(' ')[0] : '',
+          time: transport.departureTimeExample,
           location: 'Ferry Departure',
           locationDetail: transport.cabinType || '',
-          sortDate: new Date(transport.departureTime || ''),
+          sortDate: new Date(transport.departureTimeExample || ''),
         })
       } else if (transport.blockType === 'car') {
         timelineEvents.push({
           type: 'car' as const,
           title: transport.provider || 'Car Transfer',
           subtitle: `${transport.pickupLocation} → ${transport.dropoffLocation}`,
-          date: transport.pickupTime ? transport.pickupTime.split(' ')[0] : '',
-          time: transport.pickupTime,
+          date: transport.pickupTimeExample ? transport.pickupTimeExample.split(' ')[0] : '',
+          time: transport.pickupTimeExample,
           location: 'Pickup',
           locationDetail: '',
-          sortDate: new Date(transport.pickupTime || ''),
+          sortDate: new Date(transport.pickupTimeExample || ''),
         })
       } else if (transport.blockType === 'train') {
         timelineEvents.push({
           type: 'train' as const,
           title: transport.trainCompany || 'Train',
           subtitle: `${transport.departureStation} → ${transport.arrivalStation}`,
-          date: transport.departureTime ? transport.departureTime.split(' ')[0] : '',
-          time: transport.departureTime,
+          date: transport.departureTimeExample ? transport.departureTimeExample.split(' ')[0] : '',
+          time: transport.departureTimeExample,
           location: 'Train Departure',
           locationDetail: '',
-          sortDate: new Date(transport.departureTime || ''),
+          sortDate: new Date(transport.departureTimeExample || ''),
         })
       }
     })
@@ -181,27 +217,29 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
       if (destination.hotels) {
         destination.hotels.forEach(hotel => {
           // Add check-in event
-          if (hotel.checkInDate) {
+          if (hotel.checkInDateExample) {
             timelineEvents.push({
               type: 'hotel' as const,
               title: hotel.name || 'Hotel',
               subtitle: `${destination.city}, ${destination.country} - ${hotel.stars} Stars`,
-              date: hotel.checkInDate,
+              date: hotel.checkInDateExample ? hotel.checkInDateExample.split(' ')[0] : '',
+              time: hotel.checkInDateExample,
               location: 'Check-in',
               locationDetail: `${destination.city}, ${destination.country}`,
-              sortDate: new Date(hotel.checkInDate),
+              sortDate: new Date(hotel.checkInDateExample),
             })
           }
           // Add check-out event
-          if (hotel.checkOutDate) {
+          if (hotel.checkOutDateExample) {
             timelineEvents.push({
               type: 'hotel' as const,
               title: hotel.name || 'Hotel',
               subtitle: `${destination.city}, ${destination.country} - ${hotel.stars} Stars`,
-              date: hotel.checkOutDate,
+              date: hotel.checkOutDateExample ? hotel.checkOutDateExample.split(' ')[0] : '',
+              time: hotel.checkOutDateExample,
               location: 'Check-out',
               locationDetail: `${destination.city}, ${destination.country}`,
-              sortDate: new Date(hotel.checkOutDate),
+              sortDate: new Date(hotel.checkOutDateExample),
             })
           }
         })
@@ -254,18 +292,15 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
   const countryCount = countrySet.size
 
   // Hotel image handling
-  const hotelImage = destinations[0]?.hotels?.[0]?.hotelImage
-  const hotelImageSrc =
-    typeof hotelImage === 'string'
-      ? hotelImage
-      : hotelImage?.url || '/admin%20ui/categories/united-kingdom.jpg'
+  const headerImg = tripData.image
+  const headerSource = typeof headerImg === 'string' ? headerImg : `/media/${headerImg?.filename}`
 
   return (
     <div className={classes.container}>
       {/* Hero Section */}
       <div className={classes.heroContainer}>
         <img
-          src={hotelImageSrc}
+          src={headerSource}
           alt={destinations[0]?.city || 'Trip destination'}
           className={classes.heroImage}
         />
@@ -274,8 +309,20 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
           <div className={classes.heroContent}>
             <h1 className={classes.heroTitle}>{tripData.title}</h1>
             <p className={classes.heroDate}>
-              {new Date(tripData.travelDetails?.travelDates?.departureDate).toLocaleTimeString()} -{' '}
-              {new Date(tripData.travelDetails?.travelDates?.returnDate).toLocaleTimeString()}
+              {'Valid to book between '}{' '}
+              {new Date(tripData.travelDetails?.travelDates.packageDates.firstDate).toLocaleString(
+                undefined,
+                {
+                  dateStyle: 'medium',
+                },
+              )}{' '}
+              until{' '}
+              {new Date(tripData.travelDetails?.travelDates?.packageDates.lastDate).toLocaleString(
+                undefined,
+                {
+                  dateStyle: 'medium',
+                },
+              )}
             </p>
           </div>
         </div>
@@ -316,9 +363,11 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                     <span className={classes.detailLabel}>Duration</span>
                     <p className={classes.detailValue}>
                       {Math.round(
-                        (new Date(tripData.travelDetails?.travelDates?.returnDate || '').getTime() -
+                        (new Date(
+                          tripData.travelDetails?.travelDates?.returnDateExample || '',
+                        ).getTime() -
                           new Date(
-                            tripData.travelDetails?.travelDates?.departureDate || '',
+                            tripData.travelDetails?.travelDates?.departureDateExample || '',
                           ).getTime()) /
                           (1000 * 60 * 60 * 24),
                       )}{' '}
@@ -376,6 +425,83 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                   ))}
                 </div>
               )}
+
+              <p className={classes.detailLabel}>
+                * These are example dates so please put your depature date here:
+              </p>
+              <input
+                type="date"
+                id="StartDate"
+                name=""
+                min={depatureDate.toISOString().slice(0, 10)}
+                max={tripData.travelDetails.travelDates.packageDates.lastDate.slice(0, 10)}
+                className={classes.modernDateInput}
+                value={date?.toISOString().split('T')[0] || ''}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const newDate = new Date(event.target.value)
+                  setDate(newDate)
+                }}
+                aria-label="Depature Date"
+              ></input>
+              <Button
+                appearance="primary"
+                onClick={async () => {
+                  window.dispatchEvent(new CustomEvent('openChat')) // 👈 Open the chat immediately
+
+                  let messages: any[] = []
+
+                  const existing = localStorage.getItem('chatMessages')
+                  try {
+                    messages = existing ? JSON.parse(existing) : []
+                  } catch (e) {
+                    console.error('Failed to parse localStorage chatMessages:', e)
+                  }
+
+                  if (messages.length === 0 || messages[0].role !== 'system') {
+                    messages.unshift({
+                      role: 'system',
+                      content: "I'm your helpful assistant. How can I help you today?",
+                    })
+                  }
+
+                  const userMessage: any = {
+                    role: 'user',
+                    content: `Hi, I am interested in your package: ${
+                      tripData.title
+                    } and I would like to leave on the ${new Date(date).toLocaleString(undefined, {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}. `, //The product slug is ${tripData.slug}
+                  }
+                  const typingPlaceholder: any = { role: 'assistant', content: '...' }
+
+                  const intermediateMessages = [...messages, userMessage, typingPlaceholder]
+
+                  localStorage.setItem('chatMessages', JSON.stringify(intermediateMessages))
+                  window.dispatchEvent(new CustomEvent('chatMessagesUpdated'))
+
+                  try {
+                    const response = await axios.post('/api/chatbot', {
+                      messages: [...messages, userMessage],
+                    })
+
+                    const fullConversation = response.data.messages
+                    localStorage.setItem('chatMessages', JSON.stringify(fullConversation))
+                    window.dispatchEvent(new CustomEvent('chatMessagesUpdated'))
+                  } catch (err: any) {
+                    console.error('Chatbot API error:', err)
+                    const fallback = [
+                      ...messages,
+                      userMessage,
+                      { role: 'assistant', content: 'Sorry, something went wrong.' },
+                    ]
+                    localStorage.setItem('chatMessages', JSON.stringify(fallback))
+                    window.dispatchEvent(new CustomEvent('chatMessagesUpdated'))
+                  }
+                }}
+              >
+                Contact Us
+              </Button>
             </div>
 
             {/* Description Section */}
@@ -397,7 +523,9 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                             src={
                               typeof hotel.hotelImage === 'string'
                                 ? hotel.hotelImage
-                                : hotel.hotelImage?.url || '/admin%20ui/categories/Australia.jpeg'
+                                : typeof hotel.hotelImage !== 'string' && hotel.hotelImage?.filename
+                                ? `/media/${hotel.hotelImage.filename}`
+                                : ''
                             }
                             alt={hotel.name || ''}
                             className={classes.hotelImage}
@@ -419,16 +547,28 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                           </div>
                           <div className={classes.hotelDates}>
                             Check-in:{' '}
-                            {hotel.checkInDate
-                              ? new Date(hotel.checkInDate).toLocaleString(undefined, {
+                            {hotel.checkInDateExample
+                              ? new Date(
+                                  adjustEventTimeByInputDate(
+                                    hotel.checkInDateExample,
+                                    date,
+                                    depatureDate,
+                                  ),
+                                ).toLocaleString(undefined, {
                                   dateStyle: 'medium',
                                   timeStyle: 'short',
                                 })
                               : 'N/A'}
                             <br />
                             Check-out:{' '}
-                            {hotel.checkOutDate
-                              ? new Date(hotel.checkOutDate).toLocaleString(undefined, {
+                            {hotel.checkOutDateExample
+                              ? new Date(
+                                  adjustEventTimeByInputDate(
+                                    hotel.checkOutDateExample,
+                                    date,
+                                    depatureDate,
+                                  ),
+                                ).toLocaleString(undefined, {
                                   dateStyle: 'medium',
                                   timeStyle: 'short',
                                 })
@@ -464,8 +604,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                         <div className={classes.journeyDisplay}>
                           <div className={classes.locationPoint}>
                             <div className={classes.locationTime}>
-                              {flight.departureTime
-                                ? new Date(flight.departureTime).toLocaleString(undefined, {
+                              {flight.departureTimeExample
+                                ? new Date(
+                                    adjustEventTimeByInputDate(
+                                      flight.departureTimeExample,
+                                      date,
+                                      depatureDate,
+                                    ),
+                                  ).toLocaleString(undefined, {
                                     dateStyle: 'medium',
                                     timeStyle: 'short',
                                   })
@@ -479,8 +625,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                           </div>
                           <div className={classes.locationPoint}>
                             <div className={classes.locationTime}>
-                              {flight.arrivalTime
-                                ? new Date(flight.arrivalTime).toLocaleString(undefined, {
+                              {flight.arrivalTimeExample
+                                ? new Date(
+                                    adjustEventTimeByInputDate(
+                                      flight.arrivalTimeExample,
+                                      date,
+                                      depatureDate,
+                                    ),
+                                  ).toLocaleString(undefined, {
                                     dateStyle: 'medium',
                                     timeStyle: 'short',
                                   })
@@ -518,14 +670,17 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.departureTime
-                                      ? new Date(transport.departureTime).toLocaleString(
-                                          undefined,
-                                          {
-                                            dateStyle: 'medium',
-                                            timeStyle: 'short',
-                                          },
-                                        )
+                                    {transport.departureTimeExample
+                                      ? new Date(
+                                          adjustEventTimeByInputDate(
+                                            transport.departureTimeExample,
+                                            date,
+                                            depatureDate,
+                                          ),
+                                        ).toLocaleString(undefined, {
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                        })
                                       : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
@@ -538,8 +693,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.arrivalTime
-                                      ? new Date(transport.arrivalTime).toLocaleString(undefined, {
+                                    {transport.arrivalTimeExample
+                                      ? new Date(
+                                          adjustEventTimeByInputDate(
+                                            transport.arrivalTimeExample,
+                                            date,
+                                            depatureDate,
+                                          ),
+                                        ).toLocaleString(undefined, {
                                           dateStyle: 'medium',
                                           timeStyle: 'short',
                                         })
@@ -565,8 +726,8 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.departureTime
-                                      ? new Date(transport.departureTime).toLocaleString(
+                                    {transport.departureTimeExample
+                                      ? new Date(transport.departureTimeExample).toLocaleString(
                                           undefined,
                                           {
                                             dateStyle: 'medium',
@@ -585,11 +746,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.arrivalTime
-                                      ? new Date(transport.arrivalTime).toLocaleString(undefined, {
-                                          dateStyle: 'medium',
-                                          timeStyle: 'short',
-                                        })
+                                    {transport.arrivalTimeExample
+                                      ? new Date(transport.arrivalTimeExample).toLocaleString(
+                                          undefined,
+                                          {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short',
+                                          },
+                                        )
                                       : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
@@ -612,11 +776,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                               <div className={classes.journeyDisplay}>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.pickupTime
-                                      ? new Date(transport.pickupTime).toLocaleString(undefined, {
-                                          dateStyle: 'medium',
-                                          timeStyle: 'short',
-                                        })
+                                    {transport.pickupTimeExample
+                                      ? new Date(transport.pickupTimeExample).toLocaleString(
+                                          undefined,
+                                          {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short',
+                                          },
+                                        )
                                       : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
@@ -629,11 +796,14 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                                 </div>
                                 <div className={classes.locationPoint}>
                                   <div className={classes.locationTime}>
-                                    {transport.dropoffTime
-                                      ? new Date(transport.dropoffTime).toLocaleString(undefined, {
-                                          dateStyle: 'medium',
-                                          timeStyle: 'short',
-                                        })
+                                    {transport.dropoffTimeExample
+                                      ? new Date(transport.dropoffTimeExample).toLocaleString(
+                                          undefined,
+                                          {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short',
+                                          },
+                                        )
                                       : 'N/A'}
                                   </div>
                                   <div className={classes.locationName}>
@@ -658,6 +828,25 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
               {/* Full Travel Timeline Section */}
               <div className={classes.timelineCard}>
                 <h2 className={classes.timelineHeading}>Complete Travel Timeline</h2>
+                <p className={classes.detailLabel}>
+                  * These are example dates so please put your depature date here:
+                </p>
+                <input
+                  type="date"
+                  id="StartDate"
+                  name=""
+                  min={depatureDate.toISOString().slice(0, 10)}
+                  max={tripData.travelDetails.travelDates.packageDates.lastDate.slice(0, 10)}
+                  className={classes.modernDateInput}
+                  value={date?.toISOString().split('T')[0] || ''}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const newDate = new Date(event.target.value)
+                    setDate(newDate)
+                  }}
+                  aria-label="Depature Date"
+                ></input>
+                {/* <DatePickerDemo /> */}
+
                 <div ref={timelineRef} className={classes.timelineContainer}>
                   {/* Timeline connector line with animation */}
                   <div className={classes.timelineLine}></div>
@@ -671,21 +860,29 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
 
                   {/* Timeline items */}
                   <div className={classes.timelineItemsContainer}>
-                    {sortedTimeline.map((event, idx) => (
-                      <div key={idx} className={classes.TimelineItem}>
-                        <TimelineItem
-                          type={event.type}
-                          title={event.title}
-                          subtitle={event.subtitle}
-                          date={event.date}
-                          time={event.time}
-                          location={event.location}
-                          locationDetail={event.locationDetail}
-                          isActive={idx <= activeTimelineItem}
-                          className={idx % 2 === 0 ? classes.fadeIn : classes.fadeInDelayed}
-                        />
-                      </div>
-                    ))}
+                    {sortedTimeline.map((event, idx) => {
+                      const adjustedTime = adjustEventTimeByInputDate(
+                        event.time,
+                        date,
+                        depatureDate,
+                      )
+
+                      return (
+                        <div key={idx} className={classes.TimelineItem}>
+                          <TimelineItem
+                            type={event.type}
+                            title={event.title}
+                            subtitle={event.subtitle}
+                            date={adjustedTime?.split(' ')[0] || event.date}
+                            time={adjustedTime || event.time}
+                            location={event.location}
+                            locationDetail={event.locationDetail}
+                            isActive={idx <= activeTimelineItem}
+                            className={idx % 2 === 0 ? classes.fadeIn : classes.fadeInDelayed}
+                          />
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </div>

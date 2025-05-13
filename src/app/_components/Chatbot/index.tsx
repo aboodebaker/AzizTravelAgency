@@ -3,12 +3,13 @@
 import React, { TouchEvent, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
+import { Button } from '../Button'
 import ChatMessage from './ChatMessage'
 
 import './index.css'
 
 interface Message {
-  role: 'user' | 'assistant' | 'system'
+  role: 'user' | 'assistant' | 'system' | 'tool'
   content: string
 }
 
@@ -38,9 +39,20 @@ const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'system', content: "I'm your helpful assistant. How can I help you today?" },
-  ])
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('chatMessages')
+      if (saved) {
+        try {
+          return JSON.parse(saved)
+        } catch (e) {
+          console.error('Error parsing saved messages:', e)
+        }
+      }
+    }
+    return [{ role: 'system', content: "I'm your helpful assistant. How can I help you today?" }]
+  })
+
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -48,8 +60,6 @@ const ChatBot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const drawerRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
-
-  const webhookUrl = 'https://hook.eu2.make.com/smd5pbv5py9cm3nnp4arddtkqfgnma24'
 
   const minSwipeDistance = 50
 
@@ -85,22 +95,22 @@ const ChatBot: React.FC = () => {
     if (!input.trim()) return
     setLoading(true)
     const newMessage: Message = { role: 'user', content: input }
-    setMessages(prev => [...prev, newMessage])
+    const updatedMessages = [...messages, newMessage]
+    setMessages(updatedMessages)
     setInput('')
 
     try {
       console.log('Posting to webhook...')
 
-      const response = await axios.post(webhookUrl, {
-        message: messages, // or just newMessage if required by webhook
+      const response = await axios.post('/api/chatbot', {
+        messages: updatedMessages, // or just newMessage if required by webhook
       })
+
+      console.log(response.data)
 
       console.log('Webhook response:', response.data)
 
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: response.data || 'Response received.' },
-      ])
+      setMessages(response.data.messages)
     } catch (error: any) {
       console.log('Failed to send message:', error.message || error)
       setMessages(prev => [...prev, { role: 'assistant', content: 'Failed to send message.' }])
@@ -120,7 +130,63 @@ const ChatBot: React.FC = () => {
     setInput(e.target.value)
   }
 
-  const ChatContent = () => <></>
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages))
+  }, [messages])
+
+  // useEffect(() => {
+  //   if (messages.length > 1) {
+  //     setIsOpen(true) // open chat if any messages beyond the system message
+  //   }
+  // }, [messages])
+
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'chatMessages' && event.newValue) {
+        try {
+          const newMessages: Message[] = JSON.parse(event.newValue)
+          setMessages(newMessages)
+          if (newMessages.length > 1) {
+            setIsOpen(true)
+          }
+        } catch (e) {
+          console.error('Failed to parse chatMessages on storage event', e)
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
+
+  useEffect(() => {
+    const handleCustomUpdate = () => {
+      const saved = localStorage.getItem('chatMessages')
+      if (saved) {
+        try {
+          const parsed: Message[] = JSON.parse(saved)
+          setMessages(parsed)
+          if (parsed.length > 1) {
+            setIsOpen(true)
+          }
+        } catch (e) {
+          console.error('Error parsing messages on custom event:', e)
+        }
+      }
+    }
+
+    window.addEventListener('chatMessagesUpdated', handleCustomUpdate)
+    return () => window.removeEventListener('chatMessagesUpdated', handleCustomUpdate)
+  }, [])
+
+  useEffect(() => {
+    const handleOpenChat = () => {
+      setIsOpen(true)
+    }
+
+    window.addEventListener('openChat', handleOpenChat)
+    return () => window.removeEventListener('openChat', handleOpenChat)
+  }, [])
 
   return (
     <div className="chat-bot-container">
@@ -180,6 +246,8 @@ const ChatBot: React.FC = () => {
                 <div className="message-list">
                   {messages
                     .filter(msg => msg.role !== 'system')
+                    .filter(msg => msg.role !== 'tool')
+                    .filter(msg => msg.content !== null)
                     .map((message, index) => (
                       <ChatMessage
                         key={index}
@@ -200,30 +268,46 @@ const ChatBot: React.FC = () => {
                     onKeyDown={handleKeyDown}
                     className="message-textarea"
                   />
-                  <button
-                    onClick={handleSend}
-                    disabled={loading || !input.trim()}
-                    className="send-button"
-                  >
-                    {loading ? (
-                      <div className="loading-spinner" />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="m22 2-7 20-4-9-9-4Z" />
-                        <path d="M22 2 11 13" />
-                      </svg>
-                    )}
-                  </button>
+                  <div className="button-container">
+                    <button
+                      onClick={handleSend}
+                      disabled={loading || !input.trim()}
+                      className="send-button"
+                    >
+                      {loading ? (
+                        <div className="loading-spinner" />
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="m22 2-7 20-4-9-9-4Z" />
+                          <path d="M22 2 11 13" />
+                        </svg>
+                      )}
+                    </button>
+                    <Button
+                      onClick={() => {
+                        localStorage.removeItem('chatMessages')
+                        setMessages([
+                          {
+                            role: 'system',
+                            content: "I'm your helpful assistant. How can I help you today?",
+                          },
+                        ])
+                      }}
+                      appearance="secondary"
+                    >
+                      Clear Chat
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -263,6 +347,8 @@ const ChatBot: React.FC = () => {
                 <div className="message-list">
                   {messages
                     .filter(msg => msg.role !== 'system')
+                    .filter(msg => msg.role !== 'tool')
+                    .filter(msg => msg.content !== null)
                     .map((message, index) => (
                       <ChatMessage
                         key={index}
@@ -283,30 +369,46 @@ const ChatBot: React.FC = () => {
                     onKeyDown={handleKeyDown}
                     className="message-textarea"
                   />
-                  <button
-                    onClick={handleSend}
-                    disabled={loading || !input.trim()}
-                    className="send-button"
-                  >
-                    {loading ? (
-                      <div className="loading-spinner" />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="m22 2-7 20-4-9-9-4Z" />
-                        <path d="M22 2 11 13" />
-                      </svg>
-                    )}
-                  </button>
+                  <div className="button-container">
+                    <button
+                      onClick={handleSend}
+                      disabled={loading || !input.trim()}
+                      className="send-button"
+                    >
+                      {loading ? (
+                        <div className="loading-spinner" />
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="m22 2-7 20-4-9-9-4Z" />
+                          <path d="M22 2 11 13" />
+                        </svg>
+                      )}
+                    </button>
+                    <Button
+                      onClick={() => {
+                        localStorage.removeItem('chatMessages')
+                        setMessages([
+                          {
+                            role: 'system',
+                            content: "I'm your helpful assistant. How can I help you today?",
+                          },
+                        ])
+                      }}
+                      appearance="secondary"
+                    >
+                      Clear Chat
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

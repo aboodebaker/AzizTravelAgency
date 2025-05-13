@@ -28,8 +28,8 @@ const FilterContext = createContext<IContextType>(INITIAL_FILTER_DATA)
 
 export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [categoryFilters, setCategoryFilter] = useState([])
-  const [sort, setSort] = useState('-createdAt')
-  const [date, setDate] = useState('2025-06')
+  const [sort, setSort] = useState('createdAt')
+  const [date, setDate] = useState('2025-05')
   const [tags, setTags] = useState<string[]>([]) // Manage tags here
 
   return (
