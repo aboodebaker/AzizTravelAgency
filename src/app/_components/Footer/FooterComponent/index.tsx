@@ -114,14 +114,14 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
                 return (
                   <a href={item.link.url}>
                     {/* <Button key={item.link.label} className={classes.socialLinkItem}> */}
-                      <Image
-                        src={icon?.url}
-                        alt={item.link.label}
-                        width={24}
-                        height={24}
-                        className={classes.socialIcon}
-                      />
-                  {/* </Button> */}
+                    <Image
+                      src={icon?.url}
+                      alt={item.link.label}
+                      width={24}
+                      height={24}
+                      className={classes.socialIcon}
+                    />
+                    {/* </Button> */}
                   </a>
                 )
               })}

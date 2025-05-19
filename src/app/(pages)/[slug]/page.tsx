@@ -16,10 +16,10 @@ import { Gutter } from '../../_components/Gutter'
 import { Hero } from '../../_components/Hero'
 import HiltonPromo from '../../_components/HiltonPromo'
 import HiltonPromoLoyalty from '../../_components/HiltonPromoLoyalty'
+import PricingCard from '../../_components/PricingCard'
 import { generateMeta } from '../../_utilities/generateMeta'
 
 import classes from './index.module.scss'
-import PricingCard from '../../_components/PricingCard'
 
 // Payload Cloud caches all files through Cloudflare, so we don't need Next.js to cache them as well
 // This means that we can turn off Next.js data caching and instead rely solely on the Cloudflare CDN

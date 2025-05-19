@@ -7,7 +7,7 @@ import axios from 'axios'
 import { Star } from 'lucide-react'
 
 import { Media } from '../../../payload/payload-types'
-import { prompt } from '../../ApiPrompt'
+import { prompt } from '../../apiPrompt'
 import { Button } from '../Button'
 import { DatePickerDemo } from './DatePicker'
 import TimelineItem from './TimelineItem'
