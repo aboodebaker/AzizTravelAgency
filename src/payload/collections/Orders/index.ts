@@ -61,6 +61,40 @@ export const Orders: CollectionConfig = {
           label: 'Fulfilled',
           value: 'fulfilled',
         },
+        {
+          label: 'Custom Order',
+          value: 'custom',
+        },
+      ],
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      required: false,
+      admin: {
+        rows: 10,
+      },
+    },
+    {
+      name: 'customerDetails',
+      label: 'Travel Details',
+      type: 'group',
+      admin: {
+        condition: (_, siblingData) => siblingData?.status === 'custom',
+      },
+      fields: [
+        {
+          name: 'email',
+          type: 'text',
+        },
+        {
+          name: 'name',
+          type: 'text',
+        },
+        {
+          name: 'phoneNumber',
+          type: 'text',
+        },
       ],
     },
     {
@@ -72,7 +106,7 @@ export const Orders: CollectionConfig = {
     {
       name: 'membershipId',
       type: 'text',
-      required: true,
+      required: false,
     },
     {
       name: 'items',

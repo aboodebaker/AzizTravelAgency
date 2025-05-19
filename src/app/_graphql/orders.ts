@@ -17,6 +17,12 @@ export const ORDER = `
         id
         orderedBy
         status
+        description
+        customerDetails {
+          email
+          name
+          phoneNumber
+        }
         membershipId
         items {
           product ${PRODUCT}

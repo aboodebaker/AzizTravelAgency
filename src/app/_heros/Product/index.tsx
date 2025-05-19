@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
+import Image from 'next/image'
 
 import { Product } from '../../../payload/payload-types'
 import { AddToCartButton } from '../../_components/AddToCartButton'
@@ -8,8 +10,30 @@ import { Price } from '../../_components/Price'
 
 import classes from './index.module.scss'
 
-export const ProductHero: React.FC<{ product: Product }> = ({ product }) => {
+export const ProductHero: React.FC<{ product: Product; exhangeRate: number }> = ({
+  product,
+  exhangeRate,
+}) => {
   const { title, categories, meta: { image: metaImage, description } = {} } = product
+
+  const isPoints = product.title?.toLowerCase().includes('points')
+
+  const [quantity, setQuantity] = useState(100000)
+
+  const decrementQty = () => {
+    const updatedQty = quantity > 100000 ? quantity - 10000 : 100000
+    setQuantity(updatedQty)
+  }
+
+  const incrementQty = () => {
+    const updatedQty = quantity < 500000 ? quantity + 10000 : 500000
+    setQuantity(updatedQty)
+  }
+
+  const enterQty = e => {
+    const updatedQty = e.target.value
+    setQuantity(updatedQty)
+  }
 
   return (
     <Gutter className={classes.productHero}>
@@ -55,7 +79,13 @@ export const ProductHero: React.FC<{ product: Product }> = ({ product }) => {
         <div className={classes.infoSection}>
           <div className={classes.actions}>
             <div className={classes.price}>
-              <p>${product.price}</p>
+              <p>${isPoints ? `${product.price * 10000} per 10 000 points` : product.price}</p>
+              <p>
+                R
+                {isPoints
+                  ? `${Math.round(product.price * 10000 * exhangeRate)} per 10 000 points`
+                  : Math.round(product.price * exhangeRate)}
+              </p>
             </div>
           </div>
 
@@ -71,8 +101,36 @@ export const ProductHero: React.FC<{ product: Product }> = ({ product }) => {
               </div>
             ))}
           </div>
+          {isPoints && (
+            <div className={classes.quantity}>
+              <div className={classes.quantityBtn} onClick={decrementQty}>
+                <Image
+                  src={'/assets/icons/minus.svg'}
+                  alt="minus"
+                  width={24}
+                  height={24}
+                  className={classes.qtnBt}
+                />
+              </div>
 
-          <AddToCartButton product={product} className={classes.addToCartButton} />
+              <input type="text" className={classes.quantityInput} value={quantity} />
+
+              <div className={classes.quantityBtn} onClick={incrementQty}>
+                <Image
+                  src={'/assets/icons/plus.svg'}
+                  alt="plus"
+                  width={24}
+                  height={24}
+                  className={classes.qtnBt}
+                />
+              </div>
+            </div>
+          )}
+          <AddToCartButton
+            product={product}
+            className={classes.addToCartButton}
+            quantity={quantity}
+          />
         </div>
       </div>
     </Gutter>

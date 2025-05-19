@@ -22,6 +22,9 @@ export const createYocoCheckoutSession = async (req, res): Promise<void> => {
   let newOrder = null
   const exchangeRate = await convertCartTotalToZAR()
 
+  // eslint-disable-next-line no-console
+  console.log(exchangeRate)
+
   const { paymentStatus, membershipId } = req.body as {
     paymentStatus?: 'paid' | 'pending' | 'fulfilled'
     membershipId?: string
@@ -64,9 +67,9 @@ export const createYocoCheckoutSession = async (req, res): Promise<void> => {
       if (!quantity || typeof product === 'string' || !product.price) {
         continue
       }
-
-      const priceInCents = Math.round(product.price * exchangeRate) * 100 // Assuming price is in ZAR
-      totalAmount += priceInCents * quantity
+      const priceWithQty = product.price * quantity
+      const priceInCents = Math.round(priceWithQty * exchangeRate) * 100 // Assuming price is in ZAR
+      totalAmount = priceInCents
 
       lineItems.push({
         displayName: product.title,

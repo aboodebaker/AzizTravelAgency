@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Star } from 'lucide-react'
 
 import { Media } from '../../../payload/payload-types'
+import { prompt } from '../../ApiPrompt'
 import { Button } from '../Button'
 import { DatePickerDemo } from './DatePicker'
 import TimelineItem from './TimelineItem'
@@ -460,7 +461,7 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                   if (messages.length === 0 || messages[0].role !== 'system') {
                     messages.unshift({
                       role: 'system',
-                      content: "I'm your helpful assistant. How can I help you today?",
+                      content: prompt,
                     })
                   }
 
@@ -471,7 +472,7 @@ const Index = ({ tripData }: { tripData: TripDataType }) => {
                     } and I would like to leave on the ${new Date(date).toLocaleString(undefined, {
                       dateStyle: 'medium',
                       timeStyle: 'short',
-                    })}. `, //The product slug is ${tripData.slug}
+                    })}. The product slug is ${tripData.slug}`, //The product slug is ${tripData.slug}
                   }
                   const typingPlaceholder: any = { role: 'assistant', content: '...' }
 

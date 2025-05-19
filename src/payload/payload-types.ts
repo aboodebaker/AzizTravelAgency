@@ -551,9 +551,15 @@ export interface Order {
   id: string;
   orderedBy?: (string | null) | User;
   yocoPaymentId?: string | null;
-  status: 'paid' | 'pending' | 'fulfilled';
+  status: 'paid' | 'pending' | 'fulfilled' | 'custom';
+  description?: string | null;
+  customerDetails?: {
+    email?: string | null;
+    name?: string | null;
+    phoneNumber?: string | null;
+  };
   total: number;
-  membershipId: string;
+  membershipId?: string | null;
   items?:
     | {
         product: string | Product;

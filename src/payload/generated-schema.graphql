@@ -8129,8 +8129,10 @@ type Order {
   orderedBy: User
   yocoPaymentId: String
   status: Order_status!
+  description: String
+  customerDetails: Order_CustomerDetails
   total: Float!
-  membershipId: String!
+  membershipId: String
   items: [Order_Items!]
   updatedAt: DateTime
   createdAt: DateTime
@@ -8180,6 +8182,13 @@ enum Order_status {
   paid
   pending
   fulfilled
+  custom
+}
+
+type Order_CustomerDetails {
+  email: String
+  name: String
+  phoneNumber: String
 }
 
 type Order_Items {
@@ -8207,6 +8216,10 @@ input Order_where {
   orderedBy: Order_orderedBy_operator
   yocoPaymentId: Order_yocoPaymentId_operator
   status: Order_status_operator
+  description: Order_description_operator
+  customerDetails__email: Order_customerDetails__email_operator
+  customerDetails__name: Order_customerDetails__name_operator
+  customerDetails__phoneNumber: Order_customerDetails__phoneNumber_operator
   total: Order_total_operator
   membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
@@ -8252,6 +8265,51 @@ enum Order_status_Input {
   paid
   pending
   fulfilled
+  custom
+}
+
+input Order_description_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Order_customerDetails__email_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Order_customerDetails__name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Order_customerDetails__phoneNumber_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
 }
 
 input Order_total_operator {
@@ -8271,6 +8329,7 @@ input Order_membershipId_operator {
   in: [String]
   not_in: [String]
   all: [String]
+  exists: Boolean
 }
 
 input Order_items__product_operator {
@@ -8349,6 +8408,10 @@ input Order_where_and {
   orderedBy: Order_orderedBy_operator
   yocoPaymentId: Order_yocoPaymentId_operator
   status: Order_status_operator
+  description: Order_description_operator
+  customerDetails__email: Order_customerDetails__email_operator
+  customerDetails__name: Order_customerDetails__name_operator
+  customerDetails__phoneNumber: Order_customerDetails__phoneNumber_operator
   total: Order_total_operator
   membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
@@ -8366,6 +8429,10 @@ input Order_where_or {
   orderedBy: Order_orderedBy_operator
   yocoPaymentId: Order_yocoPaymentId_operator
   status: Order_status_operator
+  description: Order_description_operator
+  customerDetails__email: Order_customerDetails__email_operator
+  customerDetails__name: Order_customerDetails__name_operator
+  customerDetails__phoneNumber: Order_customerDetails__phoneNumber_operator
   total: Order_total_operator
   membershipId: Order_membershipId_operator
   items__product: Order_items__product_operator
@@ -8395,6 +8462,8 @@ type OrdersDocAccessFields {
   orderedBy: OrdersDocAccessFields_orderedBy
   yocoPaymentId: OrdersDocAccessFields_yocoPaymentId
   status: OrdersDocAccessFields_status
+  description: OrdersDocAccessFields_description
+  customerDetails: OrdersDocAccessFields_customerDetails
   total: OrdersDocAccessFields_total
   membershipId: OrdersDocAccessFields_membershipId
   items: OrdersDocAccessFields_items
@@ -8468,6 +8537,128 @@ type OrdersDocAccessFields_status_Update {
 }
 
 type OrdersDocAccessFields_status_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_description {
+  create: OrdersDocAccessFields_description_Create
+  read: OrdersDocAccessFields_description_Read
+  update: OrdersDocAccessFields_description_Update
+  delete: OrdersDocAccessFields_description_Delete
+}
+
+type OrdersDocAccessFields_description_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_description_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_description_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_description_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails {
+  create: OrdersDocAccessFields_customerDetails_Create
+  read: OrdersDocAccessFields_customerDetails_Read
+  update: OrdersDocAccessFields_customerDetails_Update
+  delete: OrdersDocAccessFields_customerDetails_Delete
+  fields: OrdersDocAccessFields_customerDetails_Fields
+}
+
+type OrdersDocAccessFields_customerDetails_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_Fields {
+  email: OrdersDocAccessFields_customerDetails_email
+  name: OrdersDocAccessFields_customerDetails_name
+  phoneNumber: OrdersDocAccessFields_customerDetails_phoneNumber
+}
+
+type OrdersDocAccessFields_customerDetails_email {
+  create: OrdersDocAccessFields_customerDetails_email_Create
+  read: OrdersDocAccessFields_customerDetails_email_Read
+  update: OrdersDocAccessFields_customerDetails_email_Update
+  delete: OrdersDocAccessFields_customerDetails_email_Delete
+}
+
+type OrdersDocAccessFields_customerDetails_email_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_email_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_email_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_email_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_name {
+  create: OrdersDocAccessFields_customerDetails_name_Create
+  read: OrdersDocAccessFields_customerDetails_name_Read
+  update: OrdersDocAccessFields_customerDetails_name_Update
+  delete: OrdersDocAccessFields_customerDetails_name_Delete
+}
+
+type OrdersDocAccessFields_customerDetails_name_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_name_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_name_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_name_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_phoneNumber {
+  create: OrdersDocAccessFields_customerDetails_phoneNumber_Create
+  read: OrdersDocAccessFields_customerDetails_phoneNumber_Read
+  update: OrdersDocAccessFields_customerDetails_phoneNumber_Update
+  delete: OrdersDocAccessFields_customerDetails_phoneNumber_Delete
+}
+
+type OrdersDocAccessFields_customerDetails_phoneNumber_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_phoneNumber_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_phoneNumber_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_customerDetails_phoneNumber_Delete {
   permission: Boolean!
 }
 
@@ -14688,6 +14879,8 @@ type OrdersFields {
   orderedBy: OrdersFields_orderedBy
   yocoPaymentId: OrdersFields_yocoPaymentId
   status: OrdersFields_status
+  description: OrdersFields_description
+  customerDetails: OrdersFields_customerDetails
   total: OrdersFields_total
   membershipId: OrdersFields_membershipId
   items: OrdersFields_items
@@ -14761,6 +14954,128 @@ type OrdersFields_status_Update {
 }
 
 type OrdersFields_status_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_description {
+  create: OrdersFields_description_Create
+  read: OrdersFields_description_Read
+  update: OrdersFields_description_Update
+  delete: OrdersFields_description_Delete
+}
+
+type OrdersFields_description_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_description_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_description_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_description_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails {
+  create: OrdersFields_customerDetails_Create
+  read: OrdersFields_customerDetails_Read
+  update: OrdersFields_customerDetails_Update
+  delete: OrdersFields_customerDetails_Delete
+  fields: OrdersFields_customerDetails_Fields
+}
+
+type OrdersFields_customerDetails_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_Fields {
+  email: OrdersFields_customerDetails_email
+  name: OrdersFields_customerDetails_name
+  phoneNumber: OrdersFields_customerDetails_phoneNumber
+}
+
+type OrdersFields_customerDetails_email {
+  create: OrdersFields_customerDetails_email_Create
+  read: OrdersFields_customerDetails_email_Read
+  update: OrdersFields_customerDetails_email_Update
+  delete: OrdersFields_customerDetails_email_Delete
+}
+
+type OrdersFields_customerDetails_email_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_email_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_email_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_email_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_name {
+  create: OrdersFields_customerDetails_name_Create
+  read: OrdersFields_customerDetails_name_Read
+  update: OrdersFields_customerDetails_name_Update
+  delete: OrdersFields_customerDetails_name_Delete
+}
+
+type OrdersFields_customerDetails_name_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_name_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_name_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_name_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_phoneNumber {
+  create: OrdersFields_customerDetails_phoneNumber_Create
+  read: OrdersFields_customerDetails_phoneNumber_Read
+  update: OrdersFields_customerDetails_phoneNumber_Update
+  delete: OrdersFields_customerDetails_phoneNumber_Delete
+}
+
+type OrdersFields_customerDetails_phoneNumber_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_phoneNumber_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_phoneNumber_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_customerDetails_phoneNumber_Delete {
   permission: Boolean!
 }
 
@@ -17622,8 +17937,10 @@ input mutationOrderInput {
   orderedBy: String
   yocoPaymentId: String
   status: Order_status_MutationInput!
+  description: String
+  customerDetails: mutationOrder_CustomerDetailsInput
   total: Float!
-  membershipId: String!
+  membershipId: String
   items: [mutationOrder_ItemsInput]
   updatedAt: String
   createdAt: String
@@ -17633,6 +17950,13 @@ enum Order_status_MutationInput {
   paid
   pending
   fulfilled
+  custom
+}
+
+input mutationOrder_CustomerDetailsInput {
+  email: String
+  name: String
+  phoneNumber: String
 }
 
 input mutationOrder_ItemsInput {
@@ -17646,6 +17970,8 @@ input mutationOrderUpdateInput {
   orderedBy: String
   yocoPaymentId: String
   status: OrderUpdate_status_MutationInput
+  description: String
+  customerDetails: mutationOrderUpdate_CustomerDetailsInput
   total: Float
   membershipId: String
   items: [mutationOrderUpdate_ItemsInput]
@@ -17657,6 +17983,13 @@ enum OrderUpdate_status_MutationInput {
   paid
   pending
   fulfilled
+  custom
+}
+
+input mutationOrderUpdate_CustomerDetailsInput {
+  email: String
+  name: String
+  phoneNumber: String
 }
 
 input mutationOrderUpdate_ItemsInput {

@@ -9,11 +9,13 @@ import { noHeaderFooterUrls } from '../../../constants'
 import { Gutter } from '../../Gutter'
 import HeaderMobileNav from '../MobileNav'
 import { HeaderNav } from '../Nav'
+import { useIsMobile } from './isMobile'
 
 import classes from './index.module.scss'
 
 const HeaderComponent = ({ header }: { header: Header }) => {
   const pathname = usePathname()
+  const isMobile = useIsMobile()
 
   return (
     <nav
@@ -30,9 +32,7 @@ const HeaderComponent = ({ header }: { header: Header }) => {
           {/* <Image src="/Logo.jpg" alt="logo" className={classes.logo} width={100} height={20} /> */}
           <h4 className={classes.title}>Travel Luxury</h4>
         </Link>
-
-        <HeaderNav header={header} />
-        {/* <HeaderMobileNav header={header} /> */}
+        {isMobile ? <HeaderMobileNav header={header} /> : <HeaderNav header={header} />}
       </Gutter>
     </nav>
   )

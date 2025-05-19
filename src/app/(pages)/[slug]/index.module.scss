@@ -10,3 +10,16 @@
         gap: 40px;
     }
 }
+
+.gridContainer {
+  display: grid;
+  gap: 2rem;
+
+  max-width: 80rem; // Equivalent to Tailwind's max-w-5xl
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,10 +6,11 @@ import Link from 'next/link'
 import { Media } from '../Media'
 import { Price } from '../Price'
 import { RemoveFromCartButton } from '../RemoveFromCartButton'
+import QuantityPoints from './QuantityPoints'
 
 import classes from './index.module.scss'
 
-const CartItem = ({ product, title, metaImage, qty, addItemToCart }) => {
+const CartItem = ({ product, title, metaImage, qty, addItemToCart, q }) => {
   const [quantity, setQuantity] = useState(qty)
   const decrementQty = () => {
     const updatedQty = quantity > 1 ? quantity - 1 : 1
@@ -21,7 +23,13 @@ const CartItem = ({ product, title, metaImage, qty, addItemToCart }) => {
     addItemToCart({ product, quantity: Number(updatedQty) })
   }
   const enterQty = e => {
-    setQuantity(e.target.value)
+    const updatedQty = e.target.value
+    setQuantity(updatedQty)
+    addItemToCart({ product, quantity: Number(updatedQty) })
+  }
+
+  const addingItemToCart = ({ product, quantity }) => {
+    addItemToCart({ product, quantity })
   }
 
   return (
@@ -38,34 +46,38 @@ const CartItem = ({ product, title, metaImage, qty, addItemToCart }) => {
           <Price product={product} button={false} quantity={1} />
         </div>
 
-        <div className={classes.quantity}>
-          <div className={classes.quantityBtn} onClick={decrementQty}>
-            <Image
-              src={'/assets/icons/minus.svg'}
-              alt="minus"
-              width={24}
-              height={24}
-              className={classes.qtnBt}
-            />
-          </div>
+        {q ? (
+          <QuantityPoints addItemToCart={addingItemToCart} product={product} quant={qty} />
+        ) : (
+          <div className={classes.quantity}>
+            <div className={classes.quantityBtn} onClick={decrementQty}>
+              <Image
+                src={'/assets/icons/minus.svg'}
+                alt="minus"
+                width={24}
+                height={24}
+                className={classes.qtnBt}
+              />
+            </div>
 
-          <input
-            type="text"
-            className={classes.quantityInput}
-            value={quantity}
-            onChange={enterQty}
-          />
-
-          <div className={classes.quantityBtn} onClick={incrementQty}>
-            <Image
-              src={'/assets/icons/plus.svg'}
-              alt="plus"
-              width={24}
-              height={24}
-              className={classes.qtnBt}
+            <input
+              type="text"
+              className={classes.quantityInput}
+              value={quantity}
+              onChange={enterQty}
             />
+
+            <div className={classes.quantityBtn} onClick={incrementQty}>
+              <Image
+                src={'/assets/icons/plus.svg'}
+                alt="plus"
+                width={24}
+                height={24}
+                className={classes.qtnBt}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className={classes.subtotalWrapper}>
           <p>

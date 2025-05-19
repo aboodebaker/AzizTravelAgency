@@ -41,6 +41,7 @@ export const Card: React.FC<{
   title?: string
   relationTo?: 'products'
   doc?: Product
+  q?: boolean
 }> = props => {
   const {
     showCategories,
@@ -48,6 +49,7 @@ export const Card: React.FC<{
     doc,
     doc: { slug, title, categories, meta, priceJSON } = {},
     className,
+    q,
   } = props
 
   const { description, image: metaImage } = meta || {}
@@ -82,6 +84,7 @@ export const Card: React.FC<{
           </div>
         )}
         {doc && <Price product={doc} />}
+        {q ? <></> : <></>}
       </div>
     </Link>
   )

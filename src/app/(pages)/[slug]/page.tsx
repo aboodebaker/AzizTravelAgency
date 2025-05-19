@@ -15,9 +15,11 @@ import Categories from '../../_components/Categories'
 import { Gutter } from '../../_components/Gutter'
 import { Hero } from '../../_components/Hero'
 import HiltonPromo from '../../_components/HiltonPromo'
+import HiltonPromoLoyalty from '../../_components/HiltonPromoLoyalty'
 import { generateMeta } from '../../_utilities/generateMeta'
 
 import classes from './index.module.scss'
+import PricingCard from '../../_components/PricingCard'
 
 // Payload Cloud caches all files through Cloudflare, so we don't need Next.js to cache them as well
 // This means that we can turn off Next.js data caching and instead rely solely on the Cloudflare CDN
@@ -85,16 +87,20 @@ export default async function Page({ params: { slug = 'home' } }) {
 
   const { hero, layout } = page
   const diamondProduct = productsInCategory.find(product => product.diamond === true)
-  const goldProduct = productsInCategory.find(product => product.diamond !== true)
+  const goldProduct = productsInCategory.find(product => product.diamond !== true && product.slug?.includes("gold"))
+  const pointsProduct = productsInCategory.find(
+    product => product.diamond !== true && product.slug?.includes("points")
+  );
+
 
 
   return (
     <React.Fragment>
-      {slug === 'home' ? (
+      {slug === 'home' || 'loyalty' ? (
         <section>
           <Hero {...hero} />
-
-          <Gutter className={classes.home}>
+          {slug !== 'loyalty' ? (
+            <Gutter className={classes.home}>
             <Categories categories={catergories} />
             {diamondProduct && (
               <HiltonPromo
@@ -123,7 +129,97 @@ export default async function Page({ params: { slug = 'home' } }) {
                 product={goldProduct}
               />
             )}
+            {pointsProduct && (
+              <HiltonPromo
+                benefits={pointsProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  pointsProduct?.meta?.image?.filename
+                    ? `/media/${pointsProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Hilton Points"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
+                product={pointsProduct}
+              />
+            )}
           </Gutter>
+          ) : (
+            <>
+            {/* <div className={classes.gridContainer}>
+              <PricingCard
+            title="Basic"
+            description="Perfect for individuals just getting started"
+            price={{ monthly: 9, annual: 89 }}
+            features={diamondProduct.benefits}
+            isAnnual={false}
+            ctaText="Start with Basic"
+            ctaVariant="outline"
+          />
+          <PricingCard
+            title="Pro"
+            description="Ideal for small teams and growing businesses"
+            price={{ monthly: 29, annual: 289 }}
+            features={diamondProduct.benefits}
+            isPopular={true}
+            isAnnual={false}
+            ctaText="Get Started"
+          />
+          <PricingCard
+            title="Enterprise"
+            description="Advanced features for large organizations"
+            price={{ monthly: 99, annual: 989 }}
+            features={diamondProduct.benefits}
+            isAnnual={false}
+            ctaText="Contact Sales"
+            ctaVariant="outline"
+          />
+            </div> */}
+            {diamondProduct && (
+              <HiltonPromoLoyalty
+                benefits={diamondProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  diamondProduct?.meta?.image?.filename
+                    ? `/media/${diamondProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Diamond Tier Benefits"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
+                product={diamondProduct}
+                left='image'
+              />
+            )}
+
+            {goldProduct && (
+              <HiltonPromoLoyalty
+                benefits={goldProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  goldProduct?.meta?.image?.filename
+                    ? `/media/${goldProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Gold Tier Benefits"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
+                product={goldProduct}
+                left='text'
+              />
+            )}
+            {pointsProduct && (
+              <HiltonPromoLoyalty
+                benefits={pointsProduct?.benefits?.map(b => b?.benefit) || []}
+                source={
+                  pointsProduct?.meta?.image?.filename
+                    ? `/media/${pointsProduct.meta.image.filename}`
+                    : '/fallback.jpg'
+                }
+                title="Hilton Points"
+                href="https://www.hilton.com/en/hilton-honors/elite-status/diamond/"
+                product={pointsProduct}
+                left='image'
+              />
+            )}
+            </>
+          )}
+          
         </section>
       ) : (
         <>

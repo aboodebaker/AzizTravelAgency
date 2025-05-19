@@ -47,6 +47,25 @@ export default async function Cart() {
 
   let settings: Settings | null = null
 
+  async function convertCartTotalToZAR(): Promise<number | null> {
+    try {
+      const res = await fetch(
+        'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
+      )
+      const data = await res.json()
+      const exchangeRate = data.conversion_rates.ZAR
+
+      return exchangeRate
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching exchange rate:', error)
+      const rand = 18
+      return rand
+    }
+  }
+
+  const exchangeRate = await convertCartTotalToZAR()
+
   try {
     settings = await fetchSettings()
   } catch (error) {
@@ -60,7 +79,7 @@ export default async function Cart() {
     <Fragment>
       <Hero {...page?.hero} />
       <Gutter>
-        <CartPage settings={settings} page={page} />
+        <CartPage settings={settings} page={page} exchangeRate={exchangeRate} />
       </Gutter>
       <Blocks blocks={page?.layout} />
     </Fragment>

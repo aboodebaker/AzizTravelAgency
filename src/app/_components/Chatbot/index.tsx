@@ -3,6 +3,7 @@
 import React, { TouchEvent, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
+import { prompt } from '../../ApiPrompt'
 import { Button } from '../Button'
 import ChatMessage from './ChatMessage'
 
@@ -50,7 +51,7 @@ const ChatBot: React.FC = () => {
         }
       }
     }
-    return [{ role: 'system', content: "I'm your helpful assistant. How can I help you today?" }]
+    return [{ role: 'system', content: prompt }]
   })
 
   const [touchStart, setTouchStart] = useState<number | null>(null)

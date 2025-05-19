@@ -1,0 +1,33 @@
+.featureItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.included {
+  color: #22c55e; // Tailwind's green-500
+}
+
+.excluded {
+  color: #d1d5db; // Tailwind's gray-300
+}
+
+.text {
+  font-size: 0.875rem;
+}
+
+.emphasis {
+  font-weight: 500;
+  color: #111827; // Tailwind's text-foreground (gray-900)
+}
+
+.muted {
+  color: #6b7280; // Tailwind's text-muted-foreground (gray-500)
+}

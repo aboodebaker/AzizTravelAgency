@@ -2,6 +2,7 @@
 
 .actions {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: calc(var(--base) / 2);
 }

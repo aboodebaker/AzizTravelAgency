@@ -33,7 +33,12 @@ const Products = async () => {
   }
 
   const diamondProduct = productsInCategory.find(product => product.diamond === true)
-  const goldProduct = productsInCategory.find(product => product.diamond !== true)
+  const goldProduct = productsInCategory.find(
+    product => product.diamond !== true && product.slug.includes('gold'),
+  )
+  const pointsProduct = productsInCategory.find(
+    product => product.diamond !== true && product.slug.includes('points'),
+  )
   return (
     <div className={classes.container}>
       <Gutter className={classes.gutter}>
@@ -65,6 +70,22 @@ const Products = async () => {
             title="Gold Tier Benefits"
             href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
             product={goldProduct}
+          />
+        )}
+
+        <div style={{ height: '30px' }}></div>
+
+        {pointsProduct && (
+          <HiltonPromo
+            benefits={pointsProduct?.benefits?.map(b => b?.benefit) || []}
+            source={
+              pointsProduct?.meta?.image?.filename
+                ? `/media/${pointsProduct.meta.image.filename}`
+                : '/fallback.jpg'
+            }
+            title="Hilton Points"
+            href="https://www.hilton.com/en/hilton-honors/elite-status/gold/"
+            product={pointsProduct}
           />
         )}
       </Gutter>

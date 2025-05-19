@@ -12,6 +12,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
 import { marked } from 'marked'
+import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies'
 
 // use this handler to get all Stripe customers
 // prevents unauthorized or non-admin users from accessing all Stripe customers
@@ -52,13 +53,13 @@ export const chatbot = async (req, res) => {
       type: 'function',
       function: {
         name: 'one_product',
-        description: 'gets all the details of one product',
+        description: 'Gets all the details of one product',
         parameters: {
           type: 'object',
           properties: {
             slug: {
               type: 'string',
-              description: 'the slug of the product you want to look for',
+              description: 'The slug of the product you want to look for',
             },
           },
           required: ['slug'],
@@ -70,13 +71,13 @@ export const chatbot = async (req, res) => {
       type: 'function',
       function: {
         name: 'all_products',
-        description: 'gets some details for all products',
+        description: 'Gets some details for all products',
         parameters: {
           type: 'object',
           properties: {
             products: {
               type: 'boolean',
-              description: 'whether to get all products or none',
+              description: 'Whether to get all products or none',
             },
           },
           required: ['products'],
@@ -84,10 +85,165 @@ export const chatbot = async (req, res) => {
         },
       },
     },
+    {
+      type: 'function',
+      function: {
+        name: 'customOrder',
+        description: 'Creates a custom travel order with user preferences',
+        parameters: {
+          type: 'object',
+          properties: {
+            existingPackage: {
+              type: 'string',
+              description:
+                'If they are looking for an existing package and what is the package called',
+            },
+            depatureCity: {
+              type: 'string',
+              description: 'The city they are looking at departing from',
+            },
+            destinations: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Places the user wants to visit (can be multiple)',
+            },
+            accommodations: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Types or names of accommodations (e.g., hotels, resorts)',
+            },
+            preferredAirlines: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Preferred airlines for travel',
+            },
+            numberOfPeople: {
+              type: 'integer',
+              description: 'How many people are traveling',
+            },
+            hotelStars: {
+              type: 'integer',
+              description: 'Preferred star rating for hotels (1–5)',
+            },
+            travelDates: {
+              type: 'string',
+              format: 'date',
+              description: 'Preferred departure date',
+            },
+            duration: {
+              type: 'string',
+              description: 'How long the trip should last (e.g., "1 week", "10 days")',
+            },
+            additionalDetails: {
+              type: 'string',
+              description: 'Any additional notes or requests from the user',
+            },
+            email: {
+              type: 'string',
+              description: 'Email address of the customer',
+            },
+            name: {
+              type: 'string',
+              description: 'Full name of the customer',
+            },
+            phoneNumber: {
+              type: 'string',
+              description: 'Phone number of the customer',
+            },
+          },
+          required: ['name', 'email'],
+          additionalProperties: false,
+        },
+      },
+    },
+    {
+      type: 'function',
+      function: {
+        name: 'update_order',
+        description: 'Updates specific fields in an existing custom travel order',
+        parameters: {
+          type: 'object',
+          properties: {
+            orderId: {
+              type: 'string',
+              description: 'The unique ID of the order to be updated',
+            },
+            existingPackage: {
+              type: 'string',
+              description:
+                'If they are looking for an existing package and what is the package called',
+            },
+            depatureCity: {
+              type: 'string',
+              description: 'The city they are looking at departing from',
+            },
+            destinations: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Updated destinations (optional)',
+            },
+            accommodations: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Updated accommodations (optional)',
+            },
+            preferredAirlines: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Updated preferred airlines (optional)',
+            },
+            numberOfPeople: {
+              type: 'integer',
+              description: 'Updated number of travelers (optional)',
+            },
+            hotelStars: {
+              type: 'integer',
+              description: 'Updated hotel star rating (optional)',
+            },
+            travelDates: {
+              type: 'string',
+              format: 'date',
+              description: 'Updated departure date (optional)',
+            },
+            duration: {
+              type: 'string',
+              description: 'Updated duration of the trip (optional)',
+            },
+            additionalDetails: {
+              type: 'string',
+              description: 'Any additional updates or user requests',
+            },
+            email: {
+              type: 'string',
+              description: 'Email address of the customer',
+            },
+            name: {
+              type: 'string',
+              description: 'Full name of the customer',
+            },
+            phoneNumber: {
+              type: 'string',
+              description: 'Phone number of the customer',
+            },
+          },
+          required: [
+            'orderId',
+            'destinations',
+            'numberOfPeople',
+            'travelDates',
+            'duration',
+            'customerDetails',
+            'name',
+            'email',
+          ],
+          additionalProperties: false,
+        },
+      },
+    },
   ]
 
   // Function to add email to the newsletter
-  const addToNewsletter = async (email, firstName, lastName) => {
+  const addToNewsletter = async ({ email, firstName, lastName }) => {
     const response = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
@@ -112,15 +268,15 @@ export const chatbot = async (req, res) => {
     console.log(`Adding email ${email} to the newsletter...`)
     return `Email ${email} successfully added to the newsletter!` // Return success message
   }
-  const one_product = async (slug: string) => {
+  const one_product = async ({ slug }: string) => {
     const product = await fetchDoc<Product>({
       collection: 'products',
       slug,
       draft: false,
     }) // Log the email being added
-    return `${product}` // Return success message
+    return JSON.stringify(product) // Return success message
   }
-  const all_products = async (products: boolean) => {
+  const all_products = async ({ products }: boolean) => {
     const allProducts = await fetchDocs<Product>('products')
     const filteredProducts = allProducts.map(product => ({
       slug: product.slug,
@@ -130,16 +286,152 @@ export const chatbot = async (req, res) => {
     return JSON.stringify(filteredProducts) // Return success message
   }
 
+  const customOrderWithDetails = async ({
+    email,
+    name,
+    phoneNumber,
+    destinations,
+    accommodations,
+    preferredAirlines,
+    numberOfPeople,
+    hotelStars,
+    travelDates,
+    duration,
+    additionalDetails,
+    existingPackage,
+    departureCity,
+  }) => {
+    const description = `
+    Travel Request:
+    Name: ${name}
+    Email: ${email}
+    PhoneNumber: ${phoneNumber ? phoneNumber : 'None provided'}
+    Package: ${existingPackage ? existingPackage : 'Looking for a custom Package'}
+    Destinations: ${
+      destinations ? (destinations.length > 1 ? destinations : destinations[0]) : 'none provided'
+    }
+    Depature City ${departureCity}
+    Accommodations: ${
+      accommodations
+        ? accommodations.length > 1
+          ? accommodations
+          : accommodations[0]
+        : 'No specific preference'
+    }
+
+    Preferred Airlines: ${
+      preferredAirlines
+        ? preferredAirlines.length > 1
+          ? preferredAirlines
+          : preferredAirlines[0]
+        : 'No specific preference'
+    }
+    Number of People: ${numberOfPeople}
+    Hotel Star Rating: ${hotelStars ? hotelStars + ' stars' : 'No preference'}
+    Travel Dates: ${travelDates}
+    Duration: ${duration}
+    Additional Notes: ${additionalDetails || 'None'}
+  `
+    console.log(description)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          paymentStatus: 'custom',
+          description,
+          customerDetails: {
+            email,
+            name,
+            phoneNumber: phoneNumber !== null ? phoneNumber : null,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        console.error(`Failed to create order for ${email}`)
+        return `Failed to create custom travel order.`
+      }
+
+      console.log(`Custom order created for ${email}`)
+      const returnedData = await response.json()
+      return `Custom travel order created successfully for ${email}! orderId is ${returnedData.id}`
+    } catch (error: unknown) {
+      console.log(error)
+    }
+  }
+
+  const updateCustomOrderWithDetails = async ({
+    orderId,
+    email,
+    name,
+    phoneNumber,
+    destinations,
+    accommodations,
+    preferredAirlines,
+    numberOfPeople,
+    hotelStars,
+    travelDates,
+    duration,
+    additionalDetails,
+    existingPackage,
+    departureCity,
+  }) => {
+    const description = `
+Travel Request:
+Name: ${name}
+Email: ${email}
+PhoneNumber: ${phoneNumber ? phoneNumber : 'None provided'}
+Package: ${existingPackage ? existingPackage : 'Looking for a custom Package'}
+Destinations: ${destinations?.join(', ') || 'No update'}
+Departure City: ${departureCity}
+Accommodations: ${accommodations?.join(', ') || 'No update'}
+Preferred Airlines: ${preferredAirlines?.join(', ') || 'No update'}
+Number of People: ${numberOfPeople ?? 'No update'}
+Hotel Star Rating: ${hotelStars ? hotelStars + ' stars' : 'No update'}
+Travel Dates: ${travelDates || 'No update'}
+Duration: ${duration || 'No update'}
+Additional Notes: ${additionalDetails || 'No update'}
+  `.trim()
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: orderId,
+        description,
+        customerDetails: {
+          email,
+          name: name,
+          phoneNumber: phoneNumber !== null ? phoneNumber : null,
+        },
+      }),
+    })
+
+    if (!response.ok) {
+      console.error(`Failed to update order ${orderId}`)
+      return `Failed to update custom travel order.`
+    }
+
+    console.log(`Custom order updated for ${email}`)
+    return `Custom travel order updated successfully for ${email}!`
+  }
+
   // Map function names to function implementations
   const functionMap = {
     add_to_newsletter: addToNewsletter,
     one_product: one_product,
     all_products: all_products,
+    customOrder: customOrderWithDetails,
+    update_order: updateCustomOrderWithDetails,
   }
   try {
     // Log the request body for debugging
     const messages = req.body.messages // Get the user message from the request body
-    console.log(messages)
     // if (!userMessage) {
     //   return res.status(400).json({ error: 'User message is required' })
     // }
@@ -154,17 +446,22 @@ export const chatbot = async (req, res) => {
 
     // Make the first call to OpenAI's API
     let response = await openai.chat.completions.create({
-      model: 'gpt-4.1-nano',
+      model: 'gpt-4.1',
       messages: messages,
       tools: functions,
       tool_choice: 'auto',
       parallel_tool_calls: false,
     })
 
-    console.log(response.choices[0].message)
+    if (!response.choices[0].message.tool_calls) {
+      const html = response.choices[0].message.content
+        ? marked.parse(response.choices[0].message.content)
+        : null
 
-    if (response.choices[0].message?.tool_calls === undefined) {
-      messages.push(response.choices[0].message)
+      messages.push({
+        role: 'assistant',
+        content: html ? html : response.choices[0].message.content,
+      })
     }
 
     // Loop to process multiple function calls
@@ -173,8 +470,10 @@ export const chatbot = async (req, res) => {
       const functionName = functionCall.function.name
       const functionArgs = JSON.parse(functionCall.function.arguments) // Parse the function arguments
 
+      console.log(functionArgs)
+
       // Call the function dynamically
-      const functionResponse = await functionMap[functionName](...Object.values(functionArgs))
+      const functionResponse = await functionMap[functionName](functionArgs)
 
       // Append the function call and its response to the conversation
       messages.push(response.choices[0].message)
@@ -187,22 +486,23 @@ export const chatbot = async (req, res) => {
 
       // Get the next response after function execution
       response = await openai.chat.completions.create({
-        model: 'gpt-4.1-nano',
+        model: 'gpt-4.1',
         messages: messages,
         tools: functions,
         tool_choice: 'auto',
         parallel_tool_calls: false,
       })
 
-      console.log(response)
-      const html = marked.parse(response.choices[0].message.content)
+      if (!response.choices[0].message.tool_calls) {
+        const html = response.choices[0].message.content
+          ? marked.parse(response.choices[0].message.content)
+          : null
 
-      messages.push({
-        role: 'assistant',
-        content: html ? html : response.choices[0].message.content,
-      })
-
-      console.log(messages)
+        messages.push({
+          role: 'assistant',
+          content: html ? html : response.choices[0].message.content,
+        })
+      }
     }
 
     // Final response from the assistant

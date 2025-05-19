@@ -195,12 +195,31 @@ export default async function Product({ params: { slug } }) {
     }
   }
 
+  async function convertCartTotalToZAR(): Promise<number | null> {
+    try {
+      const res = await fetch(
+        'https://v6.exchangerate-api.com/v6/b5221dff56cd44bc2e30e2db/latest/USD',
+      )
+      const data = await res.json()
+      const exchangeRate = data.conversion_rates.ZAR
+
+      return exchangeRate
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching exchange rate:', error)
+      const rand = 18
+      return rand
+    }
+  }
+
+  const exchangeRate = await convertCartTotalToZAR()
+
   return (
     <React.Fragment>
       {product.isPackage ? (
         <TravelProductPage tripData={ProductDetails} />
       ) : (
-        <ProductHero product={product} />
+        <ProductHero product={product} exhangeRate={exchangeRate} />
       )}
 
       {/* <ProductHero product={product} /> */}

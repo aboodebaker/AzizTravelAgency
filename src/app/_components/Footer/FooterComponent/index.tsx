@@ -99,35 +99,30 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
         <Gutter>
           <div className={classes.wrap}>
             <Link href="/">
-              <Image
-                src="/logo-white.svg"
-                alt="Logo"
-                width={170}
-                height={50}
-                className={classes.logo}
-              />
+              <h3 className={classes.logo}>Travel Luxury</h3>
             </Link>
-            <p>{footer?.copyright}</p>
+            <div className={classes.copyrightWrapper}>
+              <p>{footer?.copyright}</p>
+              <a href="https://yaseenaboobaker.com" target="_blank" rel="noopener noreferrer">
+                <p className={classes.me}>Design by: YA Projects</p>
+              </a>
+            </div>
 
             <div className={classes.socialLinks}>
               {navItems.map(item => {
                 const icon = item?.link?.icon as Media
                 return (
-                  <Button
-                    key={item.link.label}
-                    el="link"
-                    href={item.link.url}
-                    newTab={true}
-                    className={classes.socialLinkItem}
-                  >
-                    <Image
-                      src={icon?.url}
-                      alt={item.link.label}
-                      width={24}
-                      height={24}
-                      className={classes.socialIcon}
-                    />
-                  </Button>
+                  <a href={item.link.url}>
+                    {/* <Button key={item.link.label} className={classes.socialLinkItem}> */}
+                      <Image
+                        src={icon?.url}
+                        alt={item.link.label}
+                        width={24}
+                        height={24}
+                        className={classes.socialIcon}
+                      />
+                  {/* </Button> */}
+                  </a>
                 )
               })}
             </div>
