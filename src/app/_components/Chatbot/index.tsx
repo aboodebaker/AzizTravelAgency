@@ -3,7 +3,7 @@
 import React, { TouchEvent, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
-import { prompt } from '../../ApiPrompt'
+import { prompt } from '../../apiPrompt'
 import { Button } from '../Button'
 import ChatMessage from './ChatMessage'
 
