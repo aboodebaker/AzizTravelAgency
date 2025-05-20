@@ -37,6 +37,7 @@ function useIsMobile(breakpoint = 768): boolean {
 }
 
 const ChatBot: React.FC = () => {
+  const [hasMounted, setHasMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
@@ -132,6 +133,10 @@ const ChatBot: React.FC = () => {
   }
 
   useEffect(() => {
+    setHasMounted(true)
+  }, [])
+
+  useEffect(() => {
     localStorage.setItem('chatMessages', JSON.stringify(messages))
   }, [messages])
 
@@ -188,6 +193,10 @@ const ChatBot: React.FC = () => {
     window.addEventListener('openChat', handleOpenChat)
     return () => window.removeEventListener('openChat', handleOpenChat)
   }, [])
+
+  if (isMobile === null) return <div>Loading</div>
+
+  if (!hasMounted) return null
 
   return (
     <div className="chat-bot-container">

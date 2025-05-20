@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,8 +14,17 @@ import { useIsMobile } from './isMobile'
 import classes from './index.module.scss'
 
 const HeaderComponent = ({ header }: { header: Header }) => {
+  const [hasMounted, setHasMounted] = useState(false)
   const pathname = usePathname()
   const isMobile = useIsMobile()
+
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
+
+  if (isMobile === null) return <div>Loading</div>
+
+  if (!hasMounted) return null
 
   return (
     <nav
