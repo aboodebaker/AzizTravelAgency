@@ -34,7 +34,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M  # Optional: limit Mongo to 512 MB
+          memory: 1024M  # Optional: limit Mongo to 512 MB
 
 volumes:
   data:

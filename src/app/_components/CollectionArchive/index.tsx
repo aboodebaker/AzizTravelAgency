@@ -153,10 +153,14 @@ export const CollectionArchive: React.FC<Props> = props => {
               const isPackage = doc.isPackage !== false
 
               const firstDateStr = doc?.travelDetails?.travelDates?.packageDates?.firstDate
+              const validUntilStr = doc?.travelDetails?.travelDates?.validUntil
 
-              if (!firstDateStr) return false // Exclude if no firstDate
+              if (!firstDateStr || !validUntilStr) return false // Exclude if missing required dates
 
               const firstDate = new Date(firstDateStr)
+              const validUntil = new Date(validUntilStr)
+              const today = new Date()
+
               const inputDate = new Date(`${date}-01`) // `date` is like "2025-05"
 
               // Match by year and month
@@ -164,7 +168,9 @@ export const CollectionArchive: React.FC<Props> = props => {
                 firstDate.getUTCFullYear() === inputDate.getUTCFullYear() &&
                 firstDate.getUTCMonth() === inputDate.getUTCMonth()
 
-              return isPackage && sameMonth
+              const isBookingValid = validUntil >= today
+
+              return isPackage && sameMonth && isBookingValid
             })
 
             setResults({
