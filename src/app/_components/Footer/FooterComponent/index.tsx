@@ -111,7 +111,8 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
             <div className={classes.socialLinks}>
               {navItems.map((item, index) => {
                 const icon = item?.link?.icon as Media
-                const href = item?.link?.label || '#'
+                const href = item.link.url || '#'
+                console.log(href)
                 const key = item?.id || `${href}-${index}`
 
                 return (
