@@ -31,10 +31,10 @@ services:
     logging:
       driver: none
     restart: unless-stopped
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 1024M  # Optional: limit Mongo to 512 MB
+    deploy:
+      resources:
+        limits:
+          memory: 1024M  # Optional: limit Mongo to 512 MB
 
 volumes:
   data:
