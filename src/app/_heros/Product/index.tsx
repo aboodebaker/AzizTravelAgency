@@ -18,7 +18,7 @@ export const ProductHero: React.FC<{ product: Product; exhangeRate: number }> = 
 
   const isPoints = product.title?.toLowerCase().includes('points')
 
-  const [quantity, setQuantity] = useState(100000)
+  const [quantity, setQuantity] = useState(isPoints ? 100000 : 1)
 
   const decrementQty = () => {
     const updatedQty = quantity > 100000 ? quantity - 10000 : 100000
