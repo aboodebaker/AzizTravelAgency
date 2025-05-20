@@ -109,20 +109,21 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
             </div>
 
             <div className={classes.socialLinks}>
-              {navItems.map(item => {
+              {navItems.map((item, index) => {
                 const icon = item?.link?.icon as Media
+                const href = item?.link?.label || '#'
+                const key = item?.id || `${href}-${index}`
+
                 return (
-                  <a href={item.link.url}>
-                    {/* <Button key={item.link.label} className={classes.socialLinkItem}> */}
+                  <Link href={href} key={key}>
                     <Image
-                      src={icon?.url}
-                      alt={item.link.label}
+                      src={icon?.url || '/default-icon.png'}
+                      alt={href}
                       width={24}
                       height={24}
                       className={classes.socialIcon}
                     />
-                    {/* </Button> */}
-                  </a>
+                  </Link>
                 )
               })}
             </div>
